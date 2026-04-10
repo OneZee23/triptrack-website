@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://trip-track.app/sitemap.xml

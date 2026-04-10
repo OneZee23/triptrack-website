@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>TripTrack – Drive Diary | Every road tells a story</title>
+    <meta name="description" content="Auto trip diary for iOS. Records every drive, builds a visual journal of routes, photos, and stats. Free, private, no account needed." />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="TripTrack – Drive Diary" />
+    <meta property="og:description" content="Auto trip diary for iOS. Records every drive, builds a visual journal of routes, photos, and stats. Free, private, no account needed." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://trip-track.app" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TripTrack – Drive Diary" />
+    <meta name="twitter:description" content="Auto trip diary for iOS. Records every drive, builds a visual journal of routes, photos, and stats." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "TripTrack – Road Journal",
+      "operatingSystem": "iOS 17+",
+      "applicationCategory": "TravelApplication",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "ratingCount": "2" },
+      "description": "Auto trip diary for iOS. Records every drive, builds a visual journal of routes, photos, and stats. Free, private, no account needed.",
+      "url": "https://trip-track.app",
+      "downloadUrl": "https://apps.apple.com/us/app/triptrack-road-journal/id6760650361",
+      "author": { "@type": "Person", "name": "OneZee" }
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <!-- Analytics — Umami (replace data-website-id after setup) -->
+    <!-- <script defer src="https://your-umami-domain/script.js" data-website-id="YOUR_WEBSITE_ID"></script> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
