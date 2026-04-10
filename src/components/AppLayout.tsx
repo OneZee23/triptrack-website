@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect, createContext, Suspense, useMemo } from 'react';
 import { motion, useMotionValue } from 'motion/react';
 import { Outlet, Link, useLocation } from 'react-router';
 import { Globe, Apple, Menu, X } from 'lucide-react';
@@ -36,17 +36,8 @@ export default function AppLayout() {
   const toggleLang = () => setLang(lang === 'en' ? 'ru' : 'en');
 
   return (
-    <CursorContext.Provider value={{ setHoverState }}>
+    <CursorContext.Provider value={useMemo(() => ({ setHoverState }), [setHoverState])}>
       <div className="min-h-screen bg-[#f8f6f2] text-[#1e1e23] font-sans selection:bg-[#EB571E]/20 flex flex-col relative overflow-x-hidden">
-        <style>{`
-          .route-line {
-            stroke-dasharray: 8 8;
-            animation: dash 20s linear infinite;
-          }
-          @keyframes dash {
-            to { stroke-dashoffset: -1000; }
-          }
-        `}</style>
 
         {/* Header — light glass */}
         <header className="fixed top-0 left-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-black/5">
@@ -109,7 +100,9 @@ export default function AppLayout() {
         </header>
 
         <main className="flex-1 flex flex-col w-full">
-          <Outlet />
+          <Suspense fallback={null}>
+            <Outlet />
+          </Suspense>
         </main>
 
         {/* Footer — warm light */}
@@ -120,10 +113,10 @@ export default function AppLayout() {
             <span className="ml-2">&copy; 2026 OneZee</span>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-8 font-medium">
-            <a href="https://onezee23.github.io/trip-track-ios/privacy-policy.html" target="_blank" rel="noopener" className="hover:text-[#1e1e23] transition-colors">{t('footer.privacy_policy')}</a>
-            <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener" className="hover:text-[#1e1e23] transition-colors">{t('footer.github')}</a>
-            <a href="https://t.me/triptrack_app" target="_blank" rel="noopener" className="hover:text-[#1e1e23] transition-colors">{t('footer.telegram')}</a>
-            <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener" className="hover:text-[#1e1e23] transition-colors">{t('footer.youtube')}</a>
+            <a href="https://onezee23.github.io/trip-track-ios/privacy-policy.html" target="_blank" rel="noopener noreferrer" className="hover:text-[#1e1e23] transition-colors">{t('footer.privacy_policy')}</a>
+            <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="hover:text-[#1e1e23] transition-colors">{t('footer.github')}</a>
+            <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="hover:text-[#1e1e23] transition-colors">{t('footer.telegram')}</a>
+            <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="hover:text-[#1e1e23] transition-colors">{t('footer.youtube')}</a>
           </div>
           <div className="mt-6 md:mt-0 font-medium">
             {t('footer.made_with')}

@@ -123,13 +123,13 @@ export default function About() {
       <div className="flex flex-col items-center border-t border-black/5 pt-16 w-full">
         <h2 className="text-2xl font-bold mb-8 text-[#1e1e23]">{t('about.connect_title')}</h2>
         <div className="flex flex-wrap justify-center gap-4">
-          <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
+          <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
             <GithubIcon className="w-5 h-5" /> {t('about.open_source')}
           </a>
-          <a href="https://t.me/triptrack_app" target="_blank" rel="noopener" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
+          <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
             <MessageCircle className="w-5 h-5" /> {t('about.telegram')}
           </a>
-          <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
+          <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
             <Play className="w-5 h-5" /> {t('about.youtube')}
           </a>
         </div>

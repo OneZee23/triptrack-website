@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext, useMemo } from 'react';
-import { motion, AnimatePresence, useMotionValue, useMotionValueEvent } from 'motion/react';
-import { Car, Map, Crosshair, Camera, Activity, Target, MessageCircle, Star, ArrowRight, X } from 'lucide-react';
+import { useState, useEffect, useContext, useMemo, memo } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'motion/react';
+import { Map, Crosshair, Camera, Target, Star, ArrowRight, X } from 'lucide-react';
 import { CursorContext } from '../components/AppLayout';
 import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
@@ -28,7 +28,7 @@ function geoToPixel(lat: number, lon: number) {
   return { x: Math.round(x), y: Math.round(y) };
 }
 
-// --- 6 well-spaced trips along Moscow → Sochi (M4) ---
+// Trips along Moscow → Krasnodar (M4)
 // Route shapes traced from real roads, fitted to 300x85 viewbox (like MKMapSnapshotter)
 const TRIP_DATA = [
   {
@@ -98,9 +98,7 @@ const ROUTE_WAYPOINTS = [
   { lat: 45.03, lon: 38.97 },
 ];
 
-// Speed-colored route component — renders path with color segments
-function SpeedRoute({ path, colors }: { path: string; colors: string[] }) {
-  // Extract all coordinate pairs from the path
+const SpeedRoute = memo(function SpeedRoute({ path, colors }: { path: string; colors: string[] }) {
   const allCoords: [number, number][] = [];
   const numRegex = /(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)/g;
   let m;
@@ -133,10 +131,9 @@ function SpeedRoute({ path, colors }: { path: string; colors: string[] }) {
       <circle cx={allCoords[allCoords.length-1][0]} cy={allCoords[allCoords.length-1][1]} r="4" fill="#EF4444" />
     </svg>
   );
-}
+});
 
-// App-style trip card
-function TripCard({ trip, onClick, onHoverStart, onHoverEnd }: {
+const TripCard = memo(function TripCard({ trip, onClick, onHoverStart, onHoverEnd }: {
   trip: typeof TRIP_DATA[0] & { x: number; y: number };
   onClick: () => void;
   onHoverStart: (e: React.MouseEvent) => void;
@@ -203,16 +200,17 @@ function TripCard({ trip, onClick, onHoverStart, onHoverEnd }: {
       </div>
     </motion.div>
   );
-}
+});
 
 export default function Home() {
   const { setHoverState } = useContext(CursorContext);
   const { t } = useTranslation();
   const [selectedCard, setSelectedCard] = useState<typeof TRIPS[0] | null>(null);
 
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
   const dragX = useMotionValue(0);
   const dragY = useMotionValue(0);
+  const coordX = useTransform(dragX, v => Math.round(CANVAS_W / 2 - v));
+  const coordY = useTransform(dragY, v => Math.round(CANVAS_H / 2 - v));
 
   const TRIPS = useMemo(() => TRIP_DATA.map(trip => {
     const px = geoToPixel(trip.lat, trip.lon);
@@ -235,13 +233,6 @@ export default function Home() {
     return d;
   }, []);
 
-  useMotionValueEvent(dragX, "change", (latest) => {
-    setCoords(c => ({ ...c, x: Math.round(CANVAS_W / 2 - latest) }));
-  });
-  useMotionValueEvent(dragY, "change", (latest) => {
-    setCoords(c => ({ ...c, y: Math.round(CANVAS_H / 2 - latest) }));
-  });
-
   useEffect(() => {
     const voronezh = geoToPixel(51.67, 39.21);
     const viewW = typeof window !== 'undefined' ? Math.min(window.innerWidth, 1280) : 1000;
@@ -261,10 +252,9 @@ export default function Home() {
 
   return (
     <div className="w-full flex flex-col items-center">
-      {/* Noise texture removed for light theme */}
 
       {/* HERO */}
-      <section className="w-full max-w-7xl mx-auto px-6 pt-40 pb-32 flex flex-col lg:flex-row items-center justify-between gap-16 relative z-10">
+      <section className="w-full max-w-7xl mx-auto px-6 pt-28 md:pt-40 pb-16 md:pb-32 flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-16 relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-[#EB571E]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
         <div className="flex-1 text-center lg:text-left">
@@ -287,8 +277,16 @@ export default function Home() {
       {/* CANVAS — Desktop: interactive drag map, Mobile: static card list */}
 
       {/* Mobile: scrollable trip cards */}
-      <section className="md:hidden w-full px-4 mb-16">
-        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-none">
+      <section className="md:hidden w-full mb-16 relative">
+        {/* Static map background */}
+        <div className="absolute inset-0 overflow-hidden rounded-3xl mx-4">
+          <img
+            src={`https://basemaps.cartocdn.com/rastertiles/voyager/6/39/21.png`}
+            alt="" className="w-full h-full object-cover opacity-30 scale-150"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#f8f6f2] via-transparent to-[#f8f6f2]" />
+        </div>
+        <div className="relative flex gap-4 overflow-x-auto pb-4 px-4 snap-x snap-mandatory scrollbar-none">
           {TRIPS.map((trip) => (
             <div key={trip.id} className="snap-center flex-shrink-0 w-[280px]" onClick={() => setSelectedCard(trip)}>
               <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
@@ -332,7 +330,9 @@ export default function Home() {
       <section className="hidden md:block w-full max-w-7xl mx-auto px-6 mb-20 relative">
         <div className="absolute top-4 right-10 items-center gap-2 bg-white/80 px-4 py-2 rounded-full border border-black/5 backdrop-blur-md z-20 shadow-sm flex">
           <Crosshair className="w-4 h-4 text-[#EB571E]" />
-          <span className="text-xs font-mono tracking-wider text-[#1e1e23]/40">X:{coords.x.toString().padStart(4,'0')} Y:{coords.y.toString().padStart(4,'0')}</span>
+          <span className="text-xs font-mono tracking-wider text-[#1e1e23]/40">
+            X:<motion.span>{coordX}</motion.span> Y:<motion.span>{coordY}</motion.span>
+          </span>
         </div>
 
         <div className="relative rounded-[32px] border border-black/8 shadow-[0_4px_30px_rgba(0,0,0,0.08)] overflow-hidden bg-[#eae8e3] w-full h-[700px] group">
@@ -463,7 +463,7 @@ export default function Home() {
               {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 fill-[#EB571E] text-[#EB571E]" />)}
             </div>
             <p className="text-[18px] leading-relaxed mb-6 text-[#1e1e23] italic">{t('home.review1')}</p>
-            <p className="font-semibold text-[13px] text-[#1e1e23]/40">OKOPOK &middot; <a href="https://apps.apple.com/us/app/triptrack-road-journal/id6760650361" target="_blank" rel="noopener" className="text-[#EB571E] hover:underline">App Store</a></p>
+            <p className="font-semibold text-[13px] text-[#1e1e23]/40">OKOPOK &middot; <a href="https://apps.apple.com/us/app/triptrack-road-journal/id6760650361" target="_blank" rel="noopener noreferrer" className="text-[#EB571E] hover:underline">App Store</a></p>
           </div>
         </div>
       </section>
@@ -538,7 +538,7 @@ export default function Home() {
                     <span className="text-[28px] font-bold font-mono text-[#3884E0] leading-none">{selectedCard.avgSpeed} <span className="text-[14px]">km/h</span></span>
                   </div>
                   <div className="bg-[#f4f2ee] rounded-2xl p-4 border border-black/5">
-                    <span className="text-[10px] font-bold text-[#1e1e23]/30 uppercase tracking-wider block mb-1">Max speed</span>
+                    <span className="text-[10px] font-bold text-[#1e1e23]/30 uppercase tracking-wider block mb-1">{t('home.max_speed')}</span>
                     <span className="text-[28px] font-bold font-mono text-[#DC3C32] leading-none">{selectedCard.maxSpeed} <span className="text-[14px]">km/h</span></span>
                   </div>
                 </div>

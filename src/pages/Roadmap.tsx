@@ -273,7 +273,7 @@ export default function Roadmap() {
         <a
           href="https://t.me/triptrack_app"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2.5 bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full px-8 py-4 font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_2px_20px_rgba(235,87,30,0.3)]"
         >
           <MessageCircle className="w-5 h-5" />
