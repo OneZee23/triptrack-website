@@ -284,9 +284,53 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* CANVAS — dark map island on light page */}
-      <section className="w-full max-w-7xl mx-auto px-6 mb-20 relative">
-        <div className="absolute top-4 right-10 items-center gap-2 bg-white/80 px-4 py-2 rounded-full border border-black/5 backdrop-blur-md z-20 shadow-sm hidden md:flex">
+      {/* CANVAS — Desktop: interactive drag map, Mobile: static card list */}
+
+      {/* Mobile: scrollable trip cards */}
+      <section className="md:hidden w-full px-4 mb-16">
+        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-none">
+          {TRIPS.map((trip) => (
+            <div key={trip.id} className="snap-center flex-shrink-0 w-[280px]" onClick={() => setSelectedCard(trip)}>
+              <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
+                <div className="flex items-center gap-2.5 px-4 pt-4 pb-2">
+                  <div className="w-7 h-7 bg-[#f4f2ee] rounded-full flex items-center justify-center text-xs">{trip.vehicle}</div>
+                  <span className="text-[11px] text-[#1e1e23]/35">{trip.date}</span>
+                </div>
+                <div className="px-4 pb-2">
+                  <h3 className="text-[15px] font-extrabold text-[#1e1e23]">{trip.title}</h3>
+                  <p className="text-[10px] text-[#1e1e23]/35">{trip.location}</p>
+                </div>
+                <div className="mx-3 h-[70px] bg-[#f4f2ee] rounded-xl relative overflow-hidden border border-black/5 mb-1">
+                  {(() => {
+                    const z = 8;
+                    const n = Math.pow(2, z);
+                    const cx = Math.floor(((trip.lon + 180) / 360) * n);
+                    const latRad = trip.lat * Math.PI / 180;
+                    const cy = Math.floor(((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n);
+                    return [-1, 0, 1].map(dx => (
+                      <img key={dx} src={`https://basemaps.cartocdn.com/rastertiles/voyager/${z}/${cx + dx}/${cy}.png`}
+                        alt="" draggable={false} className="absolute top-0 pointer-events-none select-none"
+                        style={{ left: dx * 256 + 140 - 128, width: 256, height: 256, top: -88 }} />
+                    ));
+                  })()}
+                  <div className="absolute inset-0">
+                    <SpeedRoute path={trip.routePath} colors={trip.routeColors} />
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-1 px-4 py-2.5">
+                  <span className="text-[16px] font-bold font-mono text-[#2EAE50]">{trip.distance}<span className="text-[9px] text-[#1e1e23]/25 ml-0.5">km</span></span>
+                  <span className="text-[16px] font-bold font-mono text-[#EB571E] text-center">{trip.duration}</span>
+                  <span className="text-[16px] font-bold font-mono text-[#3884E0] text-right">{trip.avgSpeed}<span className="text-[9px] text-[#1e1e23]/25 ml-0.5">km/h</span></span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Desktop: interactive draggable map */}
+      <section className="hidden md:block w-full max-w-7xl mx-auto px-6 mb-20 relative">
+        <div className="absolute top-4 right-10 items-center gap-2 bg-white/80 px-4 py-2 rounded-full border border-black/5 backdrop-blur-md z-20 shadow-sm flex">
           <Crosshair className="w-4 h-4 text-[#EB571E]" />
           <span className="text-xs font-mono tracking-wider text-[#1e1e23]/40">X:{coords.x.toString().padStart(4,'0')} Y:{coords.y.toString().padStart(4,'0')}</span>
         </div>
@@ -300,23 +344,18 @@ export default function Home() {
             onHoverStart={() => setHoverState({ text: t('home.drag_map'), active: true })}
             onHoverEnd={() => setHoverState(null)}
           >
-            {/* CARTO Dark Map Tiles */}
             {tiles.map(tile => (
               <img
                 key={tile.key}
                 src={`https://basemaps.cartocdn.com/rastertiles/voyager/${ZOOM}/${tile.tileX}/${tile.tileY}.png`}
-                alt=""
-                draggable={false}
-                loading="lazy"
+                alt="" draggable={false} loading="lazy"
                 className="absolute pointer-events-none select-none"
                 style={{ left: tile.x, top: tile.y, width: 256, height: 256 }}
               />
             ))}
 
-            {/* Subtle vignette — lighter than before */}
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 50%, rgba(234,232,227,0.6) 100%)' }} />
 
-            {/* Route Line */}
             <svg className="absolute inset-0 pointer-events-none" style={{ width: CANVAS_W, height: CANVAS_H }}>
               <defs>
                 <filter id="routeGlow"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -335,7 +374,6 @@ export default function Home() {
               })()}
             </svg>
 
-            {/* Trip Cards */}
             {TRIPS.map((trip) => (
               <TripCard
                 key={trip.id}
@@ -347,7 +385,6 @@ export default function Home() {
             ))}
           </motion.div>
 
-          {/* Edge gradients */}
           <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#eae8e3] to-transparent pointer-events-none z-10" />
           <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#eae8e3] to-transparent pointer-events-none z-10" />
           <div className="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-[#eae8e3] to-transparent pointer-events-none z-10" />
