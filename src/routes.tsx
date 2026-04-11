@@ -7,6 +7,8 @@ const Features = lazy(() => import("./pages/Features"));
 const About = lazy(() => import("./pages/About"));
 const Download = lazy(() => import("./pages/Download"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
+const GoogleTimeline = lazy(() => import("./pages/GoogleTimeline"));
+const FogOfWarMap = lazy(() => import("./pages/FogOfWarMap"));
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +20,8 @@ export const router = createBrowserRouter([
       { path: "about", Component: About },
       { path: "download", Component: Download },
       { path: "roadmap", Component: Roadmap },
+      { path: "google-timeline-alternative", Component: GoogleTimeline },
+      { path: "fog-of-war-map", Component: FogOfWarMap },
     ],
   },
 ]);

@@ -283,19 +283,20 @@ export default function Home() {
 
       {/* Mobile: scrollable trip cards */}
       <section className="md:hidden w-full mb-16 relative">
-        {/* Static map background — 3x2 grid at zoom 5, centered on Russia */}
+        {/* Static map background — 4x3 grid at zoom 5, centered on Russia */}
         <div className="absolute inset-0 overflow-hidden rounded-3xl mx-4">
-          <div className="absolute inset-0 grid grid-cols-3 grid-rows-2">
+          <div className="absolute -inset-4 grid grid-cols-4 grid-rows-3">
             {[
-              [19, 9], [20, 9], [21, 9],
-              [19, 10], [20, 10], [21, 10],
+              [18, 8], [19, 8], [20, 8], [21, 8],
+              [18, 9], [19, 9], [20, 9], [21, 9],
+              [18, 10], [19, 10], [20, 10], [21, 10],
             ].map(([tx, ty], i) => (
               <img key={i} src={`https://basemaps.cartocdn.com/rastertiles/voyager/5/${tx}/${ty}.png`}
                 alt="" className="w-full h-full object-cover" />
             ))}
           </div>
-          <div className="absolute inset-0 bg-[#f8f6f2]/40" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#f8f6f2] via-transparent to-[#f8f6f2]" />
+          <div className="absolute inset-0 bg-[#f8f6f2]/15" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#f8f6f2] via-[#f8f6f2]/0 to-[#f8f6f2]" />
         </div>
         <div className="relative flex gap-4 overflow-x-auto pb-4 px-4 snap-x snap-mandatory scrollbar-none">
           {TRIPS.map((trip) => (
