@@ -65,41 +65,31 @@ export default function About() {
       </p>
 
       {/* Story Timeline */}
-      <div className="w-full relative">
-        {/* Vertical line */}
-        <div className="absolute left-6 md:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#DC3C32] via-[#EB571E] via-[#3884E0] to-[#2EAE50]" />
-
-        <div className="flex flex-col gap-12">
-          {STORY_STEPS.map((step, i) => (
-            <div key={i} className="relative pl-16 md:pl-20">
-              {/* Dot on the line */}
-              <div
-                className="absolute left-[14px] md:left-[22px] top-1 w-6 h-6 rounded-full border-[3px] bg-white flex items-center justify-center z-10"
-                style={{ borderColor: step.color }}
-              >
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: step.color }} />
+      <div className="w-full">
+        {STORY_STEPS.map((step, i) => {
+          const isLast = i === STORY_STEPS.length - 1;
+          return (
+            <div key={i} className="flex gap-5">
+              {/* Dot + line column */}
+              <div className="flex flex-col items-center w-4 flex-shrink-0">
+                <div className="w-4 h-4 rounded-full border-[2.5px] bg-white flex-shrink-0" style={{ borderColor: step.color }} />
+                {!isLast && <div className="w-[3px] flex-1 min-h-[24px] rounded-full" style={{ backgroundColor: step.color + '40' }} />}
               </div>
-
               {/* Card */}
-              <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8 shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">{step.emoji}</span>
-                  <h3 className="text-xl font-bold text-[#1e1e23]">
+              <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8 shadow-sm mb-5 flex-1">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-xl">{step.emoji}</span>
+                  <h3 className="text-lg font-bold text-[#1e1e23]">
                     {lang === 'ru' ? step.titleRu : step.titleEn}
                   </h3>
                 </div>
-                <p className="text-[#1e1e23]/55 leading-relaxed">
+                <p className="text-[#1e1e23]/55 leading-relaxed text-[15px]">
                   {lang === 'ru' ? step.textRu : step.textEn}
                 </p>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* End dot */}
-        <div className="absolute left-[14px] md:left-[22px] bottom-0 w-6 h-6 rounded-full bg-[#2EAE50] flex items-center justify-center z-10">
-          <div className="w-2 h-2 rounded-full bg-white" />
-        </div>
+          );
+        })}
       </div>
 
       {/* Values */}
