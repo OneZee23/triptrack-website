@@ -117,6 +117,7 @@ export default function AppLayout() {
             <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="hover:text-[#1e1e23] transition-colors">{t('footer.github')}</a>
             <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="hover:text-[#1e1e23] transition-colors">{t('footer.telegram')}</a>
             <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="hover:text-[#1e1e23] transition-colors">{t('footer.youtube')}</a>
+            <a href="mailto:nikitona123@gmail.com" className="hover:text-[#1e1e23] transition-colors">{t('footer.email')}</a>
           </div>
           <div className="mt-6 md:mt-0 font-medium">
             {t('footer.made_with')}
