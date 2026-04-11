@@ -283,12 +283,18 @@ export default function Home() {
 
       {/* Mobile: scrollable trip cards */}
       <section className="md:hidden w-full mb-16 relative">
-        {/* Static map background */}
+        {/* Static map background — 3x2 grid at zoom 5, centered on Russia */}
         <div className="absolute inset-0 overflow-hidden rounded-3xl mx-4">
-          <img
-            src={`https://basemaps.cartocdn.com/rastertiles/voyager/6/39/21.png`}
-            alt="" className="w-full h-full object-cover opacity-30 scale-150"
-          />
+          <div className="absolute inset-0 grid grid-cols-3 grid-rows-2">
+            {[
+              [19, 9], [20, 9], [21, 9],
+              [19, 10], [20, 10], [21, 10],
+            ].map(([tx, ty], i) => (
+              <img key={i} src={`https://basemaps.cartocdn.com/rastertiles/voyager/5/${tx}/${ty}.png`}
+                alt="" className="w-full h-full object-cover" />
+            ))}
+          </div>
+          <div className="absolute inset-0 bg-[#f8f6f2]/40" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#f8f6f2] via-transparent to-[#f8f6f2]" />
         </div>
         <div className="relative flex gap-4 overflow-x-auto pb-4 px-4 snap-x snap-mandatory scrollbar-none">
