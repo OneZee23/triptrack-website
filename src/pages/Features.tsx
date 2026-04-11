@@ -2,9 +2,14 @@ import { Lock, CheckCircle2, XCircle } from 'lucide-react';
 import screenProfile from '../assets/screen-profile.png';
 import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
+import { usePageMeta } from '../components/PageMeta';
 
 export default function Features() {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
+  usePageMeta(
+    lang === 'ru' ? 'Возможности TripTrack — Автозапись, Fog of War, Статистика' : 'TripTrack Features — Auto-recording, Fog of War, Smart Stats',
+    lang === 'ru' ? 'Автозапись поездок, маршруты по скорости, туман войны, фото к маршрутам, 30+ бейджей, гараж машин. 100% офлайн и приватно.' : 'Auto trip recording, speed-colored routes, fog of war exploration map, trip photos, 30+ badges, vehicle garage. 100% offline and private.',
+  );
 
   const comparisonRows = [
     { name: t('features.auto_recording'), t: true, g: false, p: false },

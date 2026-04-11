@@ -30,6 +30,9 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {
+    // URL param takes priority: ?lang=ru
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    if (urlLang === 'ru' || urlLang === 'en') return urlLang;
     const stored = localStorage.getItem('lang');
     return stored === 'ru' ? 'ru' : 'en';
   });

@@ -2,9 +2,14 @@ import { Smartphone, Apple } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import screenProfile from '../assets/screen-profile.png';
 import { AppStoreBadge } from '../components/AppStoreBadge';
+import { usePageMeta } from '../components/PageMeta';
 
 export default function Download() {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
+  usePageMeta(
+    lang === 'ru' ? 'Скачать TripTrack бесплатно — App Store' : 'Download TripTrack Free — App Store',
+    lang === 'ru' ? 'Скачайте TripTrack для iPhone бесплатно. iOS 17+, без аккаунта, без подписок. Все данные на вашем устройстве.' : 'Download TripTrack for iPhone for free. iOS 17+, no account, no subscriptions. All data stays on your device.',
+  );
 
   return (
     <div className="flex-1 w-full min-h-screen flex flex-col items-center justify-center relative overflow-hidden py-40 px-6">

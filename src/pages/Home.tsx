@@ -4,6 +4,7 @@ import { Map, Crosshair, Camera, Target, Star, ArrowRight, X } from 'lucide-reac
 import { CursorContext } from '../components/AppLayout';
 import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
+import { usePageMeta } from '../components/PageMeta';
 
 import screenFeed from '../assets/screen-feed.png';
 import screenRecording from '../assets/screen-recording.png';
@@ -204,7 +205,11 @@ const TripCard = memo(function TripCard({ trip, onClick, onHoverStart, onHoverEn
 
 export default function Home() {
   const { setHoverState } = useContext(CursorContext);
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
+  usePageMeta(
+    lang === 'ru' ? 'TripTrack — Дневник поездок | Трекер маршрутов для iOS' : 'TripTrack — Drive Diary | Trip Tracker for iOS',
+    lang === 'ru' ? 'Автоматический дневник поездок для iPhone. Записывает каждую поездку, строит визуальный журнал маршрутов, фото и статистики. Бесплатно, приватно.' : 'Auto trip diary for iOS. Records every drive, builds a visual journal of routes, photos, and stats. Free, private, Google Timeline alternative.',
+  );
   const [selectedCard, setSelectedCard] = useState<typeof TRIPS[0] | null>(null);
 
   const dragX = useMotionValue(0);

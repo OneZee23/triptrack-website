@@ -1,5 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
+import { usePageMeta } from '../components/PageMeta';
 
 type Status = 'done' | 'current' | 'planned' | 'future';
 
@@ -169,6 +170,10 @@ function lineColor(status: Status): string {
 export default function Roadmap() {
   const { lang } = useTranslation();
   const l = (obj: { en: string; ru: string }) => lang === 'ru' ? obj.ru : obj.en;
+  usePageMeta(
+    lang === 'ru' ? 'Роудмап TripTrack — План развития приложения' : 'TripTrack Roadmap — Development Plan',
+    lang === 'ru' ? 'План развития TripTrack по кварталам 2026: автостарт, виджеты, Apple Watch, iCloud синхронизация.' : 'TripTrack development plan by quarter: auto-start, widgets, Apple Watch, iCloud sync, route sharing.',
+  );
 
   return (
     <div className="flex-1 w-full max-w-2xl mx-auto px-6 py-32">

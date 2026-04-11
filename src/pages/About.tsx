@@ -1,5 +1,6 @@
 import { Shield, Heart, MessageCircle, Play } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
+import { usePageMeta } from '../components/PageMeta';
 import logo from '../assets/avatar.png';
 
 function GithubIcon({ className }: { className?: string }) {
@@ -47,6 +48,10 @@ const STORY_STEPS = [
 
 export default function About() {
   const { t, lang } = useTranslation();
+  usePageMeta(
+    lang === 'ru' ? 'О проекте TripTrack — Инди-приложение от водителя для водителей' : 'About TripTrack — Indie App Built by a Driver, for Drivers',
+    lang === 'ru' ? 'Как появился TripTrack. История создания дневника поездок после того, как Google удалил историю местоположений.' : 'How TripTrack was born. The story behind building a drive diary after Google killed location history.',
+  );
 
   return (
     <div className="flex-1 w-full max-w-3xl mx-auto px-6 py-32 flex flex-col items-center">
