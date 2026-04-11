@@ -55,19 +55,18 @@ const ROADMAP: Quarter[] = [
     milestones: [
       {
         version: 'v0.2.0', name: 'Fog Cleared',
-        date: { en: 'Apr', ru: 'Апр' },
-        status: 'current',
+        date: { en: 'Apr 10', ru: '10 апр' },
+        status: 'done',
         features: [
           { en: 'Fog of War 2.0 — soft gradients & reveal animations', ru: 'Туман войны 2.0 — мягкие градиенты и анимация открытия' },
           { en: 'Vehicle detail screen with progress', ru: 'Экран деталей машины с прогрессом' },
           { en: 'Temporal fog (state at trip completion)', ru: 'Темпоральный туман (состояние на момент поездки)' },
         ],
-        note: { en: 'On App Review', ru: 'На ревью в App Store' },
       },
       {
         version: 'v0.3.0',
         date: { en: 'May — Jun', ru: 'Май — Июн' },
-        status: 'planned',
+        status: 'current',
         features: [
           { en: 'Auto-start recording (motion detection)', ru: 'Автостарт записи (детекция движения)' },
           { en: 'GPX / CSV export', ru: 'Экспорт GPX / CSV' },
