@@ -270,11 +270,7 @@ const SHIPPED: Quarter[] = [
         version: 'v0.5.5',
         name: 'Onboarding · Stats · Rating',
         date: { en: 'May 14', ru: '14 мая' },
-        status: 'current',
-        note: {
-          en: 'Latest TestFlight build — App Store submission this week',
-          ru: 'Последний билд в TestFlight — отправка в App Store на этой неделе',
-        },
+        status: 'done',
         features: [
           {
             en: 'Onboarding redesigned — 3 pages with a working mock trip card',
@@ -303,6 +299,50 @@ const SHIPPED: Quarter[] = [
           {
             en: 'Reaction pill overflow fix on Pro Max screens',
             ru: 'Фикс переполнения реакций на Pro Max',
+          },
+        ],
+      },
+      {
+        version: 'v0.5.6',
+        name: 'Reliability · Retention · Richer Social Detail',
+        date: { en: 'May 22', ru: '22 мая' },
+        status: 'current',
+        note: {
+          en: 'Latest TestFlight build — stability sweep before the marketing push',
+          ru: 'Последний билд в TestFlight — стабильность перед маркетинговым стартом',
+        },
+        features: [
+          {
+            en: 'Auto-detect no longer ends recording mid-drive on momentary Bluetooth glitches in Remind mode',
+            ru: 'Авто-детект больше не останавливает запись посреди поездки на ложных Bluetooth-сбоях в режиме «Напоминание»',
+          },
+          {
+            en: 'Account stays signed in across long gaps — refresh tokens now rotate and effectively never expire',
+            ru: 'Аккаунт остаётся залогинен после долгих перерывов — refresh-токены ротируются и фактически не истекают',
+          },
+          {
+            en: 'Pull-to-refresh on "My Trips" no longer freezes on older iPhones — Core Data fetch moved to a background context',
+            ru: 'Пул-ту-рефреш на «Моих поездках» больше не фризит на старых iPhone — Core Data вынесен на фоновый контекст',
+          },
+          {
+            en: 'Friends\' trip detail now shows max altitude, driving time, stopped time — parity with your own trip detail',
+            ru: 'В чужих поездках теперь видны: максимальная высота, время в движении, время стоя — как в своих собственных',
+          },
+          {
+            en: 'Duration in friends\' trips reads as «1 ч 19 мин» instead of ambiguous «1:19»',
+            ru: 'Время в чужих поездках читается как «1 ч 19 мин» вместо непонятного «1:19»',
+          },
+          {
+            en: 'Sync errors retry automatically — operations no longer drop silently after a few failures',
+            ru: 'Ошибки синхронизации теперь повторяются автоматически — операции больше не теряются молча после нескольких сбоев',
+          },
+          {
+            en: 'Connectivity banner distinguishes "no network" from "server hiccup" — no more misleading "Server unreachable" while connection is fine',
+            ru: 'Баннер соединения теперь различает «нет сети» и «ошибка сервера» — больше нет вводящего в заблуждение «Сервер недоступен» при работающем интернете',
+          },
+          {
+            en: 'Comprehensive diagnostic logs across auto-detect and auth — Settings → Export logs for support',
+            ru: 'Подробные диагностические логи в авто-детекте и аутентификации — Настройки → Экспорт логов для саппорта',
           },
         ],
       },
