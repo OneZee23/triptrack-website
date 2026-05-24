@@ -14,9 +14,22 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          # Default command_timeout is 10m which is too tight on a small
+          # VPS: `npm ci` alone took 5m 36s on the v0.5.6 deploy, leaving
+          # no room for `tsc -b && vite build` before the SSH connection
+          # was killed mid-step. 30m gives plenty of head-room for cold
+          # cache rebuilds (full Docker image pull + first-time npm ci)
+          # without masking a genuine hang.
+          command_timeout: 30m
           script: |
             cd /opt/triptrack-website
             git pull origin master
-            docker compose build --no-cache
+            # Removed `--no-cache` so Docker's layer cache survives
+            # between deploys. The `package*.json COPY` happens before
+            # `RUN npm ci` in the Dockerfile, so only package-lock.json
+            # changes invalidate the install layer. Routine content
+            # commits (Roadmap.tsx, blog posts, copy tweaks) rebuild in
+            # ~30s now instead of triggering the full 5m+ npm reinstall.
+            docker compose build
             docker compose up -d
             echo "Deployed at $(date)"
