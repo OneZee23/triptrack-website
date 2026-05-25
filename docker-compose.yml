@@ -1,6 +1,12 @@
 services:
   triptrack-web:
-    build: .
+    # Image is built by the GitHub Actions runner and pushed to GHCR on
+    # every commit to master. VPS pulls a ready-made image instead of
+    # compiling locally — the previous on-VPS `npm ci + tsc + vite` flow
+    # was timing out at 30m because of memory pressure from the umami /
+    # postgres / nginx co-tenants.
+    image: ghcr.io/onezee23/triptrack-website:latest
+    pull_policy: always
     ports:
       - "127.0.0.1:3080:8080"
     restart: unless-stopped

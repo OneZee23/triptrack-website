@@ -4,32 +4,76 @@ on:
   push:
     branches: [master]
 
+# Build the Docker image on the GitHub-hosted runner (fast network,
+# plenty of RAM, persistent buildx cache via type=gha), push to ghcr.io,
+# then SSH into the VPS only to `docker pull` and restart. The previous
+# "build on VPS" flow was timing out at 30m because `tsc -b && vite
+# build` ran out of memory while Postgres / Umami / nginx competed for
+# the same 1-2GB box. Moving the build off the VPS makes deploy finish
+# in seconds regardless of how heavy the website toolchain becomes.
+
 jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # `:latest` is what the compose file references for routine
+          # restarts; the SHA tag is for rollback investigation ("which
+          # commit is in production right now?") via `docker image ls`.
+          tags: |
+            ghcr.io/onezee23/triptrack-website:latest
+            ghcr.io/onezee23/triptrack-website:${{ github.sha }}
+          # GitHub Actions cache reuses npm ci / Vite build layers
+          # between runs — first build after a package-lock bump is
+          # still slow, but routine content commits push in ~30-60s
+          # instead of 6-10 minutes.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   deploy:
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
+      - name: Pull + restart on VPS
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          # Default command_timeout is 10m which is too tight on a small
-          # VPS: `npm ci` alone took 5m 36s on the v0.5.6 deploy, leaving
-          # no room for `tsc -b && vite build` before the SSH connection
-          # was killed mid-step. 30m gives plenty of head-room for cold
-          # cache rebuilds (full Docker image pull + first-time npm ci)
-          # without masking a genuine hang.
-          command_timeout: 30m
+          # No build on VPS = no need for the previous 30m budget.
+          # 15m gives head-room for an occasionally slow image pull
+          # from ghcr.io without masking a genuine hang.
+          command_timeout: 15m
           script: |
+            set -e
             cd /opt/triptrack-website
+            # `git pull` keeps the on-VPS docker-compose.yml current so
+            # changes to service definitions (umami, postgres, env)
+            # land alongside the image bump. Source code itself is
+            # baked into the pulled image — VPS never compiles anything.
             git pull origin master
-            # Removed `--no-cache` so Docker's layer cache survives
-            # between deploys. The `package*.json COPY` happens before
-            # `RUN npm ci` in the Dockerfile, so only package-lock.json
-            # changes invalidate the install layer. Routine content
-            # commits (Roadmap.tsx, blog posts, copy tweaks) rebuild in
-            # ~30s now instead of triggering the full 5m+ npm reinstall.
-            docker compose build
+            docker compose pull triptrack-web
             docker compose up -d
+            # Prune dangling images so the VPS disk doesn't slowly fill
+            # with old layers.
+            docker image prune -f
             echo "Deployed at $(date)"
