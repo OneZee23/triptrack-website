@@ -1,6 +1,6 @@
 if (typeof window !== 'undefined') {
   if (!window.matchMedia) {
-    // @ts-expect-error minimal shim
+    // @ts-ignore minimal shim
     window.matchMedia = (query: string) => ({
       matches: false,
       media: query,
@@ -12,13 +12,13 @@ if (typeof window !== 'undefined') {
       dispatchEvent: () => false,
     });
   }
-  // @ts-expect-error minimal shim
+  // @ts-ignore minimal shim
   window.IntersectionObserver ||= class {
     observe() {}
     unobserve() {}
     disconnect() {}
   };
-  // @ts-expect-error minimal shim
+  // @ts-ignore minimal shim
   window.ResizeObserver ||= class {
     observe() {}
     unobserve() {}
