@@ -206,3 +206,12 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0,0,0,0.2);
 }
+
+/* Globe hero hint */
+@keyframes globe-hint-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.7; }
+}
+.globe-hint {
+  animation: globe-hint-pulse 2.8s ease-in-out infinite;
+}

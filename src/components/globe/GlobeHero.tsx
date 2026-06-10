@@ -61,7 +61,7 @@ export default function GlobeHero() {
             </div>
           )}
           {showGlobe && (
-            <p className="mt-8 text-xs uppercase tracking-[0.15em] text-white/40">{t('home.globe.hint')}</p>
+            <p className="globe-hint mt-8 text-xs uppercase tracking-[0.15em] text-white/40">{t('home.globe.hint')}</p>
           )}
         </div>
       </div>
