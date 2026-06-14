@@ -306,11 +306,7 @@ const SHIPPED: Quarter[] = [
         version: 'v0.5.6',
         name: 'Reliability · Retention · Richer Social Detail',
         date: { en: 'May 22', ru: '22 мая' },
-        status: 'current',
-        note: {
-          en: 'Latest TestFlight build — stability sweep before the marketing push',
-          ru: 'Последний билд в TestFlight — стабильность перед маркетинговым стартом',
-        },
+        status: 'done',
         features: [
           {
             en: 'Auto-detect no longer ends recording mid-drive on momentary Bluetooth glitches in Remind mode',
@@ -343,6 +339,54 @@ const SHIPPED: Quarter[] = [
           {
             en: 'Comprehensive diagnostic logs across auto-detect and auth — Settings → Export logs for support',
             ru: 'Подробные диагностические логи в авто-детекте и аутентификации — Настройки → Экспорт логов для саппорта',
+          },
+        ],
+      },
+      {
+        version: 'v0.5.7',
+        name: 'Reliability · Vehicles · Sharing',
+        date: { en: 'Jun 13', ru: '13 июн' },
+        status: 'current',
+        note: {
+          en: 'Newest build — two rounds of your feedback + long-trip stability',
+          ru: 'Свежий билд — два раунда вашего фидбэка + стабильность длинных поездок',
+        },
+        features: [
+          {
+            en: 'Rock-solid tracking in remote / no-signal areas — GPS fixes are no longer dropped, so long taiga drives record instead of showing "0 km"',
+            ru: 'Надёжная запись в глуши и без связи — таёжные GPS-фиксы больше не отбрасываются, длинный трек пишется, а не показывает «0 км»',
+          },
+          {
+            en: 'Live Activity keeps a live distance and working buttons on multi-day trips (past the iOS ~8h limit); a drive killed mid-route resumes as one track',
+            ru: 'Live Activity держит живую дистанцию и рабочие кнопки на многодневном треке (за лимитом iOS ~8 ч); прерванная посреди дороги поездка продолжается одним треком',
+          },
+          {
+            en: 'Change the vehicle on an already-saved trip; active recording shows which car the trip is for',
+            ru: 'Смена машины у уже сохранённой поездки; в активной записи видно, для какой машины едешь',
+          },
+          {
+            en: 'Siri & Shortcuts start with the car you actually picked — no more always-first-vehicle',
+            ru: 'Siri и Команды стартуют с выбранной машиной, а не всегда с первой',
+          },
+          {
+            en: 'No more random sign-outs on flaky networks — refresh-token rotation is now loss-tolerant',
+            ru: 'Больше нет случайных разлогинов на нестабильной сети — ротация токена устойчива к потере ответа',
+          },
+          {
+            en: 'Logged-out "Share" now prompts sign-in and resumes the share afterwards',
+            ru: 'Кнопка «Поделиться» у разлогиненных предлагает вход и возобновляет шеринг после него',
+          },
+          {
+            en: 'Night Rider & other time badges now count any trip that overlaps the window, not just its start hour',
+            ru: 'Ночные/утренние ачивки засчитываются, если поездка попадает в окно в любой момент, а не только по часу старта',
+          },
+          {
+            en: 'Choose how average speed is measured — overall, or moving-only (excludes stops & pauses); double-tap to zoom trip photos',
+            ru: 'Выбор расчёта средней скорости — общая или «в движении» (без остановок и пауз); зум фото поездки по даблтапу',
+          },
+          {
+            en: '"Regions" renamed to "Places", the feed\'s "Mine" tab to "Trips"; clearer stats calendar (today ring + legend)',
+            ru: '«Регионы» → «Места», вкладка «Мои» → «Поездки»; понятнее календарь статистики (кольцо «сегодня» + легенда)',
           },
         ],
       },
