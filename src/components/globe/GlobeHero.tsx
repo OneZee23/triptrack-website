@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { Send } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useGlobeData } from '../../hooks/useGlobeData';
 import { TripCard } from './TripCard';
@@ -97,6 +98,15 @@ export default function GlobeHero() {
           <p className="globe-hint mt-8 text-xs uppercase tracking-[0.15em] text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
             {t('home.globe.hint')}
           </p>
+          <a
+            href="https://t.me/onezee123"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pointer-events-auto mt-5 inline-flex items-center gap-1.5 text-xs text-white/45 transition-colors hover:text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
+          >
+            <Send size={12} />
+            {t('home.globe.join_cta')}
+          </a>
         </div>
       </div>
 

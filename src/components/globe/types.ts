@@ -10,6 +10,9 @@ export interface GlobeTrip {
   maxSpeedKmh?: number | null; // top speed
   maxAltitudeM?: number | null; // peak altitude
   photoCount?: number | null;
+  traveler?: string | null; // author display name
+  avatarEmoji?: string | null;
+  level?: number | null; // author profile level
 }
 
 export interface GlobeData {

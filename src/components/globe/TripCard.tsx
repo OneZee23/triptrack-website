@@ -109,10 +109,21 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
 
         <div className="mt-3 flex items-center gap-2.5">
           <span
-            className="h-7 w-7 shrink-0 rounded-full ring-2 ring-white/15"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-base ring-2 ring-white/15"
             style={{ background: `linear-gradient(135deg, ${av.from}, ${av.to})` }}
-          />
-          <span className="text-xs text-white/70">{t('home.globe.card_traveler')}</span>
+          >
+            {trip.avatarEmoji || ''}
+          </span>
+          <div className="min-w-0">
+            <div className="truncate text-[13px] font-semibold leading-tight">
+              {trip.traveler || t('home.globe.card_traveler')}
+            </div>
+            {trip.level != null && (
+              <div className="text-[10px] text-white/45 leading-tight">
+                {t('home.globe.card_level')} {trip.level}
+              </div>
+            )}
+          </div>
         </div>
 
         <a
