@@ -1,8 +1,9 @@
-import { Suspense, lazy, useState } from 'react';
-import { AnimatePresence } from 'motion/react';
+import { Suspense, lazy, useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useGlobeData } from '../../hooks/useGlobeData';
 import { TripCard } from './TripCard';
+import { StarField } from './StarField';
 import type { GlobeTrip } from './types';
 
 const MapGlobe = lazy(() => import('./MapGlobe'));
@@ -12,7 +13,7 @@ const Fallback = () => (
   <div
     aria-hidden
     className="absolute inset-0"
-    style={{ background: 'radial-gradient(circle at 58% 50%, #16263a 0%, #0a1018 60%, #06060a 100%)' }}
+    style={{ background: 'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)' }}
   />
 );
 
@@ -25,48 +26,54 @@ export default function GlobeHero() {
   const trips = state.status === 'success' ? state.data.trips : [];
   const stats = state.status === 'success' ? state.data.stats : null;
 
-  // correct RU/EN pluralization ("1 поездка / 2 поездки / 5 поездок")
   const statWord = (base: string, n: number) => t(`home.globe.${base}_${new Intl.PluralRules(lang).select(n)}`);
 
-  // hide the hero copy while exploring the map OR while a trip card is open,
-  // so nothing pops back over the globe and competes with the card (Apple/Strava
-  // map-detail pattern: selecting an object moves the page into a focused state).
+  // close the trip card when the user scrolls the page (avoids the card sticking
+  // over the hero as it scrolls away).
+  useEffect(() => {
+    if (!selected) return;
+    const close = () => setSelected(null);
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > 6) close();
+    };
+    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('scroll', close, { passive: true });
+    window.addEventListener('touchmove', close, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('scroll', close);
+      window.removeEventListener('touchmove', close);
+    };
+  }, [selected]);
+
+  // hide the hero copy while exploring the map OR while a card is open.
   const heroHidden = interacting || selected !== null;
 
   return (
     <section
       className="relative w-full h-[100svh] min-h-[600px] overflow-hidden text-white"
-      style={{
-        // deep-space backdrop so the far globe floats in space, not flat black
-        background: [
-          'radial-gradient(1.5px 1.5px at 12% 20%, rgba(255,255,255,0.55), transparent)',
-          'radial-gradient(1.5px 1.5px at 78% 14%, rgba(255,255,255,0.5), transparent)',
-          'radial-gradient(1px 1px at 58% 66%, rgba(255,255,255,0.45), transparent)',
-          'radial-gradient(1px 1px at 30% 82%, rgba(255,255,255,0.4), transparent)',
-          'radial-gradient(1px 1px at 88% 56%, rgba(255,255,255,0.5), transparent)',
-          'radial-gradient(1.2px 1.2px at 46% 34%, rgba(255,255,255,0.4), transparent)',
-          'radial-gradient(1px 1px at 67% 88%, rgba(255,255,255,0.35), transparent)',
-          'radial-gradient(1px 1px at 22% 52%, rgba(255,255,255,0.35), transparent)',
-          'radial-gradient(1px 1px at 93% 30%, rgba(255,255,255,0.4), transparent)',
-          'radial-gradient(1px 1px at 8% 74%, rgba(255,255,255,0.3), transparent)',
-          'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)',
-        ].join(', '),
-      }}
+      style={{ background: 'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)' }}
     >
+      {/* animated deep-space backdrop (shows through the transparent space around the globe) */}
+      <StarField />
+      <div className="globe-orb pointer-events-none" aria-hidden />
+      <div className="globe-orb-2 pointer-events-none" aria-hidden />
+      <div className="globe-shoot pointer-events-none" style={{ top: '16%', left: '6%' }} aria-hidden />
+
       <div className="absolute inset-0">
         <Suspense fallback={<Fallback />}>
           <MapGlobe trips={trips} onSelect={setSelected} onInteracting={setInteracting} paused={selected !== null} />
         </Suspense>
       </div>
 
-      {/* darkening scrim — fades away while you explore the map */}
+      {/* left scrim for text readability — fades while interacting / card open */}
       <div
-        className={`absolute inset-0 bg-gradient-to-r from-[#06060a]/92 via-[#06060a]/45 to-transparent pointer-events-none transition-opacity duration-700 ${heroHidden ?'opacity-0' : 'opacity-100'}`}
+        className={`absolute inset-0 bg-gradient-to-r from-[#06060a]/92 via-[#06060a]/45 to-transparent pointer-events-none transition-opacity duration-700 ${heroHidden ? 'opacity-0' : 'opacity-100'}`}
       />
 
-      {/* hero copy — smart-hides while interacting, returns when idle */}
+      {/* hero copy — smart-hides while interacting / card open */}
       <div
-        className={`relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center pointer-events-none transition-all duration-500 ${heroHidden ?'opacity-0 -translate-y-1' : 'opacity-100'}`}
+        className={`relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center pointer-events-none transition-all duration-500 ${heroHidden ? 'opacity-0 -translate-y-1' : 'opacity-100'}`}
       >
         <div className="max-w-[620px]">
           <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] drop-shadow-[0_2px_14px_rgba(0,0,0,0.7)]">
@@ -93,11 +100,25 @@ export default function GlobeHero() {
         </div>
       </div>
 
-      {/* trip card opens on the LEFT, where the hero text was (text smart-hides while selected) */}
+      {/* focus scrim + trip card (card opens on the LEFT, where the text was) */}
+      <AnimatePresence>
+        {selected && (
+          <motion.div
+            key="scrim"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="absolute inset-0 z-[15] bg-black/55 backdrop-blur-sm"
+            onClick={() => setSelected(null)}
+            aria-hidden
+          />
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {selected && (
           <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex h-full max-w-7xl items-center px-6">
-            <div className="pointer-events-auto w-full max-w-[380px]">
+            <div className="pointer-events-auto w-full max-w-[440px]">
               <TripCard trip={selected} onClose={() => setSelected(null)} />
             </div>
           </div>
