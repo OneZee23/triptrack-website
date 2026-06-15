@@ -451,5 +451,6 @@ export default function MapGlobe({
     );
   }
 
-  return <div ref={containerRef} style={{ width: '100%', height: '100%', minHeight: 320, background: '#0a0f1e' }} />;
+  // transparent so the section's deep-space backdrop shows around the globe when zoomed out
+  return <div ref={containerRef} style={{ width: '100%', height: '100%', minHeight: 320, background: 'transparent' }} />;
 }

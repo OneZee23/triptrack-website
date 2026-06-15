@@ -34,7 +34,25 @@ export default function GlobeHero() {
   const heroHidden = interacting || selected !== null;
 
   return (
-    <section className="relative w-full h-[100svh] min-h-[600px] overflow-hidden bg-[#06060a] text-white">
+    <section
+      className="relative w-full h-[100svh] min-h-[600px] overflow-hidden text-white"
+      style={{
+        // deep-space backdrop so the far globe floats in space, not flat black
+        background: [
+          'radial-gradient(1.5px 1.5px at 12% 20%, rgba(255,255,255,0.55), transparent)',
+          'radial-gradient(1.5px 1.5px at 78% 14%, rgba(255,255,255,0.5), transparent)',
+          'radial-gradient(1px 1px at 58% 66%, rgba(255,255,255,0.45), transparent)',
+          'radial-gradient(1px 1px at 30% 82%, rgba(255,255,255,0.4), transparent)',
+          'radial-gradient(1px 1px at 88% 56%, rgba(255,255,255,0.5), transparent)',
+          'radial-gradient(1.2px 1.2px at 46% 34%, rgba(255,255,255,0.4), transparent)',
+          'radial-gradient(1px 1px at 67% 88%, rgba(255,255,255,0.35), transparent)',
+          'radial-gradient(1px 1px at 22% 52%, rgba(255,255,255,0.35), transparent)',
+          'radial-gradient(1px 1px at 93% 30%, rgba(255,255,255,0.4), transparent)',
+          'radial-gradient(1px 1px at 8% 74%, rgba(255,255,255,0.3), transparent)',
+          'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)',
+        ].join(', '),
+      }}
+    >
       <div className="absolute inset-0">
         <Suspense fallback={<Fallback />}>
           <MapGlobe trips={trips} onSelect={setSelected} onInteracting={setInteracting} paused={selected !== null} />
@@ -75,10 +93,13 @@ export default function GlobeHero() {
         </div>
       </div>
 
+      {/* trip card opens on the LEFT, where the hero text was (text smart-hides while selected) */}
       <AnimatePresence>
         {selected && (
-          <div className="absolute z-20 bottom-8 right-6 left-6 md:left-auto md:w-[340px]">
-            <TripCard trip={selected} onClose={() => setSelected(null)} />
+          <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex h-full max-w-7xl items-center px-6">
+            <div className="pointer-events-auto w-full max-w-[380px]">
+              <TripCard trip={selected} onClose={() => setSelected(null)} />
+            </div>
           </div>
         )}
       </AnimatePresence>
