@@ -55,7 +55,8 @@
       "stat_cities_one": "city",
       "stat_cities_other": "cities",
       "card_traveler": "Traveler",
-      "card_cta": "Open in TripTrack"
+      "card_cta": "Open in TripTrack",
+      "km": "km"
     }
   },
   "features": {

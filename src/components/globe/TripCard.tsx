@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { motion } from 'motion/react';
-import { X } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import type { GlobeTrip } from './types';
 import { avatarStyle } from '../../lib/anonAvatar';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -9,9 +9,8 @@ import { RouteMiniMap } from './RouteMiniMap';
 const APP_STORE_URL = 'https://apps.apple.com/us/app/triptrack-road-journal/id6760650361';
 
 export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => void }) {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const av = avatarStyle(trip.id);
-  const label = [t('home.globe.card_traveler'), trip.region].filter(Boolean).join(' · ');
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -21,6 +20,14 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  const title = trip.title || trip.region || t('home.globe.card_traveler');
+  const dateLabel = trip.date
+    ? new Intl.DateTimeFormat(lang === 'ru' ? 'ru-RU' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(
+        new Date(trip.date),
+      )
+    : null;
+  const meta = [trip.distanceKm ? `${trip.distanceKm} ${t('home.globe.km')}` : null, dateLabel].filter(Boolean).join(' · ');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -29,7 +36,7 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
       role="dialog"
       aria-modal="true"
-      aria-label={label}
+      aria-label={title}
       className="relative overflow-hidden rounded-[26px] border border-white/15 bg-[#0b0d12]/55 text-white shadow-[0_12px_50px_rgba(0,0,0,0.55)] backdrop-blur-2xl backdrop-saturate-150"
     >
       {/* liquid-glass specular highlights */}
@@ -44,21 +51,29 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
         <X size={15} />
       </button>
 
-      {/* real map snapshot of the route */}
+      {/* real map snapshot of the route + "auto-recorded" hook pill */}
       <div className="relative m-3 overflow-hidden rounded-2xl border border-white/10 bg-[#0d1622]">
         <RouteMiniMap trip={trip} />
-        <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl" />
+        <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-1 ring-inset ring-white/10" />
+        <div className="pointer-events-none absolute left-3 top-3 z-10 flex items-center gap-1 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-[#FFD9A8] backdrop-blur-md">
+          <Sparkles size={12} />
+          {t('home.modal_auto_recorded')}
+        </div>
       </div>
 
-      {/* meta + cta */}
+      {/* memory: title + the story facts + traveler + CTA */}
       <div className="relative px-4 pb-4 pt-1">
-        <div className="flex items-center gap-3">
+        <h3 className="text-[15px] font-bold leading-snug">{title}</h3>
+        {meta && <div className="mt-1 text-xs text-white/65">{meta}</div>}
+
+        <div className="mt-3 flex items-center gap-2.5">
           <span
-            className="h-9 w-9 shrink-0 rounded-full ring-2 ring-white/15"
+            className="h-7 w-7 shrink-0 rounded-full ring-2 ring-white/15"
             style={{ background: `linear-gradient(135deg, ${av.from}, ${av.to})` }}
           />
-          <span className="text-sm font-medium text-white/85">{label}</span>
+          <span className="text-xs text-white/70">{t('home.globe.card_traveler')}</span>
         </div>
+
         <a
           href={APP_STORE_URL}
           className="mt-4 block rounded-xl bg-gradient-to-br from-[#FF6B00] to-[#FFB000] py-2.5 text-center font-bold text-[#1a1209] shadow-[0_4px_22px_rgba(255,107,0,0.4)] transition hover:brightness-105"

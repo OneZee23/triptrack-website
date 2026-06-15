@@ -126,23 +126,29 @@ export default function MapGlobe({
     if (didFitRef.current) return;
     const coords = list.flatMap((t) => t.coords);
     if (!coords.length) return;
+    didFitRef.current = true;
     const b = new maplibregl.LngLatBounds();
     for (const [lat, lng] of coords) b.extend([lng, lat]);
-    didFitRef.current = true;
-    programmaticRef.current = true;
-    // frame the trip in the CLEAR right-hand area, not under the left hero text
+    // Always fit ALL trips (overview), wherever they are. Left padding clears the
+    // hero text (≤620px wide) but is clamped so the globe isn't squished into a
+    // sliver on ultra-wide screens. Spread-out trips → low zoom → globe overview.
     const wide = typeof window !== 'undefined' && window.innerWidth >= 768;
-    map.fitBounds(b, {
-      padding: { top: 90, bottom: 90, right: 60, left: wide ? Math.round(window.innerWidth * 0.5) : 30 },
-      maxZoom: 6,
-      duration: 0,
-    });
-    // fit is instant (duration 0); clear the guard on the next frame after the
-    // synchronous camera events fire — not a long window that would swallow a
-    // real user grab right after load.
-    requestAnimationFrame(() => {
-      programmaticRef.current = false;
-    });
+    const leftPad = wide ? Math.min(Math.round(window.innerWidth * 0.42), 600) : 24;
+    const opts = { padding: { top: 90, bottom: 90, right: 60, left: leftPad }, maxZoom: 6 };
+    const reduce = prefersReducedMotion();
+
+    // Cinematic intro: let the globe spin for a beat, then fly in to frame the trips.
+    const fly = () => {
+      const m = mapRef.current;
+      if (!m || userInteractingRef.current) return; // don't yank if the user already grabbed
+      programmaticRef.current = true; // suppresses spin during the flight (see frame loop)
+      m.fitBounds(b, { ...opts, duration: reduce ? 0 : 2400 });
+      window.setTimeout(() => {
+        programmaticRef.current = false;
+      }, reduce ? 60 : 2600);
+    };
+    if (reduce) fly();
+    else window.setTimeout(fly, 1800);
   }
 
   useEffect(() => {
@@ -228,7 +234,7 @@ export default function MapGlobe({
         const dt = ts - last;
         last = ts;
 
-        const active = !pausedRef.current; // paused while a trip card is open
+        const active = !pausedRef.current && !programmaticRef.current; // paused: card open / camera flying
         if (active && !userInteractingRef.current && m.getZoom() < MAX_SPIN_ZOOM) {
           const c = m.getCenter();
           c.lng -= (360 / SECONDS_PER_REVOLUTION) * (dt / 1000);
