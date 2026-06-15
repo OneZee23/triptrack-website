@@ -39,9 +39,9 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
       <button
         onClick={onClose}
         aria-label="Close"
-        className="absolute right-3 top-3 z-30 rounded-full bg-black/35 p-1.5 text-white/85 backdrop-blur transition hover:bg-black/55 hover:text-white"
+        className="absolute right-4 top-4 z-30 grid h-7 w-7 place-items-center rounded-full bg-black/45 text-white/90 backdrop-blur-md transition hover:bg-black/65 hover:text-white"
       >
-        <X size={16} />
+        <X size={15} />
       </button>
 
       {/* real map snapshot of the route */}

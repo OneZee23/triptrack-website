@@ -234,14 +234,16 @@ export default function MapGlobe({
           c.lng -= (360 / SECONDS_PER_REVOLUTION) * (dt / 1000);
           m.setCenter(c);
         }
-        if (active && m.getLayer(ROUTE_FLOW_LAYER)) {
+        // dash flow + pulse animate ALWAYS (even while a card is open / spin paused) —
+        // `paused` only freezes the camera spin, not the route's visual life.
+        if (m.getLayer(ROUTE_FLOW_LAYER)) {
           const step = Math.floor((ts / 60) % DASH_SEQUENCE.length);
           if (step !== dashStepRef.current) {
             m.setPaintProperty(ROUTE_FLOW_LAYER, 'line-dasharray', DASH_SEQUENCE[step]);
             dashStepRef.current = step;
           }
         }
-        if (active && m.getLayer(ENDPOINT_PULSE_LAYER)) {
+        if (m.getLayer(ENDPOINT_PULSE_LAYER)) {
           const p = (Math.sin(ts / 700) + 1) / 2; // 0..1
           m.setPaintProperty(ENDPOINT_PULSE_LAYER, 'circle-radius', 7 + p * 16);
           m.setPaintProperty(ENDPOINT_PULSE_LAYER, 'circle-opacity', 0.4 * (1 - p));
