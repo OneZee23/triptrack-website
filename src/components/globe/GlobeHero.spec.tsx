@@ -22,7 +22,7 @@ describe('GlobeHero', () => {
       </LanguageProvider>,
     );
     expect(screen.getByRole('heading', { level: 1 })).toBeTruthy();
-    expect(screen.getByRole('link')).toBeTruthy();
+    expect(screen.getByRole('link', { name: /app store/i })).toBeTruthy();
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
   });
 });
