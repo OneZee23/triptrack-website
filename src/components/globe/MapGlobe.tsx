@@ -407,11 +407,12 @@ export default function MapGlobe({
 
   useEffect(() => {
     const map = mapRef.current;
-    // Only act when the style is ready. If it isn't, the style.load handler runs
-    // setData + fitToTrips using the latest tripsRef — so we must NOT wait on the
-    // map 'idle' event (the spin loop keeps the map perpetually non-idle, which
-    // previously meant the camera never framed the trip).
-    if (!map || !map.isStyleLoaded()) return;
+    // Act once the source/layers exist (layersAddedRef). If they don't yet, the
+    // style.load handler applies the latest tripsRef when it adds them. Do NOT
+    // gate on isStyleLoaded() — it returns false transiently after layers are
+    // added (during tile loads), which on a cached reload skipped setData+fit
+    // forever, leaving the route source empty.
+    if (!map || !layersAddedRef.current) return;
     setData(map, trips);
     fitToTrips(map, trips);
   }, [trips]);
