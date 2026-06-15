@@ -1,7 +1,7 @@
+// jsdom shims for the globe components' browser-API usage.
 if (typeof window !== 'undefined') {
   if (!window.matchMedia) {
-    // @ts-ignore minimal shim
-    window.matchMedia = (query: string) => ({
+    window.matchMedia = ((query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -10,18 +10,17 @@ if (typeof window !== 'undefined') {
       addListener: () => {},
       removeListener: () => {},
       dispatchEvent: () => false,
-    });
+    })) as typeof window.matchMedia;
   }
-  // @ts-ignore minimal shim
-  window.IntersectionObserver ||= class {
+  const NoopObserver = class {
     observe() {}
     unobserve() {}
     disconnect() {}
   };
-  // @ts-ignore minimal shim
-  window.ResizeObserver ||= class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
+  if (!window.IntersectionObserver) {
+    window.IntersectionObserver = NoopObserver as unknown as typeof IntersectionObserver;
+  }
+  if (!window.ResizeObserver) {
+    window.ResizeObserver = NoopObserver as unknown as typeof ResizeObserver;
+  }
 }

@@ -26,3 +26,6 @@ dist-ssr
 
 # brainstorm scratch (visual companion)
 .superpowers/
+
+# local dev globe mock (anonymized real data; prod uses nginx-proxied /api/globe)
+public/api/

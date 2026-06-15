@@ -18,6 +18,13 @@ export function useGlobeData(): GlobeDataState {
 
   useEffect(() => {
     const ctrl = new AbortController();
+    // Guard against a hung request (RU users have hit relay timeouts): abort
+    // after 8s and surface an error instead of spinning on 'loading' forever.
+    let timedOut = false;
+    const timeout = window.setTimeout(() => {
+      timedOut = true;
+      ctrl.abort();
+    }, 8000);
     fetch(ENDPOINT, { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((d: unknown) => {
@@ -25,10 +32,17 @@ export function useGlobeData(): GlobeDataState {
         setState(d.trips.length ? { status: 'success', data: d } : { status: 'empty' });
       })
       .catch((e: unknown) => {
-        if (e instanceof DOMException && e.name === 'AbortError') return;
+        if (e instanceof DOMException && e.name === 'AbortError') {
+          if (timedOut) setState({ status: 'error' });
+          return;
+        }
         setState({ status: 'error' });
-      });
-    return () => ctrl.abort();
+      })
+      .finally(() => window.clearTimeout(timeout));
+    return () => {
+      window.clearTimeout(timeout);
+      ctrl.abort();
+    };
   }, []);
 
   return state;

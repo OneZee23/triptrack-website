@@ -50,8 +50,12 @@
       "subtitle": "TripTrack превращает поездки в живой глобус. Крути, приближай, исследуй реальные маршруты сообщества.",
       "cta": "Скачать в App Store",
       "hint": "Крути · приближай · нажми на поездку",
-      "stat_trips": "поездок",
-      "stat_cities": "городов",
+      "stat_trips_one": "поездка",
+      "stat_trips_few": "поездки",
+      "stat_trips_many": "поездок",
+      "stat_cities_one": "город",
+      "stat_cities_few": "города",
+      "stat_cities_many": "городов",
       "card_traveler": "Путешественник",
       "card_cta": "Открыть в TripTrack"
     }

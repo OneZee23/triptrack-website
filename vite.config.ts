@@ -4,15 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  resolve: { dedupe: ['three'] },
-  optimizeDeps: { include: ['three', 'react-globe.gl'] },
+  optimizeDeps: { include: ['maplibre-gl'] },
   build: {
     rollupOptions: {
       output: {
         // function form avoids the React.lazy eager-load regression (Vite #17653)
         manualChunks(id) {
-          if (id.includes('node_modules/three')) return 'three'
-          if (id.includes('react-globe.gl') || id.includes('globe.gl') || id.includes('three-globe')) return 'globe'
+          if (id.includes('node_modules/maplibre-gl')) return 'maplibre'
         },
       },
     },
