@@ -216,49 +216,48 @@ html {
   animation: globe-hint-pulse 2.8s ease-in-out infinite;
 }
 
-/* Globe hero — interaction hint (rotate / zoom affordance). Positioned + faded
-   by MapGlobe via inline transform/opacity; never blocks pointer events. */
+/* Globe hero — small interaction hint (rotate / zoom). Positioned + faded by
+   MapGlobe via inline transform/opacity; never blocks pointer events. */
 .globe-hint-overlay {
   position: absolute;
   left: 0;
   top: 0;
-  width: 74vmin;
-  height: 74vmin;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.55s ease;
-  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.55));
+  transition: opacity 0.5s ease;
 }
-.globe-hint-overlay > .ghint-rot,
-.globe-hint-overlay > .ghint-zoom {
-  position: absolute;
-  inset: 0;
+.globe-hint-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 13px;
+  border-radius: 9999px;
+  background: rgba(10, 14, 24, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+  animation: ghint-bob 3.2s ease-in-out infinite;
 }
-.ghint-rot {
+.ghint-divider {
+  width: 1px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.ghint-rock {
   transform-origin: center;
-  animation: ghint-rock 4.6s ease-in-out infinite;
+  animation: ghint-rock 3.2s ease-in-out infinite;
 }
 @keyframes ghint-rock {
-  0%, 100% { transform: rotate(-7deg); }
-  50%      { transform: rotate(7deg); }
+  0%, 100% { transform: rotate(-22deg); }
+  50%      { transform: rotate(22deg); }
 }
-.ghint-pulse {
-  animation: ghint-fade 3s ease-in-out infinite;
-}
-@keyframes ghint-fade {
-  0%, 100% { opacity: 0.5; }
-  50%      { opacity: 1; }
-}
-.ghint-zoom {
-  transform-origin: 50% 76%;
-  animation: ghint-zoom 2.8s ease-in-out infinite;
-}
-@keyframes ghint-zoom {
-  0%, 100% { opacity: 0.4; transform: scale(0.94); }
-  50%      { opacity: 0.85; transform: scale(1.05); }
+@keyframes ghint-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.86; }
+  50%      { transform: translateY(-3px); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ghint-rot, .ghint-pulse, .ghint-zoom { animation: none; }
+  .globe-hint-chip, .ghint-rock { animation: none; }
 }
 
 /* Globe hero — animated deep-space backdrop */
