@@ -58,7 +58,14 @@
       "stat_cities_many": "городов",
       "card_traveler": "Путешественник",
       "card_cta": "Открыть в TripTrack",
-      "km": "км"
+      "km": "км",
+      "stat_distance": "Расстояние",
+      "stat_duration": "В пути",
+      "stat_avg": "Ср. скорость",
+      "stat_max": "Макс. скорость",
+      "unit_kmh": "км/ч",
+      "unit_h": "ч",
+      "unit_min": "мин"
     }
   },
   "features": {

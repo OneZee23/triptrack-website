@@ -1,12 +1,26 @@
 import { useEffect } from 'react';
 import { motion } from 'motion/react';
-import { X, Sparkles } from 'lucide-react';
+import { X, Sparkles, Route, Clock, Gauge, Zap, type LucideIcon } from 'lucide-react';
 import type { GlobeTrip } from './types';
 import { avatarStyle } from '../../lib/anonAvatar';
 import { useTranslation } from '../../i18n/useTranslation';
 import { RouteMiniMap } from './RouteMiniMap';
 
 const APP_STORE_URL = 'https://apps.apple.com/us/app/triptrack-road-journal/id6760650361';
+
+type StatItem = { icon: LucideIcon; value: string; label: string };
+
+function Stat({ icon: Icon, value, label }: StatItem) {
+  return (
+    <div className="flex items-center gap-2 rounded-xl bg-white/[0.06] px-2.5 py-2">
+      <Icon size={15} className="shrink-0 text-[#FFB000]" />
+      <div className="min-w-0">
+        <div className="truncate text-[13px] font-semibold leading-tight">{value}</div>
+        <div className="text-[10px] uppercase tracking-wide text-white/45 leading-tight">{label}</div>
+      </div>
+    </div>
+  );
+}
 
 export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => void }) {
   const { t, lang } = useTranslation();
@@ -26,7 +40,26 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
         new Date(trip.date),
       )
     : null;
-  const meta = [trip.distanceKm ? `${trip.distanceKm} ${t('home.globe.km')}` : null, dateLabel].filter(Boolean).join(' · ');
+  const subtitle = [dateLabel, trip.region].filter(Boolean).join(' · ');
+
+  const fmtDuration = (sec: number) => {
+    let h = Math.floor(sec / 3600);
+    let m = Math.round((sec % 3600) / 60);
+    if (m === 60) {
+      h += 1;
+      m = 0;
+    }
+    return h > 0 ? `${h} ${t('home.globe.unit_h')} ${m} ${t('home.globe.unit_min')}` : `${m} ${t('home.globe.unit_min')}`;
+  };
+
+  const km = t('home.globe.km');
+  const kmh = t('home.globe.unit_kmh');
+  const stats: StatItem[] = [
+    trip.distanceKm != null ? { icon: Route, value: `${trip.distanceKm} ${km}`, label: t('home.globe.stat_distance') } : null,
+    trip.durationSec != null ? { icon: Clock, value: fmtDuration(trip.durationSec), label: t('home.globe.stat_duration') } : null,
+    trip.avgSpeedKmh != null ? { icon: Gauge, value: `${trip.avgSpeedKmh} ${kmh}`, label: t('home.globe.stat_avg') } : null,
+    trip.maxSpeedKmh != null ? { icon: Zap, value: `${trip.maxSpeedKmh} ${kmh}`, label: t('home.globe.stat_max') } : null,
+  ].filter((s): s is StatItem => s !== null);
 
   return (
     <motion.div
@@ -61,10 +94,18 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
         </div>
       </div>
 
-      {/* memory: title + the story facts + traveler + CTA */}
+      {/* memory: title + facts + stats + traveler + CTA */}
       <div className="relative px-4 pb-4 pt-1">
         <h3 className="text-[15px] font-bold leading-snug">{title}</h3>
-        {meta && <div className="mt-1 text-xs text-white/65">{meta}</div>}
+        {subtitle && <div className="mt-1 text-xs text-white/60">{subtitle}</div>}
+
+        {stats.length > 0 && (
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {stats.map((s) => (
+              <Stat key={s.label} icon={s.icon} value={s.value} label={s.label} />
+            ))}
+          </div>
+        )}
 
         <div className="mt-3 flex items-center gap-2.5">
           <span

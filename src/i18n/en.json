@@ -56,7 +56,14 @@
       "stat_cities_other": "cities",
       "card_traveler": "Traveler",
       "card_cta": "Open in TripTrack",
-      "km": "km"
+      "km": "km",
+      "stat_distance": "Distance",
+      "stat_duration": "Duration",
+      "stat_avg": "Avg speed",
+      "stat_max": "Top speed",
+      "unit_kmh": "km/h",
+      "unit_h": "h",
+      "unit_min": "min"
     }
   },
   "features": {
