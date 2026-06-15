@@ -285,7 +285,8 @@ html {
   position: absolute;
   width: 130px;
   height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.95), transparent);
+  /* bright head on the right (leading) edge, tail fades behind toward the left */
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.95));
   border-radius: 9999px;
   animation: globe-shoot 16s ease-in infinite;
   animation-delay: 8s;

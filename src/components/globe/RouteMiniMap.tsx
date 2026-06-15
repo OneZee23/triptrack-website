@@ -118,5 +118,5 @@ export function RouteMiniMap({ trip }: { trip: GlobeTrip }) {
 
   // explicit pixel height (inline style, not Tailwind/aspect-ratio) so the map
   // container can never collapse to 0 height inside the animated card.
-  return <div ref={ref} style={{ width: '100%', height: 150 }} />;
+  return <div ref={ref} style={{ width: '100%', height: 220 }} />;
 }

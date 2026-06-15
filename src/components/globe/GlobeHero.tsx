@@ -118,7 +118,7 @@ export default function GlobeHero() {
       <AnimatePresence>
         {selected && (
           <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex h-full max-w-7xl items-center px-6">
-            <div className="pointer-events-auto w-full max-w-[440px]">
+            <div className="pointer-events-auto w-full max-w-[360px]">
               <TripCard trip={selected} onClose={() => setSelected(null)} />
             </div>
           </div>
