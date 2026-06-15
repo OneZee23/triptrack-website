@@ -216,6 +216,51 @@ html {
   animation: globe-hint-pulse 2.8s ease-in-out infinite;
 }
 
+/* Globe hero — interaction hint (rotate / zoom affordance). Positioned + faded
+   by MapGlobe via inline transform/opacity; never blocks pointer events. */
+.globe-hint-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 74vmin;
+  height: 74vmin;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.55));
+}
+.globe-hint-overlay > .ghint-rot,
+.globe-hint-overlay > .ghint-zoom {
+  position: absolute;
+  inset: 0;
+}
+.ghint-rot {
+  transform-origin: center;
+  animation: ghint-rock 4.6s ease-in-out infinite;
+}
+@keyframes ghint-rock {
+  0%, 100% { transform: rotate(-7deg); }
+  50%      { transform: rotate(7deg); }
+}
+.ghint-pulse {
+  animation: ghint-fade 3s ease-in-out infinite;
+}
+@keyframes ghint-fade {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+.ghint-zoom {
+  transform-origin: 50% 76%;
+  animation: ghint-zoom 2.8s ease-in-out infinite;
+}
+@keyframes ghint-zoom {
+  0%, 100% { opacity: 0.4; transform: scale(0.94); }
+  50%      { opacity: 0.85; transform: scale(1.05); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ghint-rot, .ghint-pulse, .ghint-zoom { animation: none; }
+}
+
 /* Globe hero — animated deep-space backdrop */
 
 /* Parallax starfield: random box-shadow dots, drift on the compositor only.

@@ -7,6 +7,7 @@ import maplibregl from 'maplibre-gl';
 import type { Map as MapLibreMap, GeoJSONSource, MapMouseEvent, MapGeoJSONFeature } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { GlobeTrip } from './types';
+import { GlobeHint } from './GlobeHint';
 import type { Feature, FeatureCollection, LineString, Point } from 'geojson';
 
 // Keyless OpenFreeMap "Liberty" vector street style (closest no-key match to Mapbox streets-v12).
@@ -106,6 +107,9 @@ export default function MapGlobe({
   const interactionTimerRef = useRef<number | undefined>(undefined);
   const pausedRef = useRef(paused);
   const onscreenRef = useRef(true);
+  const hintRef = useRef<HTMLDivElement | null>(null);
+  const hintDismissedRef = useRef(false);
+  const [hintGone, setHintGone] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -148,7 +152,7 @@ export default function MapGlobe({
       }, reduce ? 60 : 2600);
     };
     if (reduce) fly();
-    else window.setTimeout(fly, 1800);
+    else window.setTimeout(fly, 3200); // let the globe spin (with the hint) for a beat first
   }
 
   useEffect(() => {
@@ -190,8 +194,31 @@ export default function MapGlobe({
     // listen to USER-input events (mouse/touch/drag/zoom), NOT our own programmatic
     // camera moves (guarded by programmaticRef) and NOT move events (our setCenter
     // spin fires those and would falsely pause itself).
+    // Dismiss the rotate/zoom hint forever the first time the user grabs the globe.
+    const dismissHint = () => {
+      if (hintDismissedRef.current) return;
+      hintDismissedRef.current = true;
+      if (hintRef.current) hintRef.current.style.opacity = '0';
+      window.setTimeout(() => setHintGone(true), 600);
+    };
+
+    // Anchor the hint to the globe's on-screen center; show only while idle on the
+    // far globe (not interacting / flying / card-open / zoomed-in).
+    const positionHint = () => {
+      const el = hintRef.current;
+      const m = mapRef.current;
+      if (!el || !m) return;
+      const c = m.project(m.getCenter());
+      el.style.transform = `translate(${c.x}px, ${c.y}px) translate(-50%, -50%)`;
+      if (hintDismissedRef.current) return;
+      const show =
+        !pausedRef.current && !programmaticRef.current && !userInteractingRef.current && m.getZoom() < MAX_SPIN_ZOOM;
+      el.style.opacity = show ? '1' : '0';
+    };
+
     const onInteractStart = () => {
       if (programmaticRef.current) return;
+      dismissHint();
       userInteractingRef.current = true;
       onInteractingRef.current?.(true);
       if (interactionTimerRef.current) window.clearTimeout(interactionTimerRef.current);
@@ -216,6 +243,7 @@ export default function MapGlobe({
     map.on('touchend', onInteractEnd);
     map.on('dragend', onInteractEnd);
     map.on('zoomend', onInteractEnd);
+    map.on('move', positionHint); // tracks the globe center during spin + fly
 
     // Single rAF loop: spin (setCenter — a jump, not easeTo, so no run() re-entry),
     // animated route dashes, and pulsing endpoint beacons.
@@ -291,10 +319,14 @@ export default function MapGlobe({
       addTripLayers(map);
       setData(map, tripsRef.current);
       fitToTrips(map, tripsRef.current);
+      positionHint();
       if (spin) startAnim();
     });
 
-    const ro = new ResizeObserver(() => map.resize());
+    const ro = new ResizeObserver(() => {
+      map.resize();
+      positionHint();
+    });
     ro.observe(container);
 
     // pause the whole rAF loop when the hero scrolls out of view
@@ -452,5 +484,10 @@ export default function MapGlobe({
   }
 
   // transparent so the section's deep-space backdrop shows around the globe when zoomed out
-  return <div ref={containerRef} style={{ width: '100%', height: '100%', minHeight: 320, background: 'transparent' }} />;
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div ref={containerRef} style={{ width: '100%', height: '100%', minHeight: 320, background: 'transparent' }} />
+      {!hintGone && <GlobeHint ref={hintRef} />}
+    </div>
+  );
 }
