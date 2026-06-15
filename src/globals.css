@@ -332,8 +332,10 @@ html {
   /* bright head on the right (leading) edge, tail fades behind toward the left */
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.95));
   border-radius: 9999px;
-  animation: globe-shoot 16s ease-in infinite;
-  animation-delay: 8s;
+  /* opacity:0 base + fill-mode:both so it stays invisible during the start delay
+     (otherwise the streak sits fully visible & frozen at the start for 8s) */
+  opacity: 0;
+  animation: globe-shoot 16s ease-in 8s infinite both;
 }
 @media (prefers-reduced-motion: reduce) {
   .sf-layer,
