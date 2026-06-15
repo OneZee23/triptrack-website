@@ -206,3 +206,140 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0,0,0,0.2);
 }
+
+/* Globe hero hint */
+@keyframes globe-hint-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.7; }
+}
+.globe-hint {
+  animation: globe-hint-pulse 2.8s ease-in-out infinite;
+}
+
+/* Globe hero — small interaction hint (rotate / zoom). Positioned + faded by
+   MapGlobe via inline transform/opacity; never blocks pointer events. */
+.globe-hint-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.globe-hint-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 13px;
+  border-radius: 9999px;
+  background: rgba(10, 14, 24, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+  animation: ghint-bob 3.2s ease-in-out infinite;
+}
+.ghint-divider {
+  width: 1px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.ghint-rock {
+  transform-origin: center;
+  animation: ghint-rock 3.2s ease-in-out infinite;
+}
+@keyframes ghint-rock {
+  0%, 100% { transform: rotate(-22deg); }
+  50%      { transform: rotate(22deg); }
+}
+@keyframes ghint-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.86; }
+  50%      { transform: translateY(-3px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .globe-hint-chip, .ghint-rock { animation: none; }
+}
+
+/* Globe hero — animated deep-space backdrop */
+
+/* Parallax starfield: random box-shadow dots, drift on the compositor only.
+   The ::after duplicate one viewport below makes the vertical loop seamless. */
+.sf-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: var(--sf);
+  animation: sf-drift var(--sf-dur) linear infinite;
+  will-change: transform;
+}
+.sf-layer::after {
+  content: "";
+  position: absolute;
+  top: var(--sf-h);
+  left: 0;
+  width: inherit;
+  height: inherit;
+  border-radius: 50%;
+  box-shadow: var(--sf);
+}
+.sf-far  { width: 1px;   height: 1px; }
+.sf-mid  { width: 1.6px; height: 1.6px; }
+.sf-near { width: 2.4px; height: 2.4px; }
+@keyframes sf-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, calc(var(--sf-h) * -1), 0); }
+}
+.sf-paused .sf-layer { animation-play-state: paused; }
+
+@keyframes orb-drift {
+  0% { transform: translate(-14vw, 72vh); }
+  100% { transform: translate(80vw, 6vh); }
+}
+.globe-orb {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255,182,92,0.22), rgba(255,150,60,0.07) 45%, transparent 70%);
+  filter: blur(6px);
+  animation: orb-drift 200s linear infinite alternate;
+}
+@keyframes orb-drift-2 {
+  0% { transform: translate(82vw, 58vh); }
+  100% { transform: translate(8vw, 12vh); }
+}
+.globe-orb-2 {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(200,220,255,0.20), rgba(170,190,230,0.06) 48%, transparent 72%);
+  filter: blur(5px);
+  animation: orb-drift-2 260s linear infinite alternate;
+}
+@keyframes globe-shoot {
+  0% { transform: translate(0, 0) rotate(20deg); opacity: 0; }
+  3% { opacity: 0.9; }
+  14% { transform: translate(440px, 160px) rotate(20deg); opacity: 0; }
+  100% { opacity: 0; }
+}
+.globe-shoot {
+  position: absolute;
+  width: 130px;
+  height: 2px;
+  /* bright head on the right (leading) edge, tail fades behind toward the left */
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.95));
+  border-radius: 9999px;
+  /* opacity:0 base + fill-mode:both so it stays invisible during the start delay
+     (otherwise the streak sits fully visible & frozen at the start for 8s) */
+  opacity: 0;
+  animation: globe-shoot 16s ease-in 8s infinite both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sf-layer,
+  .globe-orb,
+  .globe-orb-2 { animation: none; }
+  .globe-shoot { display: none; }
+}

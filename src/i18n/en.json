@@ -44,7 +44,29 @@
     "cta_note": "iOS 17+ \u2022 Free \u2022 No account \u2022 Privacy-first",
     "modal_auto_recorded": "Recorded automatically",
     "modal_add_photos": "Add photos & notes",
-    "modal_try_free": "Get TripTrack Free"
+    "modal_try_free": "Get TripTrack Free",
+    "globe": {
+      "title": "Every road, on the world map",
+      "subtitle": "TripTrack turns your drives into a living globe. Spin it, zoom in, explore real journeys from the community.",
+      "cta": "Download on the App Store",
+      "hint": "Drag · zoom · tap a trip",
+      "stat_trips_one": "trip",
+      "stat_trips_other": "trips",
+      "stat_cities_one": "city",
+      "stat_cities_other": "cities",
+      "card_traveler": "Traveler",
+      "card_cta": "Open in TripTrack",
+      "card_level": "Level",
+      "join_cta": "Want your trip on the globe? Message @onezee123",
+      "km": "km",
+      "stat_distance": "Distance",
+      "stat_duration": "Duration",
+      "stat_avg": "Avg speed",
+      "stat_max": "Top speed",
+      "unit_kmh": "km/h",
+      "unit_h": "h",
+      "unit_min": "min"
+    }
   },
   "features": {
     "hero_title": "Built for the road.",
