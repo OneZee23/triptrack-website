@@ -128,6 +128,9 @@ export function TripCard({ trip, onClose }: { trip: GlobeTrip; onClose: () => vo
 
         <a
           href={APP_STORE_URL}
+          data-umami-event="appstore-click"
+          data-umami-event-source="card"
+          data-umami-event-trip={trip.id}
           className="mt-4 block rounded-xl bg-gradient-to-br from-[#FF6B00] to-[#FFB000] py-2.5 text-center font-bold text-[#1a1209] shadow-[0_4px_22px_rgba(255,107,0,0.4)] transition hover:brightness-105"
         >
           {t('home.globe.card_cta')}

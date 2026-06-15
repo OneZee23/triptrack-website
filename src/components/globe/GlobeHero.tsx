@@ -1,8 +1,9 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Send } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useGlobeData } from '../../hooks/useGlobeData';
+import { trackEvent } from '../../lib/analytics';
 import { TripCard } from './TripCard';
 import { StarField } from './StarField';
 import type { GlobeTrip } from './types';
@@ -23,6 +24,11 @@ export default function GlobeHero() {
   const state = useGlobeData();
   const [selected, setSelected] = useState<GlobeTrip | null>(null);
   const [interacting, setInteracting] = useState(false);
+
+  const handleSelect = useCallback((trip: GlobeTrip) => {
+    trackEvent('trip-card-open', { id: trip.id, title: trip.title ?? trip.region ?? '' });
+    setSelected(trip);
+  }, []);
 
   const trips = state.status === 'success' ? state.data.trips : [];
   const stats = state.status === 'success' ? state.data.stats : null;
@@ -63,7 +69,7 @@ export default function GlobeHero() {
 
       <div className="absolute inset-0">
         <Suspense fallback={<Fallback />}>
-          <MapGlobe trips={trips} onSelect={setSelected} onInteracting={setInteracting} paused={selected !== null} />
+          <MapGlobe trips={trips} onSelect={handleSelect} onInteracting={setInteracting} paused={selected !== null} />
         </Suspense>
       </div>
 
@@ -85,6 +91,8 @@ export default function GlobeHero() {
           </p>
           <a
             href={APP_STORE_URL}
+            data-umami-event="appstore-click"
+            data-umami-event-source="hero"
             className="pointer-events-auto mt-8 inline-flex w-max items-center gap-2 rounded-xl bg-gradient-to-br from-[#FF6B00] to-[#FFB000] px-6 py-3 font-bold text-[#1a1209] shadow-lg"
           >
             {t('home.globe.cta')}
@@ -102,6 +110,7 @@ export default function GlobeHero() {
             href="https://t.me/onezee123"
             target="_blank"
             rel="noopener noreferrer"
+            data-umami-event="telegram-click"
             className="pointer-events-auto mt-5 inline-flex items-center gap-1.5 text-xs text-white/45 transition-colors hover:text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
           >
             <Send size={12} />
