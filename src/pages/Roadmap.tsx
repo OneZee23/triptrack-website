@@ -346,11 +346,7 @@ const SHIPPED: Quarter[] = [
         version: 'v0.5.7',
         name: 'Reliability · Vehicles · Sharing',
         date: { en: 'Jun 13', ru: '13 июн' },
-        status: 'current',
-        note: {
-          en: 'Newest build — two rounds of your feedback + long-trip stability',
-          ru: 'Свежий билд — два раунда вашего фидбэка + стабильность длинных поездок',
-        },
+        status: 'done',
         features: [
           {
             en: 'Rock-solid tracking in remote / no-signal areas — GPS fixes are no longer dropped, so long taiga drives record instead of showing "0 km"',
@@ -387,6 +383,46 @@ const SHIPPED: Quarter[] = [
           {
             en: '"Regions" renamed to "Places", the feed\'s "Mine" tab to "Trips"; clearer stats calendar (today ring + legend)',
             ru: '«Регионы» → «Места», вкладка «Мои» → «Поездки»; понятнее календарь статистики (кольцо «сегодня» + легенда)',
+          },
+        ],
+      },
+      {
+        version: 'v0.5.8',
+        name: 'Field Fixes · Globe Opt-in',
+        date: { en: 'Jun 16', ru: '16 июн' },
+        status: 'current',
+        note: {
+          en: 'Newest build — subscriber field feedback + opt-in trips on the website globe',
+          ru: 'Свежий билд — фидбэк подписчика с дороги + опт-ин публикации поездок на глобусе сайта',
+        },
+        features: [
+          {
+            en: 'Opt in to show your public trips on the website globe — off by default, routes anonymized, private trips never shown',
+            ru: 'Опт-ин показа своих публичных поездок на глобусе сайта — по умолчанию выкл, маршрут анонимизируется, приватные не показываются',
+          },
+          {
+            en: 'Route line no longer flickers while recording — smoother live map',
+            ru: 'Линия маршрута больше не мигает при записи — карта стала плавной',
+          },
+          {
+            en: 'Speedometer correctly reads 0 at a full stop (no more "16 km/h" at a red light)',
+            ru: 'Спидометр честно показывает 0 на остановке (больше не «16 км/ч» на светофоре)',
+          },
+          {
+            en: 'Fixed a launch-screen hang on the "Ready to drive" screen',
+            ru: 'Исправлено зависание экрана «Готов к поездке» при запуске',
+          },
+          {
+            en: 'Feed loads instantly on cold start — no manual pull-to-refresh',
+            ru: 'Лента загружается сразу на холодном старте — без ручного pull-to-refresh',
+          },
+          {
+            en: 'Photos upload in full quality on any network, not just Wi-Fi',
+            ru: 'Фото грузятся в полном качестве на любой сети, а не только по Wi-Fi',
+          },
+          {
+            en: 'Trip notes are easier to find and add',
+            ru: 'Заметки к поездке проще найти и добавить',
           },
         ],
       },
