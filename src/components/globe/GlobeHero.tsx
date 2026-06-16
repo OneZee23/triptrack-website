@@ -1,6 +1,6 @@
-import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Send } from 'lucide-react';
+import { Send, ChevronDown } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useGlobeData } from '../../hooks/useGlobeData';
 import { trackEvent } from '../../lib/analytics';
@@ -24,6 +24,7 @@ export default function GlobeHero() {
   const state = useGlobeData();
   const [selected, setSelected] = useState<GlobeTrip | null>(null);
   const [interacting, setInteracting] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const handleSelect = useCallback((trip: GlobeTrip) => {
     trackEvent('trip-card-open', { id: trip.id, title: trip.title ?? trip.region ?? '' });
@@ -58,7 +59,8 @@ export default function GlobeHero() {
 
   return (
     <section
-      className="relative w-full h-[100svh] min-h-[600px] overflow-hidden text-white"
+      ref={sectionRef}
+      className="relative w-full h-[90svh] min-h-[600px] overflow-hidden text-white md:h-[100svh]"
       style={{ background: 'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)' }}
     >
       {/* animated deep-space backdrop (shows through the transparent space around the globe) */}
@@ -143,6 +145,22 @@ export default function GlobeHero() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* mobile: the globe takes one-finger gestures, so give an explicit way to
+          scroll past the hero (desktop scrolls/zooms with wheel, so md:hidden) */}
+      {!selected && (
+        <button
+          type="button"
+          onClick={() => {
+            const el = sectionRef.current;
+            if (el) window.scrollTo({ top: el.offsetHeight, behavior: 'smooth' });
+          }}
+          aria-label={t('home.globe.scroll')}
+          className="pointer-events-auto absolute bottom-5 left-1/2 z-20 grid h-11 w-11 -translate-x-1/2 place-items-center rounded-full bg-black/35 text-white/90 ring-1 ring-white/15 backdrop-blur-md md:hidden"
+        >
+          <ChevronDown size={22} className="animate-bounce" />
+        </button>
+      )}
     </section>
   );
 }

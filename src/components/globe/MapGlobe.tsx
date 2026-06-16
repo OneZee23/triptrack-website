@@ -164,6 +164,13 @@ export default function MapGlobe({
       return;
     }
 
+    // Touch devices: let ONE finger spin/pan the globe (+ pinch to zoom). With
+    // cooperativeGestures the map needs two fingers and one-finger drag scrolls
+    // the page instead — which feels broken on mobile. On desktop we keep it on
+    // so the mouse wheel doesn't hijack page scroll over the full-screen hero.
+    // (GlobeHero gives mobile an explicit scroll affordance to leave the hero.)
+    const isTouch = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
+
     let map: MapLibreMap;
     try {
       map = new maplibregl.Map({
@@ -174,7 +181,7 @@ export default function MapGlobe({
         minZoom: 0.8,
         maxZoom: 16,
         attributionControl: false,
-        cooperativeGestures: true, // avoids hijacking page scroll on the full-screen hero
+        cooperativeGestures: !isTouch,
         dragRotate: true,
         pitchWithRotate: false,
       });

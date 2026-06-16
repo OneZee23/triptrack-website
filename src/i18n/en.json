@@ -50,6 +50,7 @@
       "subtitle": "TripTrack turns your drives into a living globe. Spin it, zoom in, explore real journeys from the community.",
       "cta": "Download on the App Store",
       "hint": "Drag · zoom · tap a trip",
+      "scroll": "Scroll down",
       "stat_trips_one": "trip",
       "stat_trips_other": "trips",
       "stat_cities_one": "city",
