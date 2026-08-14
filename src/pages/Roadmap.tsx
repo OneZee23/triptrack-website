@@ -390,7 +390,7 @@ const SHIPPED: Quarter[] = [
         version: 'v0.5.8',
         name: 'Field Fixes · Globe Opt-in',
         date: { en: 'Jun 16', ru: '16 июн' },
-        status: 'current',
+        status: 'done',
         note: {
           en: 'Newest build — subscriber field feedback + opt-in trips on the website globe',
           ru: 'Свежий билд — фидбэк подписчика с дороги + опт-ин публикации поездок на глобусе сайта',
@@ -423,6 +423,54 @@ const SHIPPED: Quarter[] = [
           {
             en: 'Trip notes are easier to find and add',
             ru: 'Заметки к поездке проще найти и добавить',
+          },
+        ],
+      },
+      {
+        version: 'v0.6.0',
+        name: 'Redesign · Companions',
+        date: { en: 'Aug 14', ru: '14 авг' },
+        status: 'current',
+        note: {
+          en: 'The whole app redrawn — and a trip you can share with everyone who was in the car',
+          ru: 'Приложение перерисовано целиком — и поездку теперь можно разделить с теми, кто ехал рядом',
+        },
+        features: [
+          {
+            en: 'Companions — invite the people who rode with you; their photos land on the trip and it joins their history too',
+            ru: 'Попутчики — пригласите тех, кто ехал с вами: их фото появляются в поездке, и она попадает в их историю',
+          },
+          {
+            en: 'Discussions — comments with replies on public trips, reactions and a "who reacted" list',
+            ru: 'Обсуждения — комментарии с ответами к публичным поездкам, реакции и список «кто отреагировал»',
+          },
+          {
+            en: 'Replay a drive like a film; share it as a story poster or a link',
+            ru: 'Реплей маршрута как маленькое кино; постер для истории или ссылка',
+          },
+          {
+            en: 'Five tabs — Feed, Map, Record, Groups, Me — with your own map of every road you have driven',
+            ru: 'Пять вкладок — Лента, Карта, Запись, Группы, Я — со своей картой всех проеханных дорог',
+          },
+          {
+            en: 'Profile: achievements, levels, followers, and a "how others see you" preview',
+            ru: 'Профиль: достижения, уровни, подписчики и превью «как видят другие»',
+          },
+          {
+            en: 'Shared profile links open a real profile page instead of the marketing site',
+            ru: 'Ссылка на профиль открывает настоящую страницу профиля, а не промо-сайт',
+          },
+          {
+            en: 'The "All" feed is strictly newest-first, whoever the drive belongs to',
+            ru: '«Все» в ленте — строго по дате, чья бы поездка ни была',
+          },
+          {
+            en: 'Clubs preview with a real waiting list you can join',
+            ru: 'Превью клубов с настоящим списком ожидания',
+          },
+          {
+            en: 'Delete your account in-app — server and device, and it says so before it does',
+            ru: 'Удаление аккаунта прямо в приложении — и сервер, и устройство, о чём сказано заранее',
           },
         ],
       },
