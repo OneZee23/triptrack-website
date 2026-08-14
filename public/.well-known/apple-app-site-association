@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "J52AX8YA9Y.com.onezee.TripTrack",
+          "J52AX8YA9Y.com.onezee.TripTrack.dev"
+        ],
+        "components": [
+          { "/": "/u/*", "comment": "Shared profile links open the app" }
+        ]
+      }
+    ]
+  }
+}
