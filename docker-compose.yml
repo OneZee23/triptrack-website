@@ -6,7 +6,11 @@ services:
     # was timing out at 30m because of memory pressure from the umami /
     # postgres / nginx co-tenants.
     image: ghcr.io/onezee23/triptrack-website:latest
-    pull_policy: always
+    # NO `pull_policy: always`. The deploy script already runs an explicit
+    # `docker compose pull`, and with this set `up -d` pulled the same image a
+    # SECOND time — two full pulls of every layer over the VPS's link. That is
+    # half of why the 14 Aug deploy hit the 15m SSH timeout and left production
+    # serving the previous build.
     ports:
       - "127.0.0.1:3080:8080"
     restart: unless-stopped
