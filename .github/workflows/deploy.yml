@@ -70,7 +70,22 @@ jobs:
             # changes to service definitions (umami, postgres, env)
             # land alongside the image bump. Source code itself is
             # baked into the pulled image — VPS never compiles anything.
-            git pull origin master
+            #
+            # Retried once: on 15 Aug this line died with «Could not resolve
+            # host: github.com» after three minutes of resolver timeouts, and
+            # the droplet's DNS was working again by the time anyone looked.
+            # DigitalOcean's resolvers (67.207.67.2/.3) blinked. One retry
+            # turns that into a slow deploy instead of a red build and a
+            # production still serving the previous image.
+            #
+            # It is deliberately ONE retry, not a loop: a resolver that is
+            # genuinely down should still fail the job loudly rather than be
+            # papered over for ten minutes.
+            git pull origin master || {
+              echo "git pull failed — retrying once in 15s"
+              sleep 15
+              git pull origin master
+            }
             docker compose pull triptrack-web
             # `--no-deps triptrack-web`, not a bare `up -d`: the bare form also
             # brings up umami, which `depends_on` postgres `service_healthy`, so
