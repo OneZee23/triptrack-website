@@ -65,6 +65,25 @@ jobs:
           command_timeout: 15m
           script: |
             set -e
+
+            # Every step announces itself with a timestamp, and every long
+            # command carries its own `timeout`. Three deploys in a row died on
+            # «Run Command Timeout» with no output at all, which told us the
+            # budget ran out but not WHICH command ate it — the log has to name
+            # the culprit itself, or diagnosing means guessing.
+            step() { echo "--- $(date -u +%H:%M:%S) $* ---"; }
+
+            step "host state"
+            df -h / | tail -1
+            docker system df 2>&1 | tail -4 || true
+
+            step "docker daemon alive?"
+            # Cheap liveness probe with a hard cap. A hung dockerd blocks the
+            # CLI on its socket BEFORE printing anything, which is exactly the
+            # silence we kept seeing; this turns that into a named failure in
+            # 30 seconds instead of a mute 15-minute timeout.
+            timeout 30 docker version --format '{{.Server.Version}}'
+
             cd /opt/triptrack-website
             # `git pull` keeps the on-VPS docker-compose.yml current so
             # changes to service definitions (umami, postgres, env)
@@ -86,23 +105,30 @@ jobs:
               sleep 15
               git pull origin master
             }
-            docker compose pull triptrack-web
+            step "pull image"
+            timeout 600 docker compose pull triptrack-web
             # `--no-deps triptrack-web`, not a bare `up -d`: the bare form also
             # brings up umami, which `depends_on` postgres `service_healthy`, so
             # a website deploy sat waiting on the analytics database's health
             # check. The website does not need umami to ship, and umami does not
             # need redeploying when only the site changes. Touch the analytics
             # stack by hand when its own config moves.
-            docker compose up -d --no-deps triptrack-web
+            step "restart container"
+            timeout 180 docker compose up -d --no-deps triptrack-web
             # Prune dangling images so the VPS disk doesn't slowly fill
             # with old layers.
-            docker image prune -f
+            step "prune dangling images"
+            # This is the LAST step, so a deploy that fails earlier never runs
+            # it — three failed deploys in a row meant three rounds of old
+            # layers left on a small disk. That is why `df -h` now runs first.
+            timeout 120 docker image prune -f
 
             # Fail loudly if the running container is NOT the image we just
             # pulled. On 14 Aug the job timed out after the pull but before the
             # restart: CI went red, production quietly kept serving the old
             # build, and the two facts looked unrelated for a day. A red job
             # must mean "not deployed", and a green one must mean "deployed".
+            step "verify"
             running=$(docker inspect --format '{{.Image}}' "$(docker compose ps -q triptrack-web)")
             latest=$(docker image inspect --format '{{.Id}}' ghcr.io/onezee23/triptrack-website:latest)
             if [ "$running" != "$latest" ]; then
