@@ -20,6 +20,8 @@ import {
   Receipt,
   Plane,
   Server,
+  Navigation,
+  Map as MapIcon,
 } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
@@ -426,11 +428,17 @@ const SHIPPED: Quarter[] = [
           },
         ],
       },
+    ],
+  },
+  {
+    label: { en: 'Q3 2026 — Redesign', ru: 'Q3 2026 — Редизайн' },
+    status: 'current',
+    milestones: [
       {
         version: 'v0.6.0',
         name: 'Redesign · Companions',
         date: { en: 'Aug 14', ru: '14 авг' },
-        status: 'current',
+        status: 'done',
         note: {
           en: 'The whole app redrawn — and a trip you can share with everyone who was in the car',
           ru: 'Приложение перерисовано целиком — и поездку теперь можно разделить с теми, кто ехал рядом',
@@ -474,6 +482,42 @@ const SHIPPED: Quarter[] = [
           },
         ],
       },
+      {
+        version: 'v0.6.1',
+        name: 'Thirteen Languages · Data That Comes Back',
+        date: { en: 'Aug 16', ru: '16 авг' },
+        status: 'current',
+        note: {
+          en: 'Newest build — eleven more languages, and trips that find their way home',
+          ru: 'Свежий билд — ещё одиннадцать языков и поездки, которые сами возвращаются',
+        },
+        features: [
+          {
+            en: 'Eleven more languages — thirteen in total. Screens, empty states, errors, notifications, all 53 achievements and the Lock Screen card',
+            ru: 'Ещё одиннадцать языков — тринадцать всего. Экраны, пустые состояния, ошибки, уведомления, все 53 достижения и карточка на локскрине',
+          },
+          {
+            en: 'If your library ever went missing, the app now notices it holds fewer trips than your account does — and fetches the rest back by itself',
+            ru: 'Если библиотека когда-то пропала, приложение само замечает, что поездок на телефоне меньше, чем в аккаунте, и забирает остальные обратно',
+          },
+          {
+            en: 'It can no longer lose them: a database that fails to open is never silently replaced with an empty one — the app says what happened and keeps the old file',
+            ru: 'И потерять их больше не может: база, которая не открылась, не подменяется молча пустой — приложение говорит, что случилось, и сохраняет старый файл',
+          },
+          {
+            en: 'Levels, achievements and the map of visited roads rebuild themselves once the trips are back',
+            ru: 'Уровни, достижения и карта проеханных дорог пересчитываются сами, когда поездки вернулись',
+          },
+          {
+            en: 'Dates, numbers and plurals follow the language you picked — including Turkish\'s dotted İ and Polish\'s own plural rules',
+            ru: 'Даты, числа и склонения следуют выбранному языку — включая турецкую İ и польские правила множественного числа',
+          },
+          {
+            en: 'Permission prompts translated for every one of the thirteen',
+            ru: 'Запросы разрешений переведены на все тринадцать',
+          },
+        ],
+      },
     ],
   },
 ];
@@ -484,6 +528,45 @@ const SHIPPED: Quarter[] = [
 
 const COMING_NEXT: BenchItem[] = [
   {
+    icon: Navigation,
+    title: {
+      en: 'How the drive is drawn',
+      ru: 'Как поездка пишется на карте',
+    },
+    body: {
+      en: 'The single thing people write to us about most. Tighter GPS filtering, a route line that matches the road you actually took, and honest numbers on the pass and in the tunnel.',
+      ru: 'То, о чём нам пишут чаще всего. Более строгий фильтр GPS, линия маршрута по той дороге, по которой ты действительно ехал, и честные цифры на перевале и в тоннеле.',
+    },
+    meta: {
+      en: 'Top of the list — the next thing we build',
+      ru: 'Первое в очереди — следующее, за что берёмся',
+    },
+  },
+  {
+    icon: Cloud,
+    title: { en: 'Multi-device sync', ru: 'Синхронизация между устройствами' },
+    body: {
+      en: 'The same trips on your iPhone and iPad, with edits and deletions travelling both ways. The data layer for it landed in 0.6.1; what remains is making two devices agree.',
+      ru: 'Одни и те же поездки на iPhone и iPad, с правками и удалениями в обе стороны. Слой данных под это приземлился в 0.6.1; осталось научить два устройства договариваться.',
+    },
+  },
+  {
+    icon: Users,
+    title: { en: 'Clubs, for real', ru: 'Клубы по-настоящему' },
+    body: {
+      en: '0.6.0 shipped a preview and a waiting list. Next comes the thing itself — a shared feed, members, and drives you take together.',
+      ru: 'В 0.6.0 вышло превью и список ожидания. Дальше — сама вещь: общая лента, участники и совместные покатушки.',
+    },
+  },
+  {
+    icon: MapIcon,
+    title: { en: 'The map, rebuilt', ru: 'Карта заново' },
+    body: {
+      en: 'The Map tab arrived with the redesign and is the youngest screen in the app. It needs a second pass: faster on big libraries, clearer regions, and a fog that reads at every zoom.',
+      ru: 'Вкладка «Карта» появилась вместе с редизайном и пока самая молодая в приложении. Ей нужен второй заход: быстрее на больших библиотеках, понятнее регионы и туман, который читается на любом зуме.',
+    },
+  },
+  {
     icon: Watch,
     title: { en: 'Apple Watch companion', ru: 'Приложение для Apple Watch' },
     body: {
@@ -493,28 +576,6 @@ const COMING_NEXT: BenchItem[] = [
     meta: {
       en: 'Code complete — waiting on icon assets and real-hardware testing',
       ru: 'Код готов — ждём дизайн иконок и тест на реальном железе',
-    },
-  },
-  {
-    icon: Sparkles,
-    title: {
-      en: '"NEW" badge on freshly-published trips',
-      ru: 'Бейдж «NEW» на свежеопубликованных поездках',
-    },
-    body: {
-      en: 'Trips you publicly share will get a 24-hour highlight in the feed, so followers don\'t miss them.',
-      ru: 'Поездки, которые ты публикуешь, будут подсвечены в ленте 24 часа — чтобы подписчики не пропустили.',
-    },
-  },
-  {
-    icon: ImageIcon,
-    title: {
-      en: 'Sharper share-card map',
-      ru: 'Резкая карта на share-card',
-    },
-    body: {
-      en: 'Pre-warm the map at the share-sheet width — no more low-res flash before the sharp version pops in.',
-      ru: 'Прогрев карты под ширину share-sheet — без вспышки низкого разрешения перед резким финалом.',
     },
   },
   {
@@ -533,11 +594,11 @@ const COMING_NEXT: BenchItem[] = [
 
 const HORIZON: BenchItem[] = [
   {
-    icon: Cloud,
-    title: { en: 'Multi-device sync', ru: 'Синхронизация между устройствами' },
+    icon: ImageIcon,
+    title: { en: 'Photos back from the cloud', ru: 'Фото обратно из облака' },
     body: {
-      en: 'Open the same trips on your iPhone, iPad, and (one day) Mac. Architecture is designed; rollout is staged.',
-      ru: 'Открывай те же поездки на iPhone, iPad и (когда-нибудь) Mac. Архитектура готова; раскатка поэтапная.',
+      en: 'Trips already come home from the server; their photos do not yet. Change phones and the pictures stay behind. We want a way to pull them down again.',
+      ru: 'Поездки с сервера уже возвращаются, а фотографии пока нет. Сменил телефон — снимки остались там. Хотим сделать так, чтобы их можно было забрать.',
     },
   },
   {
@@ -581,19 +642,14 @@ const HORIZON: BenchItem[] = [
     },
   },
   {
-    icon: MessageCircle,
-    title: { en: 'Comments on public trips', ru: 'Комментарии к публичным поездкам' },
-    body: {
-      en: 'Move past reactions — actual conversations on someone\'s great drive.',
-      ru: 'Шаг дальше реакций — реальные разговоры под чьим-то крутым маршрутом.',
+    icon: Sparkles,
+    title: {
+      en: '"NEW" badge on freshly-published trips',
+      ru: 'Бейдж «NEW» на свежеопубликованных поездках',
     },
-  },
-  {
-    icon: Users,
-    title: { en: 'Friends-only feed', ru: 'Лента «только друзья»' },
     body: {
-      en: 'A second feed showing only people you follow — no algorithm, no strangers.',
-      ru: 'Вторая лента — только те, на кого ты подписан. Без алгоритма, без чужих.',
+      en: 'Trips you publish get a 24-hour highlight in the feed, so followers don\'t miss them.',
+      ru: 'Опубликованные поездки подсвечиваются в ленте 24 часа — чтобы подписчики не пропустили.',
     },
   },
   {
@@ -722,9 +778,9 @@ export default function Roadmap() {
       {/* MOMENTUM — proof we ship */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-20">
         {[
-          { num: '5', label: { en: 'versions in 60 days', ru: 'версий за 60 дней' } },
-          { num: '39', label: { en: 'achievements (7 secret)', ru: 'ачивок (7 секретных)' } },
-          { num: '2', label: { en: 'languages — RU & EN', ru: 'языка — RU и EN' } },
+          { num: '12', label: { en: 'versions since March', ru: 'версий с марта' } },
+          { num: '53', label: { en: 'achievements to earn', ru: 'достижения можно получить' } },
+          { num: '13', label: { en: 'languages in the app', ru: 'языков в приложении' } },
           { num: '0', label: { en: 'paywalls or trackers', ru: 'пейволлов и трекеров' } },
         ].map((stat, i) => (
           <div
