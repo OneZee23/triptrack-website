@@ -486,10 +486,10 @@ const SHIPPED: Quarter[] = [
         version: 'v0.6.1',
         name: 'Thirteen Languages · Data That Comes Back',
         date: { en: 'Aug 16', ru: '16 авг' },
-        status: 'current',
+        status: 'done',
         note: {
-          en: 'Newest build — eleven more languages, and trips that find their way home',
-          ru: 'Свежий билд — ещё одиннадцать языков и поездки, которые сами возвращаются',
+          en: 'Eleven more languages, and trips that find their way home',
+          ru: 'Ещё одиннадцать языков и поездки, которые сами возвращаются',
         },
         features: [
           {
@@ -515,6 +515,38 @@ const SHIPPED: Quarter[] = [
           {
             en: 'Permission prompts translated for every one of the thirteen',
             ru: 'Запросы разрешений переведены на все тринадцать',
+          },
+        ],
+      },
+      {
+        version: 'v0.6.2',
+        name: 'A Face of Its Own',
+        date: { en: 'In build', ru: 'В работе' },
+        status: 'current',
+        note: {
+          en: 'Newest build — the app stops borrowing its icons from the system',
+          ru: 'Свежий билд — приложение перестаёт занимать иконки у системы',
+        },
+        features: [
+          {
+            en: 'Pick the vehicle you actually own — body shapes and two-wheelers, each in its own colour, instead of one car in eight paints',
+            ru: 'Выбор транспорта, на котором ты правда ездишь — кузова и два колеса, каждый в своём цвете, вместо одной машины в восьми красках',
+          },
+          {
+            en: 'Drawn illustrations where the app used to show a system glyph — an empty garage, a library with no trips yet, a map still under fog',
+            ru: 'Рисованные иллюстрации там, где раньше стоял системный значок — пустой гараж, лента без поездок, карта ещё под туманом',
+          },
+          {
+            en: 'Achievement categories get their own marks: distance, exploration, streaks',
+            ru: 'У категорий достижений свои значки: дистанция, исследование, серии',
+          },
+          {
+            en: 'Change which car a drive belongs to and both odometers now follow — the kilometres leave one and arrive at the other',
+            ru: 'Смена машины у поездки пересчитывает оба пробега — километры уходят с одной и приходят на другую',
+          },
+          {
+            en: 'Your own car is no longer the one blurry thing on screen',
+            ru: 'Своя машина больше не единственное размытое пятно на экране',
           },
         ],
       },
