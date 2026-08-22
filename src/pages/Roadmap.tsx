@@ -537,8 +537,12 @@ const SHIPPED: Quarter[] = [
             ru: 'Рисованные иллюстрации там, где раньше стоял системный значок — пустой гараж, лента без поездок, карта ещё под туманом',
           },
           {
-            en: 'Achievement categories get their own marks: distance, exploration, streaks',
-            ru: 'У категорий достижений свои значки: дистанция, исследование, серии',
+            en: 'Your own trips stop introducing you to yourself — no name, no avatar, and the level is the one you held the day you drove it',
+            ru: 'Свои поездки перестают представлять тебя тебе же — без имени и аватара, а уровень тот, что был у тебя в день поездки',
+          },
+          {
+            en: 'Lists load as an outline of themselves instead of a spinner — the screen you are waiting for is the screen you already see',
+            ru: 'Списки грузятся своим же контуром вместо крутящегося кружка — экран, которого ждёшь, уже перед тобой',
           },
           {
             en: 'Change which car a drive belongs to and both odometers now follow — the kilometres leave one and arrive at the other',
