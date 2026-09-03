@@ -53,16 +53,57 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Pull + restart on VPS
+      # The VPS cannot fetch layers from ghcr.io. Three deploys in a row died
+      # here (17 Aug, 22 Aug, 3 Sep) with `exit 124` after ~15 minutes of every
+      # layer sitting at «Pulling fs layer 0B» — zero bytes, not slow bytes.
+      # The manifest arrives, so ghcr.io itself resolves; the blobs come from
+      # pkg-containers.githubusercontent.com, and that host is what never
+      # answers. `git pull` from github.com on the same box finishes in three
+      # seconds, so the machine's network is fine — one host is not.
+      #
+      # So the image travels over the SSH channel that demonstrably works
+      # instead of over a registry fetch that does not. The runner pulls (fast,
+      # GitHub's own network), saves, and ships the tarball to the VPS, which
+      # loads it locally. `docker compose pull` is gone from the VPS script
+      # entirely — that command is the failure.
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull image on the runner and pack it
+        run: |
+          set -e
+          docker pull ghcr.io/onezee23/triptrack-website:latest
+          # gzip -1: the tarball crosses one SSH hop and is deleted minutes
+          # later, so transfer time matters and ratio does not.
+          docker save ghcr.io/onezee23/triptrack-website:latest | gzip -1 > image.tar.gz
+          ls -lh image.tar.gz
+
+      - name: Ship the image to the VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: image.tar.gz
+          target: /tmp
+          timeout: 10m
+
+      - name: Load + restart on VPS
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          # No build on VPS = no need for the previous 30m budget.
-          # 15m gives head-room for an occasionally slow image pull
-          # from ghcr.io without masking a genuine hang.
-          command_timeout: 15m
+          # The registry fetch is gone, and with it the only step that ever ate
+          # this budget. What is left — git pull, docker load from a local
+          # tarball, restart — is seconds. 10m is now head-room, not hope: if
+          # this timeout is ever hit again it means something genuinely hung,
+          # which is exactly what a timeout should mean.
+          command_timeout: 10m
           script: |
             set -e
 
@@ -105,8 +146,13 @@ jobs:
               sleep 15
               git pull origin master
             }
-            step "pull image"
-            timeout 600 docker compose pull triptrack-web
+            step "load image from the tarball we just shipped"
+            # No `docker compose pull` here on purpose — see the comment on the
+            # shipping steps above. The tarball already carries the tag compose
+            # references, so `up -d` finds it locally and never reaches out.
+            ls -lh /tmp/image.tar.gz
+            timeout 300 sh -c 'gunzip -c /tmp/image.tar.gz | docker load'
+            rm -f /tmp/image.tar.gz
             # `--no-deps triptrack-web`, not a bare `up -d`: the bare form also
             # brings up umami, which `depends_on` postgres `service_healthy`, so
             # a website deploy sat waiting on the analytics database's health
