@@ -521,12 +521,8 @@ const SHIPPED: Quarter[] = [
       {
         version: 'v0.6.2',
         name: 'A Face of Its Own',
-        date: { en: 'In build', ru: 'В работе' },
-        status: 'current',
-        note: {
-          en: 'Newest build — the app stops borrowing its icons from the system',
-          ru: 'Свежий билд — приложение перестаёт занимать иконки у системы',
-        },
+        date: { en: 'Sep 1', ru: '1 сентября' },
+        status: 'done',
         features: [
           {
             en: 'Pick the vehicle you actually own — body shapes and two-wheelers, each in its own colour, instead of one car in eight paints',
@@ -551,6 +547,42 @@ const SHIPPED: Quarter[] = [
           {
             en: 'Your own car is no longer the one blurry thing on screen',
             ru: 'Своя машина больше не единственное размытое пятно на экране',
+          },
+        ],
+      },
+      {
+        version: 'v0.6.3',
+        name: 'Someone Else, In Full',
+        date: { en: 'In review', ru: 'На ревью' },
+        status: 'current',
+        note: {
+          en: 'With Apple now — a profile stops being three numbers behind glass',
+          ru: 'Сейчас у Apple — профиль перестаёт быть тремя числами за стеклом',
+        },
+        features: [
+          {
+            en: 'Open someone and see the map of everywhere they have driven, not a preview of it',
+            ru: 'Открываешь человека и видишь карту всего, что он проехал, а не её превью',
+          },
+          {
+            en: 'Their statistics in full — the rhythm of their months, their best drives, the places they reached first',
+            ru: 'Его статистика целиком — ритм по месяцам, лучшие поездки, места, куда он добрался первым',
+          },
+          {
+            en: 'Four switches decide what others see of you: your counters, your statistics, your map, your achievements. What you switch off disappears — no «hidden» placeholder where it used to be',
+            ru: 'Четыре тумблера решают, что видно другим: счётчики, статистика, карта, достижения. Выключенное исчезает целиком — на его месте не остаётся плашки «скрыто»',
+          },
+          {
+            en: 'Your own fog is still yours after you look at someone else’s map',
+            ru: 'Твой туман остаётся твоим после того, как посмотрел на чужую карту',
+          },
+          {
+            en: 'The car you asked the app not to show other people is finally not shown to them',
+            ru: 'Машина, которую ты просил не показывать другим, наконец им не показывается',
+          },
+          {
+            en: 'A dropped connection no longer signs you out — the app waits for the network instead of forgetting who you are',
+            ru: 'Пропавшая связь больше не разлогинивает — приложение ждёт сеть, а не забывает, кто ты',
           },
         ],
       },
