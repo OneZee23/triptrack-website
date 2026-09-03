@@ -82,15 +82,43 @@ jobs:
           docker save ghcr.io/onezee23/triptrack-website:latest | gzip -1 > image.tar.gz
           ls -lh image.tar.gz
 
-      - name: Ship the image to the VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          source: image.tar.gz
-          target: /tmp
-          timeout: 10m
+      # Plain OpenSSH rather than scp-action, for two measured reasons.
+      #
+      # First, scp-action tars whatever you hand it — so it spent 110 seconds
+      # re-packing an already-gzipped tarball into a second tarball before
+      # sending a byte.
+      #
+      # Second, and the reason it failed: its Go SSH client got «handshake
+      # failed: connection reset by peer» from this host. Streaming straight
+      # into `docker load` needs no temp file on either side, uses the same
+      # OpenSSH client the rest of the world talks to this box with, and is one
+      # connection instead of two.
+      #
+      # Retried three times with a pause: a reset handshake is the symptom of a
+      # box refusing a connection at that moment, not of a wrong key — and the
+      # loop is bounded so a genuinely broken key still fails the job loudly.
+      - name: Stream the image into docker load
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          SSH="ssh -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=30 -o ServerAliveInterval=15"
+          for attempt in 1 2 3; do
+            echo "--- попытка $attempt: заливаю образ в docker load ---"
+            if $SSH "$VPS_USER@$VPS_HOST" 'gunzip -c | docker load' < image.tar.gz; then
+              echo "образ загружен на VPS"
+              exit 0
+            fi
+            echo "попытка $attempt не удалась"
+            sleep 20
+          done
+          echo "не удалось передать образ за три попытки"
+          exit 1
 
       - name: Load + restart on VPS
         uses: appleboy/ssh-action@v1
@@ -146,13 +174,14 @@ jobs:
               sleep 15
               git pull origin master
             }
-            step "load image from the tarball we just shipped"
-            # No `docker compose pull` here on purpose — see the comment on the
-            # shipping steps above. The tarball already carries the tag compose
-            # references, so `up -d` finds it locally and never reaches out.
-            ls -lh /tmp/image.tar.gz
-            timeout 300 sh -c 'gunzip -c /tmp/image.tar.gz | docker load'
-            rm -f /tmp/image.tar.gz
+            step "image is already loaded — confirm it is here"
+            # No `docker compose pull` here on purpose: that command is the
+            # failure this whole change removes. The previous step streamed the
+            # image straight into `docker load` over SSH, and it carries the
+            # exact tag the compose file references, so `up -d` finds it
+            # locally and never reaches for a registry.
+            timeout 60 docker image inspect ghcr.io/onezee23/triptrack-website:latest \
+              --format 'загружен: {{.Id}} ({{.Created}})'
             # `--no-deps triptrack-web`, not a bare `up -d`: the bare form also
             # brings up umami, which `depends_on` postgres `service_healthy`, so
             # a website deploy sat waiting on the analytics database's health
