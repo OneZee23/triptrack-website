@@ -4,9 +4,9 @@ import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
 import GlobeHero from '../components/globe/GlobeHero';
 
-import screenRecording from '../assets/screen-recording.png';
-import screenDetail from '../assets/screen-detail.png';
-import screenLockscreen from '../assets/screen-lockscreen.png';
+import screenRecording from '../assets/screen-recording.webp';
+import screenDetail from '../assets/screen-detail.webp';
+import screenLockscreen from '../assets/screen-lockscreen.webp';
 
 export default function Home() {
   const { t, lang } = useTranslation();
@@ -52,7 +52,7 @@ export default function Home() {
             <span className="absolute -top-12 text-[120px] font-bold text-black/[0.03] leading-none select-none">01</span>
             <div className="w-12 h-12 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(16,185,129,0.3)]"><div className="w-3 h-3 rounded-full bg-emerald-500" /></div>
             <div className="w-[240px] h-[380px] rounded-[28px] mb-6 shadow-lg overflow-hidden border border-black/5 bg-[#f8f6f2]">
-              <img src={screenLockscreen} alt="Live Activity on Lock Screen" className="w-full h-[150%] object-cover object-bottom" />
+              <img src={screenLockscreen} alt="Live Activity on Lock Screen" width={480} height={1043} loading="eager" fetchPriority="high" className="w-full h-[150%] object-cover object-bottom" />
             </div>
             <h4 className="text-xl font-semibold mb-3 text-[#1e1e23]">{t('home.step1_title')}</h4>
             <p className="text-[#1e1e23]/50 text-sm px-4">{t('home.step1_desc')}</p>
@@ -62,7 +62,7 @@ export default function Home() {
             <span className="absolute -top-12 text-[120px] font-bold text-black/[0.03] leading-none select-none">02</span>
             <div className="w-12 h-12 rounded-full bg-[#EB571E]/20 border-2 border-[#EB571E] flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(235,87,30,0.3)]"><div className="w-3 h-3 rounded-full bg-[#EB571E]" /></div>
             <div className="w-[240px] h-[380px] rounded-[28px] mb-6 shadow-lg overflow-hidden border border-black/5 bg-[#f8f6f2]">
-              <img src={screenRecording} alt="Recording a trip" className="w-full h-[150%] object-cover object-bottom" />
+              <img src={screenRecording} alt="Recording a trip" width={480} height={1043} loading="lazy" className="w-full h-[150%] object-cover object-bottom" />
             </div>
             <h4 className="text-xl font-semibold mb-3 text-[#1e1e23]">{t('home.step2_title')}</h4>
             <p className="text-[#1e1e23]/50 text-sm px-4">{t('home.step2_desc')}</p>
@@ -72,7 +72,7 @@ export default function Home() {
             <span className="absolute -top-12 text-[120px] font-bold text-black/[0.03] leading-none select-none">03</span>
             <div className="w-12 h-12 rounded-full bg-red-500/20 border-2 border-red-500 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(239,68,68,0.3)]"><div className="w-3 h-3 rounded-full bg-red-500" /></div>
             <div className="w-[240px] h-[380px] rounded-[28px] mb-6 shadow-lg overflow-hidden border border-black/5 bg-[#f8f6f2]">
-              <img src={screenDetail} alt="Trip detail view" className="w-full h-[150%] object-cover object-bottom" />
+              <img src={screenDetail} alt="Trip detail view" width={480} height={1043} loading="lazy" className="w-full h-[150%] object-cover object-bottom" />
             </div>
             <h4 className="text-xl font-semibold mb-3 text-[#1e1e23]">{t('home.step3_title')}</h4>
             <p className="text-[#1e1e23]/50 text-sm px-4">{t('home.step3_desc')}</p>

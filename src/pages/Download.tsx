@@ -1,6 +1,6 @@
 import { Smartphone, Apple } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
-import screenProfile from '../assets/screen-profile.png';
+import screenProfile from '../assets/screen-profile.webp';
 import { AppStoreBadge } from '../components/AppStoreBadge';
 import { usePageMeta } from '../components/PageMeta';
 
@@ -18,7 +18,7 @@ export default function Download() {
       <div className="flex flex-col items-center text-center max-w-3xl relative z-10 w-full">
         {/* iPhone Mockup — stays dark */}
         <div className="w-[280px] md:w-[320px] aspect-[9/16] rounded-[32px] overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.1)] border border-black/5 bg-[#f8f6f2] mb-16">
-          <img src={screenProfile} alt="TripTrack Driver Profile" className="w-full h-[145%] object-cover object-bottom" />
+          <img src={screenProfile} alt="TripTrack Driver Profile" width={640} height={1391} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
         </div>
 
         <h1 className="text-[40px] md:text-[72px] font-bold tracking-tighter mb-8 leading-tight text-[#1e1e23]">

@@ -2,7 +2,7 @@ import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
 import { AppStoreBadge } from '../components/AppStoreBadge';
 import { CheckCircle2, XCircle, MapPin, Eye, EyeOff, Trophy } from 'lucide-react';
-import screenFeed from '../assets/screen-feed.png';
+import screenFeed from '../assets/screen-feed.webp';
 
 export default function FogOfWarMap() {
   const { lang } = useTranslation();
@@ -133,7 +133,7 @@ export default function FogOfWarMap() {
       {/* Screenshot */}
       <div className="flex justify-center mb-12">
         <div className="w-[240px] aspect-[9/16] rounded-[28px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2]">
-          <img src={screenFeed} alt="TripTrack Feed" className="w-full h-[145%] object-cover object-bottom" />
+          <img src={screenFeed} alt="TripTrack Feed" width={480} height={1043} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
         </div>
       </div>
 
