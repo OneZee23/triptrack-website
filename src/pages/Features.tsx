@@ -1,5 +1,5 @@
 import { Lock, CheckCircle2, XCircle } from 'lucide-react';
-import screenProfile from '../assets/screen-profile.png';
+import screenProfile from '../assets/screen-profile.webp';
 import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
@@ -37,7 +37,7 @@ export default function Features() {
             <p className="text-[13px] text-[#1e1e23]/35 font-medium">{t('features.gamification_note')}</p>
           </div>
           <div className="w-[260px] md:w-[300px] aspect-[9/16] rounded-[32px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2] flex-shrink-0">
-            <img src={screenProfile} alt="Driver Profile with levels and badges" className="w-full h-[145%] object-cover object-bottom" />
+            <img src={screenProfile} alt="Driver Profile with levels and badges" width={640} height={1391} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
           </div>
         </div>
       </section>

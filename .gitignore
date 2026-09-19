@@ -29,3 +29,6 @@ dist-ssr
 
 # local dev globe mock (anonymized real data; prod uses nginx-proxied /api/globe)
 public/api/
+
+# git worktrees
+.worktrees/
