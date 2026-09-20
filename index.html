@@ -2,52 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>TripTrack — Drive Diary & Trip Tracker for iOS | Free</title>
-    <meta name="description" content="Free trip tracker for iPhone. Automatically records every drive with routes, photos, stats, fog of war map. Private, offline, no account. Google Timeline alternative." />
-    <meta name="keywords" content="trip tracker, drive diary, road trip app, google timeline alternative, fog of war map, трекер поездок, дневник поездок, трекер маршрутов" />
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="TripTrack — Your Drives, Remembered" />
-    <meta property="og:description" content="Free trip tracker for iPhone. Records every drive, builds a visual diary of routes, photos and stats. 100% private." />
-    <meta property="og:image" content="/og-image.jpg" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://trip-track.app" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="TripTrack – Drive Diary" />
-    <meta name="twitter:description" content="Auto trip diary for iOS. Records every drive, builds a visual journal of routes, photos, and stats." />
-    <meta name="twitter:image" content="/og-image.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f8f6f2" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "TripTrack – Road Journal",
-      "operatingSystem": "iOS 17+",
-      "applicationCategory": "TravelApplication",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "ratingCount": "2" },
-      "description": "Auto trip diary for iOS. Records every drive, builds a visual journal of routes, photos, and stats. Free, private, no account needed.",
-      "url": "https://trip-track.app",
-      "downloadUrl": "https://apps.apple.com/us/app/triptrack-road-journal/id6760650361",
-      "author": { "@type": "Person", "name": "OneZee" }
-    }
-    </script>
+    <!-- The display face: every page paints a bold heading in the first frame,
+         so it is worth fetching before the stylesheet asks for it. The other
+         weights are not preloaded on purpose — they would compete with it. -->
+    <link rel="preload" href="/fonts/inter-700.woff2" as="font" type="font/woff2" crossorigin />
 
-    <!-- Fonts (self-hosted) -->
-    <!-- Analytics — Umami -->
+    <!-- Title, description, canonical, hreflang, Open Graph and JSON-LD are
+         written per page and per language by scripts/prerender.mjs. This file
+         is the template AND the SPA fallback, so it keeps a plain default
+         head; nothing here is what a crawler reads on a real page. -->
+    <!--app-head-->
+    <title>TripTrack — drive diary and trip tracker for iPhone</title>
+    <meta name="description" content="A trip tracker for iPhone that records every drive by itself and keeps it as a drive diary: route, photos, stats, places and a fog of war map you uncover." />
+    <!--/app-head-->
+
+    <!-- Analytics — Umami (cookieless, self-hosted) -->
     <script defer src="https://analytics.trip-track.app/script.js" data-website-id="1e458188-3307-4fb1-b14f-2620e0d4f5ae"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
