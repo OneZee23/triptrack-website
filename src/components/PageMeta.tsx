@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from '../i18n/useTranslation';
-import { PAGE_META, type MetaKey } from '../lib/meta';
+import { isIndexable, PAGE_META, type MetaKey } from '../lib/meta';
 import { canonicalUrl, DEFAULT_LANG, LANGS } from '../lib/site';
 
 /**
@@ -16,7 +16,7 @@ export function usePageMeta(key: MetaKey) {
 
   useEffect(() => {
     const { title, description } = PAGE_META[key][lang];
-    const url = key === '404' ? undefined : canonicalUrl(key, lang);
+    const url = isIndexable(key) ? canonicalUrl(key, lang) : undefined;
 
     document.title = title;
     setMeta('name', 'description', description);
@@ -30,6 +30,11 @@ export function usePageMeta(key: MetaKey) {
       setLink('canonical', url);
       for (const alt of LANGS) setLink('alternate', canonicalUrl(key, alt), alt);
       setLink('alternate', canonicalUrl(key, DEFAULT_LANG), 'x-default');
+    } else {
+      // A page with no canonical of its own must not keep the last one's.
+      // Arriving at the 404 or at `/app` by a soft navigation would otherwise
+      // leave the head claiming this is the page the visitor came from.
+      dropLinks('link[rel="canonical"], link[rel="alternate"]');
     }
   }, [key, lang]);
 }
@@ -42,6 +47,10 @@ function setMeta(kind: 'name' | 'property', key: string, content: string) {
     document.head.appendChild(el);
   }
   el.setAttribute('content', content);
+}
+
+function dropLinks(selector: string) {
+  for (const el of document.head.querySelectorAll(selector)) el.remove();
 }
 
 function setLink(rel: string, href: string, hreflang?: string) {

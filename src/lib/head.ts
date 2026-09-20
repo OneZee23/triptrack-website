@@ -1,6 +1,6 @@
 import { translate } from '../i18n/dict';
 import { FAQ_IDS } from './faq';
-import { PAGE_META, type MetaKey } from './meta';
+import { isIndexable, NOINDEX_ROBOTS, PAGE_META, type MetaKey } from './meta';
 import { canonicalUrl, DEFAULT_LANG, LANGS, ROUTE_PRIORITY, ROUTES, SITE_URL, type Lang, type Route } from './site';
 
 /**
@@ -102,7 +102,7 @@ function breadcrumbs(route: Route, lang: Lang) {
 
 /** Everything structured-data for one page, in the order it is emitted. */
 export function structuredData(key: MetaKey, lang: Lang): unknown[] {
-  if (key === '404') return [];
+  if (!isIndexable(key)) return [];
   if (key === '/') return [softwareApplication(lang), organization(), faqPage(lang)];
   if (key === '/download') return [softwareApplication(lang), breadcrumbs(key, lang)];
   return [breadcrumbs(key, lang)];
@@ -111,9 +111,10 @@ export function structuredData(key: MetaKey, lang: Lang): unknown[] {
 /**
  * The `<head>` contents for one page × one language.
  *
- * The 404 shell is the one page with no canonical and no hreflang: it exists
- * at every wrong address at once, so pointing search engines at a canonical
- * would be a lie. It gets `noindex` instead.
+ * A page that is not indexable gets no canonical and no hreflang: the 404
+ * exists at every wrong address at once and `/app` exists only for the person
+ * signed into it, so pointing search engines at a canonical would be a lie.
+ * They get `noindex` instead (`NOINDEX_ROBOTS`).
  */
 export function buildHead(key: MetaKey, lang: Lang): string {
   const { title, description } = PAGE_META[key][lang];
@@ -122,8 +123,9 @@ export function buildHead(key: MetaKey, lang: Lang): string {
     `<meta name="description" content="${escapeAttr(description)}" />`,
   ];
 
-  if (key === '404') {
-    lines.push('<meta name="robots" content="noindex, follow" />');
+  const robots = NOINDEX_ROBOTS[key];
+  if (robots) {
+    lines.push(`<meta name="robots" content="${robots}" />`);
   } else {
     lines.push(`<link rel="canonical" href="${canonicalUrl(key, lang)}" />`);
     for (const alt of LANGS) {
@@ -144,7 +146,7 @@ export function buildHead(key: MetaKey, lang: Lang): string {
     `<meta name="twitter:description" content="${escapeAttr(description)}" />`,
     `<meta name="twitter:image" content="${OG_IMAGE}" />`,
   );
-  if (key !== '404') lines.push(`<meta property="og:url" content="${canonicalUrl(key, lang)}" />`);
+  if (!robots) lines.push(`<meta property="og:url" content="${canonicalUrl(key, lang)}" />`);
 
   for (const data of structuredData(key, lang)) lines.push(jsonLd(data));
 

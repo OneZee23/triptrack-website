@@ -325,10 +325,6 @@
     "nav": {
       "link": "My trips"
     },
-    "meta": {
-      "title": "My trips — TripTrack",
-      "description": "Your own trips from the TripTrack app, on the web. Private: only you can see them."
-    },
     "loading": "Loading…",
     "retry": "Try again",
     "sign_out": "Sign out",

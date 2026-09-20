@@ -30,6 +30,14 @@ describe('buildHead', () => {
     expect(head).not.toContain('hreflang');
   });
 
+  it('marks the signed-in section noindex, nofollow and gives it no canonical', () => {
+    const head = buildHead('app', 'ru');
+    expect(head).toContain('<meta name="robots" content="noindex, nofollow" />');
+    expect(head).not.toContain('rel="canonical"');
+    expect(head).not.toContain('hreflang');
+    expect(head).not.toContain('og:url');
+  });
+
   it('escapes what goes into an attribute', () => {
     const head = buildHead('/', 'ru');
     expect(head).not.toMatch(/content="[^"]*"[^"=>]+="/);
@@ -76,6 +84,7 @@ describe('structured data', () => {
 
   it('gives the 404 nothing to index', () => {
     expect(structuredData('404', 'en')).toEqual([]);
+    expect(structuredData('app', 'en')).toEqual([]);
   });
 });
 

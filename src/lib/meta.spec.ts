@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { DESC_MAX, DESC_MIN, PAGE_META, TITLE_MAX, type MetaKey } from './meta';
+import { DESC_MAX, DESC_MIN, isIndexable, NOINDEX_ROBOTS, PAGE_META, TITLE_MAX, type MetaKey } from './meta';
 import { LANGS, ROUTES } from './site';
 
-const KEYS: MetaKey[] = [...ROUTES, '404'];
+const KEYS: MetaKey[] = [...ROUTES, '404', 'app'];
+/** The length rules are about what a SEARCH RESULT renders, so they are
+ *  asked only of the pages that can be one. */
+const INDEXABLE = KEYS.filter(isIndexable);
 
 describe('PAGE_META', () => {
   it('covers every route in every language', () => {
@@ -17,7 +20,7 @@ describe('PAGE_META', () => {
     expect(Object.keys(PAGE_META).sort()).toEqual([...KEYS].sort());
   });
 
-  it.each(KEYS.flatMap((key) => LANGS.map((lang) => [key, lang] as const)))(
+  it.each(INDEXABLE.flatMap((key) => LANGS.map((lang) => [key, lang] as const)))(
     'keeps %s / %s inside the lengths a search result renders',
     (key, lang) => {
       const { title, description } = PAGE_META[key][lang];
@@ -27,6 +30,23 @@ describe('PAGE_META', () => {
       expect(description.length, `description of ${key}/${lang} is ${description.length}`).toBeLessThanOrEqual(DESC_MAX);
     },
   );
+
+  it.each(KEYS.flatMap((key) => LANGS.map((lang) => [key, lang] as const)))(
+    'keeps the tab title of %s / %s short and trimmed',
+    (key, lang) => {
+      const { title, description } = PAGE_META[key][lang];
+      expect(title.length, `title "${title}" is ${title.length}`).toBeLessThanOrEqual(TITLE_MAX);
+      expect(title.trim()).toBe(title);
+      expect(description.trim()).toBe(description);
+      expect(description.length).toBeGreaterThan(0);
+    },
+  );
+
+  it('keeps the private pages out of the index, and only those', () => {
+    expect(Object.keys(NOINDEX_ROBOTS).sort()).toEqual(['404', 'app']);
+    expect(NOINDEX_ROBOTS.app).toContain('noindex');
+    expect(INDEXABLE).toEqual([...ROUTES]);
+  });
 
   it('never repeats a title between pages of the same language', () => {
     for (const lang of LANGS) {

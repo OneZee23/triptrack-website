@@ -25,7 +25,9 @@ function Shell() {
   const { session, signOut } = useAuth();
   const { pathname } = useLocation();
 
-  usePageMeta(t('app.meta.title'), t('app.meta.description'));
+  // One table for every page's title and description, `/app` included
+  // (`PAGE_META.app`, `noindex` and out of the sitemap — see lib/meta.ts).
+  usePageMeta('app');
   useNoIndex();
 
   useEffect(() => {
