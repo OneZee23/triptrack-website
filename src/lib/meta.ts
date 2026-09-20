@@ -23,8 +23,30 @@ export interface PageMeta {
   description: string;
 }
 
-/** Pages that have meta: every indexable route, plus the 404 shell. */
-export type MetaKey = Route | '404';
+/**
+ * Pages that have meta: every indexable route, plus the two that are not
+ * indexable — the 404 shell and the signed-in `/app` section.
+ */
+export type MetaKey = Route | '404' | 'app';
+
+/**
+ * The pages that must never be indexed, and the robots line each one gets.
+ *
+ * The 404 exists at every wrong address at once, so it may be followed but
+ * not indexed. `/app` needs a session to show anything at all, so there is
+ * nothing to follow either — the same pair `src/app/meta.ts` writes into the
+ * live DOM. Both are here rather than as `if (key === …)` in three files: the
+ * question "is this page for search engines" has one answer, in one place.
+ */
+export const NOINDEX_ROBOTS: Partial<Record<MetaKey, string>> = {
+  '404': 'noindex, follow',
+  app: 'noindex, nofollow',
+};
+
+/** An indexable key is a real route: it has a canonical URL and hreflang. */
+export function isIndexable(key: MetaKey): key is Route {
+  return !(key in NOINDEX_ROBOTS);
+}
 
 export const PAGE_META: Record<MetaKey, Record<Lang, PageMeta>> = {
   '/': {
@@ -121,6 +143,20 @@ export const PAGE_META: Record<MetaKey, Record<Lang, PageMeta>> = {
       title: 'Приватность — поездки остаются на телефоне',
       description:
         'Что TripTrack хранит на iPhone, что уезжает только при включённом Cloud Sync, почему на сайте нет отслеживающих cookies и как удалить всё сразу и навсегда.',
+    },
+  },
+  app: {
+    // Never in a search result — `noindex`, and out of the sitemap — so this
+    // pair exists only for the browser tab and the share card of a link
+    // someone pastes to themselves. Short on purpose; the snippet-length rule
+    // in meta.spec.ts is about search results and does not apply.
+    en: {
+      title: 'My trips — TripTrack',
+      description: 'Your own trips from the TripTrack app, in the browser. Private: only you can see them.',
+    },
+    ru: {
+      title: 'Мои поездки — TripTrack',
+      description: 'Ваши поездки из приложения TripTrack в браузере. Их видите только вы.',
     },
   },
   '404': {

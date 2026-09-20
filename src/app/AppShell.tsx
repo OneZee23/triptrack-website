@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { LogOut } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
+import { routeFromPath } from '../lib/site';
 import { usePageMeta } from '../components/PageMeta';
 import { AuthProvider } from './auth';
 import { useAuth } from './useAuth';
@@ -21,11 +22,13 @@ export default function AppShell() {
 }
 
 function Shell() {
-  const { t, lang } = useTranslation();
+  const { t, lang, href } = useTranslation();
   const { session, signOut } = useAuth();
   const { pathname } = useLocation();
 
-  usePageMeta(t('app.meta.title'), t('app.meta.description'));
+  // One table for every page's title and description, `/app` included
+  // (`PAGE_META.app`, `noindex` and out of the sitemap — see lib/meta.ts).
+  usePageMeta('app');
   useNoIndex();
 
   useEffect(() => {
@@ -38,13 +41,16 @@ function Shell() {
     };
   }, []);
 
-  const onLoginPage = pathname === '/app/login';
-  if (!session && !onLoginPage) return <Navigate to="/app/login" replace />;
-  if (session && onLoginPage) return <Navigate to="/app/trips" replace />;
+  // The section is mounted under both language roots, so every comparison is
+  // made on the English spelling (`/ru/app/login` → `/app/login`) and every
+  // redirect is written back through `href` — otherwise a Russian reader gets
+  // bounced into the English site by his own sign-in.
+  const route = routeFromPath(pathname);
+  const onLoginPage = route === '/app/login';
+  if (!session && !onLoginPage) return <Navigate to={href('/app/login')} replace />;
+  if (session && onLoginPage) return <Navigate to={href('/app/trips')} replace />;
   // `/app` itself is just a door.
-  if (pathname === '/app' || pathname === '/app/') {
-    return <Navigate to={session ? '/app/trips' : '/app/login'} replace />;
-  }
+  if (route === '/app') return <Navigate to={href(session ? '/app/trips' : '/app/login')} replace />;
 
   return (
     <div className="flex-1 w-full pt-28 md:pt-32 pb-20 px-6">

@@ -14,7 +14,7 @@ import { ErrorNote } from './ui';
 const CLIENT_ID = String(import.meta.env.VITE_APPLE_SERVICES_ID ?? 'app.trip-track.web');
 
 export default function LoginPage() {
-  const { t } = useTranslation();
+  const { t, href } = useTranslation();
   const { signedIn } = useAuth();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
@@ -38,7 +38,7 @@ export default function LoginPage() {
       const response = await auth.signIn();
       const session = await login(response.authorization.id_token, nonce);
       signedIn(session);
-      navigate('/app/trips', { replace: true });
+      navigate(href('/app/trips'), { replace: true });
     } catch (error: unknown) {
       if (isCancelled(error)) {
         setBusy(false);

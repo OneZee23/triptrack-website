@@ -12,7 +12,7 @@ import { ErrorNote, Spinner } from './ui';
 const PAGE = 20;
 
 export default function TripsPage() {
-  const { t, lang } = useTranslation();
+  const { t, lang, href } = useTranslation();
   const [trips, setTrips] = useState<TripSummary[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -77,7 +77,13 @@ export default function TripsPage() {
 
       <div className="grid gap-5 sm:grid-cols-2">
         {trips.map((trip) => (
-          <TripCard key={trip.id} trip={trip} lang={lang as Lang} untitled={t('app.trips.untitled')} />
+          <TripCard
+            key={trip.id}
+            trip={trip}
+            to={href(`/app/trips/${trip.id}`)}
+            lang={lang as Lang}
+            untitled={t('app.trips.untitled')}
+          />
         ))}
       </div>
 
@@ -103,11 +109,11 @@ export default function TripsPage() {
   );
 }
 
-function TripCard({ trip, lang, untitled }: { trip: TripSummary; lang: Lang; untitled: string }) {
+function TripCard({ trip, to, lang, untitled }: { trip: TripSummary; to: string; lang: Lang; untitled: string }) {
   const duration = tripDurationSeconds(trip);
   return (
     <Link
-      to={`/app/trips/${trip.id}`}
+      to={to}
       className="block rounded-3xl bg-white border border-black/5 p-4 hover:shadow-[0_8px_40px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 active:translate-y-0 transition-all"
     >
       <RoutePreview polyline={trip.previewPolyline} />
