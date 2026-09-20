@@ -320,5 +320,57 @@
     "rights_p2": "If you would rather ask a person — about what is stored, about a copy of your data, or about deleting it — write to the address below. The answer comes from the developer, because there is only one.",
     "contact_title": "Contact",
     "contact_p1": "TripTrack is made by OneZee, an independent developer. Questions about this page, or about anything stored:"
+  },
+  "app": {
+    "nav": {
+      "link": "My trips"
+    },
+    "meta": {
+      "title": "My trips — TripTrack",
+      "description": "Your own trips from the TripTrack app, on the web. Private: only you can see them."
+    },
+    "loading": "Loading…",
+    "retry": "Try again",
+    "sign_out": "Sign out",
+    "units_note": "Distances in kilometres, speed in km/h.",
+    "account": {
+      "no_name": "Your account"
+    },
+    "login": {
+      "title": "Sign in with Apple",
+      "lead": "The same trips you record in the app — and only you can see them here.",
+      "button": "Sign in with Apple",
+      "busy": "Signing in…",
+      "note": "Apple shares your name and email with TripTrack, nothing else. Nothing on this page is public, and nothing is shared with anyone."
+    },
+    "trips": {
+      "title": "My trips",
+      "count": "{n} in total",
+      "loading": "Loading your trips…",
+      "more": "Show more",
+      "untitled": "Trip",
+      "empty_title": "No trips yet",
+      "empty_body": "Record your first one in the app — it shows up here the next time it syncs."
+    },
+    "trip": {
+      "back": "All trips",
+      "distance": "Distance",
+      "duration": "Time on the road",
+      "avg_speed": "Average speed",
+      "max_speed": "Top speed",
+      "checkpoints": "Checkpoints",
+      "checkpoint_n": "Checkpoint {n}",
+      "no_track": "The server has no route for this trip."
+    },
+    "error": {
+      "network": "Couldn't reach the server. Check your connection and try again.",
+      "session": "Your session has ended. Please sign in again.",
+      "banned": "This account is suspended.",
+      "apple": "Apple couldn't confirm the sign-in. Please try again.",
+      "apple_sdk": "Sign in with Apple didn't load. Check your connection or any content blocker, then try again.",
+      "rate_limit": "Too many attempts. Please try again in a few minutes.",
+      "trip_missing": "This trip is no longer on the server.",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }

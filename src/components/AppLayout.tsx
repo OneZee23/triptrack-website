@@ -91,6 +91,13 @@ function Shell() {
                   {t(item.key)}
                 </Link>
               ))}
+              <Link
+                to="/app"
+                className={`flex min-h-[44px] items-center text-[15px] font-medium transition-colors ${here.startsWith('/app') ? 'text-[#1e1e23]' : 'text-[#1e1e23]/50 hover:text-[#1e1e23]'}`}
+                {...hover(t('app.nav.link'))}
+              >
+                {t('app.nav.link')}
+              </Link>
             </nav>
 
             <div className="flex items-center gap-1 md:gap-4">
@@ -133,6 +140,12 @@ function Shell() {
                   {t(item.key)}
                 </Link>
               ))}
+              <Link
+                to="/app"
+                className={`flex min-h-[44px] items-center text-[17px] font-medium ${here.startsWith('/app') ? 'text-[#1e1e23]' : 'text-[#1e1e23]/50'}`}
+              >
+                {t('app.nav.link')}
+              </Link>
               <Link to={href('/download')} className="bg-[#EB571E] text-white rounded-full min-h-[44px] px-6 text-center font-bold flex items-center justify-center gap-2 mt-3">
                 <Apple className="w-5 h-5" />
                 {t('nav.download_free')}

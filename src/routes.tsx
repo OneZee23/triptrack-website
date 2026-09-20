@@ -62,7 +62,20 @@ function childrenFrom(resolve: (id: PageId) => PageModule): RouteObject[] {
   // backend by nginx; if that proxy is missing or the code is dead, they land
   // here and get told where the trip actually lives. Eager on purpose: a 404
   // that needs a chunk to download is a 404 that can fail to render.
-  return [...pages, { path: '*', Component: NotFound }];
+  // «Мои поездки»: раздел для вошедших. Один объект, дети ленивые — SDK Apple,
+  // клиент API и MapLibre не попадают в чанки маркетинговых страниц. `noindex`
+  // ставит компонент, `Disallow: /app` — сгенерированный robots.txt; в
+  // пререндер и sitemap раздел не входит (они идут по PAGE_PATHS).
+  const app: RouteObject = {
+    path: 'app',
+    lazy: () => import('./app/AppShell').then((m) => ({ Component: m.default })),
+    children: [
+      { path: 'login', lazy: () => import('./app/LoginPage').then((m) => ({ Component: m.default })) },
+      { path: 'trips', lazy: () => import('./app/TripsPage').then((m) => ({ Component: m.default })) },
+      { path: 'trips/:id', lazy: () => import('./app/TripPage').then((m) => ({ Component: m.default })) },
+    ],
+  };
+  return [...pages, app, { path: '*', Component: NotFound }];
 }
 
 function roots(children: () => RouteObject[]): RouteObject[] {
