@@ -11,7 +11,7 @@
     "hero_title": "Your drives. Remembered.",
     "hero_subtitle": "TripTrack quietly records every trip and turns it into a visual diary — routes, photos, stats, all on your phone.",
     "download_free": "Download Free",
-    "hero_note": "Free forever \u00b7 No sign-up \u00b7 100% on-device",
+    "hero_note": "Free forever · No sign-up · 100% on-device",
     "may_trips": "May Trips",
     "coastline_run": "Coastline Run",
     "trip": "Trip",
@@ -36,18 +36,18 @@
     "step2_recording": "Recording",
     "step3_title": "Look back",
     "step3_desc": "Route, photos, stats — every drive becomes a memory you can revisit.",
-    "rating": "5.0 on the App Store \u00b7 60+ trips recorded",
-    "review1": "\"\u041f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u043e\u0433\u043e\u043d\u044c. \u041b\u044e\u0431\u043b\u044e \u0440\u0430\u0437\u043d\u044b\u0435 \u0442\u0440\u0435\u043a\u0435\u0440\u044b. \u042d\u0442\u043e\u0442 \u043f\u043e\u043a\u0430\u0437\u0430\u043b\u0441\u044f \u0438\u043d\u0442\u0435\u0440\u0435\u0441\u043d\u044b\u043c, \u0441\u043b\u0435\u0436\u0443 \u0437\u0430 \u043d\u0438\u043c \u0442\u0435\u043f\u0435\u0440\u044c.\"",
-    "review1_author": "OKOPOK \u00b7 App Store",
+    "rating": "5.0 on the App Store · 60+ trips recorded",
+    "review1": "\"Приложение огонь. Люблю разные трекеры. Этот показался интересным, слежу за ним теперь.\"",
+    "review1_author": "OKOPOK · App Store",
     "cta_title": "Your roads. Your story.",
     "cta_button": "Download TripTrack",
-    "cta_note": "iOS 17+ \u2022 Free \u2022 No account \u2022 Privacy-first",
+    "cta_note": "iOS 17+ • Free • No account • Privacy-first",
     "modal_auto_recorded": "Recorded automatically",
     "modal_add_photos": "Add photos & notes",
     "modal_try_free": "Get TripTrack Free",
     "globe": {
-      "title": "Every road, on the world map",
-      "subtitle": "TripTrack turns your drives into a living globe. Spin it, zoom in, explore real journeys from the community.",
+      "title": "Your drive diary, on the world map",
+      "subtitle": "A trip tracker for iPhone that records every drive by itself. Spin the globe — those are real routes, recorded by real people.",
       "cta": "Download on the App Store",
       "hint": "Drag · zoom · tap a trip",
       "scroll": "Scroll down",
@@ -67,10 +67,67 @@
       "unit_kmh": "km/h",
       "unit_h": "h",
       "unit_min": "min"
-    }
+    },
+    "atlas": {
+      "title": "The map starts dark",
+      "p1": "Everywhere you have not driven lies under fog. Every recorded trip burns a corridor through it, and what is left is an atlas of the roads you actually know — not a list of places you meant to visit one day.",
+      "p2": "The figure under the map is the length of what is open, not the sum of your trips. The hundredth lap around your own block opens nothing, and the map is honest about that.",
+      "link": "How the fog of war map works"
+    },
+    "places": {
+      "title": "Places, and the journeys between them",
+      "p1": "Mark a point on a route and TripTrack starts recognising it. By the eleventh time you pull in it knows how long the drive there usually takes, and which direction you usually come from.",
+      "p2": "Four trips over one long weekend are four rows in a database and one story in life. A journey is a window of dates over your own trips — the days, the kilometres and the regions counted once, in one place.",
+      "link": "Everything TripTrack records"
+    },
+    "privacy": {
+      "title": "Your drives stay on your phone",
+      "p1": "Trips, photos and statistics live in a database on the iPhone. Nothing is uploaded unless you switch Cloud Sync on yourself, and an account is needed for nothing else.",
+      "point_device": "On the device by default",
+      "point_account": "Account optional — Sign in with Apple, nothing else",
+      "point_ads": "No ads, no trackers, nothing sold",
+      "link": "Read the privacy page"
+    },
+    "plus": {
+      "title": "TripTrack Plus",
+      "p1": "An optional subscription for profile and card looks, and for writing in a drive you forgot to record. Everything that records, remembers and shows your roads stays free — and will."
+    },
+    "faq_title": "Questions people actually ask",
+    "faq": {
+      "free": {
+        "q": "Is TripTrack free?",
+        "a": "Yes. Recording, the diary, the map, photos, statistics and the atlas are free and carry no ads. TripTrack Plus is an optional subscription for looks and a few extras; nothing that remembers your roads sits behind it."
+      },
+      "auto": {
+        "q": "Does it record on its own?",
+        "a": "It can. Pair it with the car stereo once: recording starts when the stereo comes on and offers to finish when it goes off. Or press start yourself — while a trip is paused the app never decides on its own that it is over."
+      },
+      "battery": {
+        "q": "Will it drain my battery?",
+        "a": "A two-hour drive costs a few per cent. Points are written densely enough to show a manoeuvre in a courtyard, but the app does no networking while you drive and draws nothing on a screen that is off."
+      },
+      "account": {
+        "q": "Do I need an account?",
+        "a": "No. TripTrack works with no sign-up at all and keeps everything on the phone. An account exists only for Cloud Sync — a second device, a public profile, a shared trip link — and it is Sign in with Apple, nothing else."
+      },
+      "timeline": {
+        "q": "Is this a Google Timeline alternative?",
+        "a": "That is why it exists. Timeline left the web and took years of history with it. TripTrack records the same journeys, shows the route in the colours of your speed, and keeps them where nobody can switch them off."
+      },
+      "atlas": {
+        "q": "What is the fog of war map?",
+        "a": "The Atlas tab covers the world in fog and clears it along the roads you have driven. It is not a game layer laid over the map — it is the map, and the number under it is the length of what you have opened."
+      },
+      "android": {
+        "q": "Is there an Android version?",
+        "a": "Not yet, and there is no date. TripTrack is written for iPhone in Apple's own frameworks by one developer; an Android version would be a second app rather than a port."
+      }
+    },
+    "step1_alt": "TripTrack recording a drive on the iPhone Lock Screen",
+    "step2_alt": "A trip being recorded: speed, distance and the route so far",
+    "step3_alt": "A finished trip in TripTrack: route on the map, photos and statistics"
   },
   "features": {
-    "hero_title": "Built for the road.",
     "hero_subtitle": "Everything you need to remember your drives — from daily commutes to cross-country road trips.",
     "records_title": "Tracks every drive",
     "records_desc": "Runs quietly in the background. Speed, distance, elevation — all captured without killing your battery.",
@@ -85,7 +142,7 @@
     "encrypted_offline": "Encrypted Offline",
     "gamification_title": "Level up as you drive.",
     "gamification_desc": "Earn badges, grow your driver profile, and unlock achievements for every road trip milestone.",
-    "gamification_note": "30 driver levels \u00b7 10 vehicle stickers \u00b7 Hidden achievements",
+    "gamification_note": "30 driver levels · 10 vehicle stickers · Hidden achievements",
     "locked": "Locked",
     "comparison_title": "Why TripTrack?",
     "comparison_features": "Feature",
@@ -95,7 +152,18 @@
     "fog_map": "Fog of War map",
     "offline_private": "100% Offline & Private",
     "no_account": "No account needed",
-    "get_started": "Get Started Free"
+    "get_started": "Get Started Free",
+    "intro_p1": "TripTrack is a trip tracker for iPhone that does the remembering for you. It starts when you drive, writes the route densely enough to show a manoeuvre in a courtyard, and turns the result into a page you can open a year later.",
+    "intro_p2": "Everything below is in the shipping app, not on a roadmap. What is genuinely not built yet lives on the roadmap page, with dates where there are dates.",
+    "atlas_title": "Atlas — the fog of war map",
+    "atlas_desc": "The world starts under fog and clears along the roads you have driven. The figure it shows is the length of what is open, not the sum of your trips.",
+    "places_title": "Places and journeys",
+    "places_desc": "A point you keep returning to becomes a place that knows how long the drive usually takes. Trips over one long weekend fold into a single journey.",
+    "garage_title": "Garage",
+    "garage_desc": "Several cars, each with its own odometer, fuel log and dashboard units — kilometres in the app, miles on the car whose dashboard shows miles.",
+    "link_fog": "More about the fog of war map",
+    "link_timeline": "Coming from Google Timeline?",
+    "h1": "What a trip tracker for iPhone actually records"
   },
   "about": {
     "hero_title_1": "Built by a driver,",
@@ -113,22 +181,144 @@
   },
   "download": {
     "ready": "Ready to ride.",
-    "hero_title_1": "Start your road ",
-    "hero_title_2": "story",
     "hero_subtitle": "Get TripTrack free on the App Store. No account, no subscription. Just drive.",
     "download_on": "Download on the",
     "app_store": "App Store",
     "scan": "Scan to Download",
     "req_ios": "Requires iOS 17.0+",
     "req_iphone": "Designed for iPhone",
-    "req_free": "Free. Always."
+    "req_free": "Free. Always.",
+    "p1": "TripTrack is an iPhone app. It needs iOS 17 or newer, it costs nothing, and it asks for no account: install it, allow location, and your next drive is already a page you can open.",
+    "p2": "Location is the one permission it genuinely needs — choose Always if you want trips to start by themselves, or While Using if you would rather press start. Photos and notifications are optional and asked for only when you use them.",
+    "link_features": "What it records",
+    "link_privacy": "What happens to the data",
+    "screenshot_alt": "The TripTrack driver profile: level, badges and totals",
+    "h1": "Download TripTrack for iPhone"
   },
   "footer": {
-    "privacy_policy": "Privacy",
     "github": "GitHub",
     "telegram": "Telegram",
     "youtube": "YouTube",
     "email": "Email",
-    "made_with": "Made with \u2764\ufe0f and 71,000 km behind the wheel"
+    "made_with": "Made with ❤️ and 71,000 km behind the wheel",
+    "privacy": "Privacy",
+    "cookies": "Cookies"
+  },
+  "page": {
+    "home": "Home",
+    "features": "Features",
+    "download": "Download",
+    "google_timeline": "Google Timeline alternative",
+    "fog_of_war": "Fog of war map",
+    "about": "About",
+    "roadmap": "Roadmap",
+    "privacy": "Privacy"
+  },
+  "gt": {
+    "badge": "Google Timeline shut down in 2025",
+    "h1": "The Google Timeline alternative for iPhone",
+    "lead": "In 2025 Google wiped years of location history without warning. TripTrack is a free app that records your drives and keeps everything on your iPhone.",
+    "what_title": "What happened to Google Timeline?",
+    "what_p1": "Google Timeline (Location History) tracked everywhere you went and showed where you had been each day. In 2025 Google discontinued the web version and started deleting data. Millions of people lost years of travel history.",
+    "what_p2": "If you are looking for a Google Timeline replacement, TripTrack does the same job differently: it records trips automatically, shows the route in the colours of your speed, and keeps the data on your phone rather than in an account somebody else can close.",
+    "what_p3": "The difference that matters is where the history lives. Timeline was a feature of a service, and a service can be switched off. A TripTrack trip is a row in a database on your iPhone; Cloud Sync is something you turn on, not something you agree to.",
+    "table_title": "TripTrack vs Google Timeline",
+    "feature": "Feature",
+    "row_works": "Still works in 2026",
+    "row_auto": "Auto-records trips",
+    "row_speed": "Speed-coloured routes",
+    "row_photos": "Photos on the route",
+    "row_stats": "Trip statistics",
+    "row_offline": "Works offline",
+    "row_noaccount": "No account needed",
+    "row_ondevice": "Data on the device",
+    "row_fog": "Fog of war map",
+    "row_badges": "Badges and levels",
+    "speed_title": "Speed-coloured routes",
+    "speed_desc": "See where you drove fast and where you sat in traffic",
+    "private_title": "Private by default",
+    "private_desc": "Google saw all of it. TripTrack does not",
+    "free_title": "Free forever",
+    "free_desc": "No subscriptions, no ads, no hidden fees",
+    "import_title": "Can I bring my old Timeline data across?",
+    "import_p1": "No, and it would be dishonest to imply otherwise — TripTrack has no Timeline importer. What Google still lets you do is download a Takeout archive, and that is worth keeping whatever you use next.",
+    "import_p2": "From the day you install TripTrack the history starts again, and this time it is yours. The first month is the odd one; after that the map fills in faster than people expect.",
+    "cta_title": "Get your Google Timeline replacement",
+    "cta_note": "iPhone · iOS 17+ · Free · No sign-up",
+    "screenshot_alt": "The TripTrack feed: recorded drives with route, distance and date",
+    "link_fog": "The fog of war map",
+    "link_features": "Everything TripTrack records"
+  },
+  "fog": {
+    "badge": "A game map for drivers",
+    "h1": "Fog of war map for everyday driving",
+    "lead": "Remember fog of war from strategy games? TripTrack covers the whole world in fog and clears it as you drive. Every kilometre is a new discovery.",
+    "what_title": "What is a fog of war map?",
+    "what_p1": "Fog of war is a video-game mechanic: the map is hidden under dark fog until you explore it. In TripTrack it works the same way — the world map starts covered, and the fog clears only where you have actually driven.",
+    "what_p2": "That turns every drive into a small expedition. A different route to work uncovers a new neighbourhood; a road trip cuts a whole strip out of the fog. Over time the map becomes a picture of where your life has actually taken you.",
+    "what_p3": "The number under the map is the length of what is open — not the sum of your trips. Your hundredth lap around your own block opens nothing, and a map that counted it would be flattering you instead of telling you something.",
+    "how_title": "How it works",
+    "step1_title": "The whole world in fog",
+    "step1_desc": "On the first launch the entire map is covered. You start from nothing — like a new game.",
+    "step2_title": "Drive, and the fog clears",
+    "step2_desc": "Every recorded trip burns a corridor through the fog. The more you drive, the more of the world is yours.",
+    "step3_title": "See what is left",
+    "step3_desc": "Open the Atlas and look at the blank spots. They are the best route planner there is.",
+    "step4_title": "Find what is out there",
+    "step4_desc": "Passes, lighthouses, border posts and ferries leave a seal on the map when you drive past them.",
+    "table_title": "TripTrack vs Fog of World",
+    "feature": "Feature",
+    "row_fog": "Fog of war map",
+    "row_diary": "Trip diary and feed",
+    "row_speed": "Speed-coloured routes",
+    "row_photos": "Photos on the route",
+    "row_badges": "Badges and levels",
+    "row_garage": "Vehicle garage",
+    "row_free": "Free",
+    "row_offline": "Works offline",
+    "row_noaccount": "No account needed",
+    "cta_title": "Start uncovering the map",
+    "cta_note": "iPhone · iOS 17+ · Free · No sign-up",
+    "screenshot_alt": "The TripTrack feed: recorded drives with route, distance and date",
+    "link_features": "Everything TripTrack records",
+    "link_timeline": "Coming from Google Timeline?"
+  },
+  "notfound": {
+    "title_trip": "This trip didn't open",
+    "title_page": "No such page",
+    "body_trip": "The trip link may have expired, been revoked by its author, or got mangled on its way through a messenger. The trip itself is still there — inside the app.",
+    "body_page": "The address may have a typo, or the page moved. Start from the home page — or open the app.",
+    "open_app": "Open TripTrack — the trip is waiting there",
+    "go_home": "Go home",
+    "get_app": "Get the app"
+  },
+  "privacy": {
+    "h1": "Privacy",
+    "lead": "TripTrack records where you drive. That is about as personal as data gets, so this page says plainly what is kept, where it is kept, and what it takes to make all of it go away.",
+    "updated": "Last updated: 20 September 2026",
+    "summary_title": "The short version",
+    "summary_1": "Trips, photos and statistics live on your iPhone. The app works with no account at all.",
+    "summary_2": "Anything reaches our server only while you keep Cloud Sync switched on, and only your own data.",
+    "summary_3": "No advertising, no trackers, nothing sold or shared. There is nothing here to sell.",
+    "phone_title": "What stays on the phone",
+    "phone_p1": "Every trip — its track, distance, speed, elevation, photos, notes, checkpoints, places, vehicles and the atlas of what you have opened — is stored in a database inside the app on your device. Photos you attach are copied into the app's own folder. None of it is sent anywhere by default.",
+    "phone_p2": "Delete a trip and it is gone from the phone. Delete the app and everything goes with it, because there is no copy elsewhere unless you made one.",
+    "cloud_title": "What leaves the phone with Cloud Sync on",
+    "cloud_p1": "Cloud Sync is off until you turn it on and sign in with Apple. Apple gives us a stable identifier and, if you allow it, your name and a relay e-mail address; we never see your Apple password.",
+    "cloud_p2": "With it on, your trips (track, statistics, photos, checkpoints, segments), your vehicles, your journeys and your settings are uploaded so a second device can show the same library. They stay yours: other people see a trip only if you publish it, and a published trip can be unpublished.",
+    "cloud_p3": "Turning Cloud Sync off stops the uploads. «Delete account» in the app erases the server copy and the phone copy in one go, and it cannot be undone.",
+    "crash_title": "Crash reports",
+    "crash_p1": "The app sends crash and error reports to Sentry so that failures get fixed. Reports are scrubbed before they leave the phone: no coordinates, no trip contents, no tokens, no e-mail addresses — the stack, the app version and the device model.",
+    "cookies_title": "Cookies and data on this site",
+    "cookies_p1": "This website sets no tracking cookies. No advertising cookies, no profiling cookies, and no third-party tags at all. Our hosting provider may set a short-lived security cookie to tell a browser from a bot; that one is technical, and nothing personal can be read out of it.",
+    "cookies_p2": "Visits are counted with Umami — the stock open-source build, running on our own server at analytics.trip-track.app. It is cookieless: it records the page, the referrer, the country, the browser and the screen size. Your IP address is used only to derive a daily anonymous visit id and is not stored, so a visitor cannot be followed from one day to the next.",
+    "cookies_p3": "The «My trips» area keeps two things in your browser's local storage: a session token and a device id, both strictly needed to keep you signed in. They are not analytics, they are never sent anywhere but our own API, and signing out deletes them.",
+    "cookies_p4": "The map in that area draws its tiles from OpenFreeMap (tiles.openfreemap.org). Like any map provider, it sees requests for the area you are looking at. Your trips themselves are never sent there — they are drawn in your browser on top of the tiles.",
+    "cookies_p5": "Since nothing here is non-essential, there is no consent banner to click away.",
+    "rights_title": "Your rights",
+    "rights_p1": "You can use the app with no account, delete any trip at any time, stop Cloud Sync whenever you like, unpublish anything you published, and delete the account together with everything on the server. All of it is in the app, and none of it requires writing to us first.",
+    "rights_p2": "If you would rather ask a person — about what is stored, about a copy of your data, or about deleting it — write to the address below. The answer comes from the developer, because there is only one.",
+    "contact_title": "Contact",
+    "contact_p1": "TripTrack is made by OneZee, an independent developer. Questions about this page, or about anything stored:"
   }
 }
