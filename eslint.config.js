@@ -6,7 +6,10 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'dist-server']),
+  // `.worktrees/*` holds git worktrees of this same repo: linting from the
+  // root would walk them, and a per-file override like the one below would
+  // not match their copies (the paths are relative to this config).
+  globalIgnores(['dist', 'dist-server', '.worktrees']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
