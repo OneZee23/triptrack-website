@@ -1,15 +1,12 @@
-import { Lock, CheckCircle2, XCircle } from 'lucide-react';
+import { Lock, CheckCircle2, XCircle, Compass, MapPin, Car } from 'lucide-react';
 import screenProfile from '../assets/screen-profile.webp';
 import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
 
 export default function Features() {
-  const { t, lang } = useTranslation();
-  usePageMeta(
-    lang === 'ru' ? 'Возможности TripTrack — Автозапись, Fog of War, Статистика' : 'TripTrack Features — Auto-recording, Fog of War, Smart Stats',
-    lang === 'ru' ? 'Автозапись поездок, маршруты по скорости, туман войны, фото к маршрутам, 30+ бейджей, гараж машин. 100% офлайн и приватно.' : 'Auto trip recording, speed-colored routes, fog of war exploration map, trip photos, 30+ badges, vehicle garage. 100% offline and private.',
-  );
+  const { t, href } = useTranslation();
+  usePageMeta('/features');
 
   const comparisonRows = [
     { name: t('features.auto_recording'), t: true, g: false, p: false },
@@ -21,11 +18,30 @@ export default function Features() {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 py-32 flex flex-col items-center relative z-10">
-      <section className="text-center mb-24 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#EB571E]/5 blur-[100px] rounded-full pointer-events-none -z-10" />
-        <h1 className="text-[40px] md:text-[72px] font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('features.hero_title')}</h1>
-        <p className="text-[16px] md:text-[18px] text-[#1e1e23]/50 max-w-2xl mx-auto leading-relaxed">{t('features.hero_subtitle')}</p>
+    <div className="w-full max-w-7xl mx-auto px-5 sm:px-6 py-28 md:py-32 flex flex-col items-center relative z-10">
+      <section className="text-center mb-16 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] max-w-[150vw] bg-[#EB571E]/5 blur-[100px] rounded-full pointer-events-none -z-10" />
+        <h1 className="text-[40px] md:text-[64px] font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('features.h1')}</h1>
+        <p className="text-[18px] text-[#1e1e23]/60 max-w-2xl mx-auto leading-relaxed">{t('features.hero_subtitle')}</p>
+        <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-4 text-left text-[16px] leading-relaxed text-[#1e1e23]/65">
+          <p>{t('features.intro_p1')}</p>
+          <p>{t('features.intro_p2')}</p>
+        </div>
+      </section>
+
+      {/* What 0.6.8-0.8.0 added: the three blocks the old page never mentioned */}
+      <section className="mb-20 grid w-full max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
+        {[
+          { icon: <Compass className="w-7 h-7 text-[#EB571E]" />, title: 'features.atlas_title', desc: 'features.atlas_desc' },
+          { icon: <MapPin className="w-7 h-7 text-[#3884E0]" />, title: 'features.places_title', desc: 'features.places_desc' },
+          { icon: <Car className="w-7 h-7 text-[#2EAE50]" />, title: 'features.garage_title', desc: 'features.garage_desc' },
+        ].map((card) => (
+          <div key={card.title} className="rounded-[28px] border border-black/5 bg-white p-7 shadow-sm">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4f2ee]">{card.icon}</div>
+            <h2 className="mb-3 text-[20px] font-bold text-[#1e1e23]">{t(card.title)}</h2>
+            <p className="text-[15px] leading-relaxed text-[#1e1e23]/60">{t(card.desc)}</p>
+          </div>
+        ))}
       </section>
 
       {/* GAMIFICATION — profile screenshot first (looks good) */}
@@ -33,11 +49,11 @@ export default function Features() {
         <div className="flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-[40px] font-bold mb-6 text-[#1e1e23]">{t('features.gamification_title')}</h2>
-            <p className="text-[16px] text-[#1e1e23]/50 mb-8 leading-relaxed max-w-lg">{t('features.gamification_desc')}</p>
-            <p className="text-[13px] text-[#1e1e23]/35 font-medium">{t('features.gamification_note')}</p>
+            <p className="text-[16px] text-[#1e1e23]/60 mb-8 leading-relaxed max-w-lg">{t('features.gamification_desc')}</p>
+            <p className="text-[15px] text-[#1e1e23]/50 font-medium">{t('features.gamification_note')}</p>
           </div>
           <div className="w-[260px] md:w-[300px] aspect-[9/16] rounded-[32px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2] flex-shrink-0">
-            <img src={screenProfile} alt="Driver Profile with levels and badges" width={640} height={1391} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
+            <img src={screenProfile} alt={t('download.screenshot_alt')} width={640} height={1391} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
           </div>
         </div>
       </section>
@@ -71,7 +87,11 @@ export default function Features() {
 
       {/* CTA */}
       <div className="pt-12 pb-24 w-full flex flex-col items-center border-b border-black/5">
-        <Link to="/download" className="bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full px-12 py-5 text-[20px] font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_2px_20px_rgba(235,87,30,0.3)] mb-4">{t('features.get_started')}</Link>
+        <Link to={href('/download')} className="bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full px-12 py-5 text-[20px] font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_2px_20px_rgba(235,87,30,0.3)] mb-4">{t('features.get_started')}</Link>
+        <nav className="mt-6 flex flex-wrap justify-center gap-x-7 gap-y-1 text-[16px] font-medium">
+          <Link to={href('/fog-of-war-map')} className="flex min-h-[44px] items-center text-[#EB571E] hover:underline">{t('features.link_fog')}</Link>
+          <Link to={href('/google-timeline-alternative')} className="flex min-h-[44px] items-center text-[#EB571E] hover:underline">{t('features.link_timeline')}</Link>
+        </nav>
       </div>
 
       {/* BENTO GRID — feature details at the bottom */}
@@ -90,7 +110,7 @@ export default function Features() {
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between group h-[340px] shadow-sm">
           <div>
             <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.photos_title')}</h3>
-            <p className="text-[#1e1e23]/50 text-[12px] leading-relaxed">{t('features.photos_desc')}</p>
+            <p className="text-[#1e1e23]/60 text-[15px] leading-relaxed">{t('features.photos_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-[#f4f2ee] rounded-2xl mt-6 border border-black/5 flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden relative">
             <div className="w-20 h-20 bg-white rounded-xl rotate-12 absolute -right-4 -bottom-4 shadow-md border border-black/5" />
@@ -101,7 +121,7 @@ export default function Features() {
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between group h-[340px] shadow-sm">
           <div>
             <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.stats_title')}</h3>
-            <p className="text-[#1e1e23]/50 text-[12px] leading-relaxed">{t('features.stats_desc')}</p>
+            <p className="text-[#1e1e23]/60 text-[15px] leading-relaxed">{t('features.stats_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-[#f4f2ee] rounded-2xl mt-6 border border-black/5 flex flex-col items-center justify-center p-4 group-hover:scale-105 transition-transform gap-2">
              <div className="w-full flex justify-between items-end h-12 gap-2">
@@ -134,7 +154,7 @@ export default function Features() {
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between shadow-sm">
           <div>
             <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.private_title')}</h3>
-            <p className="text-[#1e1e23]/50 text-[12px] leading-relaxed">{t('features.private_desc')}</p>
+            <p className="text-[#1e1e23]/60 text-[15px] leading-relaxed">{t('features.private_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-emerald-50 rounded-2xl mt-6 border border-emerald-500/20 flex flex-col items-center justify-center text-emerald-600 gap-3">
             <Lock className="w-8 h-8" />
