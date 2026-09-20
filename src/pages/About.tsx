@@ -48,19 +48,16 @@ const STORY_STEPS = [
 
 export default function About() {
   const { t, lang } = useTranslation();
-  usePageMeta(
-    lang === 'ru' ? 'О проекте TripTrack — Инди-приложение от водителя для водителей' : 'About TripTrack — Indie App Built by a Driver, for Drivers',
-    lang === 'ru' ? 'Как появился TripTrack. История создания дневника поездок после того, как Google удалил историю местоположений.' : 'How TripTrack was born. The story behind building a drive diary after Google killed location history.',
-  );
+  usePageMeta('/about');
 
   return (
-    <div className="flex-1 w-full max-w-3xl mx-auto px-6 py-32 flex flex-col items-center">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-32 flex flex-col items-center">
       {/* Header */}
-      <img src={logo} alt="TripTrack" className="w-20 h-20 rounded-2xl shadow-lg mb-8" />
+      <img src={logo} alt="" width={80} height={80} className="w-20 h-20 rounded-2xl shadow-lg mb-8" />
       <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-center mb-4 text-[#1e1e23]">
         {lang === 'ru' ? 'Как появился TripTrack' : 'How TripTrack was born'}
       </h1>
-      <p className="text-[#1e1e23]/40 text-center mb-20">
+      <p className="text-[16px] text-[#1e1e23]/50 text-center mb-20">
         {lang === 'ru' ? 'Не стартап. Не бизнес. Просто нужное приложение.' : 'Not a startup. Not a business. Just a needed app.'}
       </p>
 
@@ -95,21 +92,21 @@ export default function About() {
       {/* Values */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-20 mb-20">
         <div className="bg-white border border-black/5 rounded-2xl p-8 flex items-start gap-5 shadow-sm">
-          <div className="w-11 h-11 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
+          <div className="w-[44px] h-[44px] rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
             <Shield className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
             <h3 className="text-lg font-bold mb-2 text-[#1e1e23]">{t('about.private_title')}</h3>
-            <p className="text-[#1e1e23]/50 leading-relaxed text-sm">{t('about.private_desc')}</p>
+            <p className="text-[16px] text-[#1e1e23]/60 leading-relaxed">{t('about.private_desc')}</p>
           </div>
         </div>
         <div className="bg-white border border-black/5 rounded-2xl p-8 flex items-start gap-5 shadow-sm">
-          <div className="w-11 h-11 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+          <div className="w-[44px] h-[44px] rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
             <Heart className="w-5 h-5 text-blue-500" />
           </div>
           <div>
             <h3 className="text-lg font-bold mb-2 text-[#1e1e23]">{t('about.indie_title')}</h3>
-            <p className="text-[#1e1e23]/50 leading-relaxed text-sm">{t('about.indie_desc')}</p>
+            <p className="text-[16px] text-[#1e1e23]/60 leading-relaxed">{t('about.indie_desc')}</p>
           </div>
         </div>
       </div>
@@ -118,13 +115,13 @@ export default function About() {
       <div className="flex flex-col items-center border-t border-black/5 pt-16 w-full">
         <h2 className="text-2xl font-bold mb-8 text-[#1e1e23]">{t('about.connect_title')}</h2>
         <div className="flex flex-wrap justify-center gap-4">
-          <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
+          <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-[15px]">
             <GithubIcon className="w-5 h-5" /> {t('about.open_source')}
           </a>
-          <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
+          <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-[15px]">
             <MessageCircle className="w-5 h-5" /> {t('about.telegram')}
           </a>
-          <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-sm">
+          <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white hover:bg-[#f4f2ee] border border-black/10 rounded-full px-7 py-3.5 font-semibold transition-all hover:scale-105 text-[#1e1e23] shadow-sm text-[15px]">
             <Play className="w-5 h-5" /> {t('about.youtube')}
           </a>
         </div>

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Send, ChevronDown } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useGlobeData } from '../../hooks/useGlobeData';
+import { useMounted } from '../../lib/useMounted';
 import { trackEvent } from '../../lib/analytics';
 import { TripCard } from './TripCard';
 import { StarField } from './StarField';
@@ -21,6 +22,11 @@ const Fallback = () => (
 
 export default function GlobeHero() {
   const { t, lang } = useTranslation();
+  // WebGL and a randomly-seeded starfield cannot exist in prerendered HTML:
+  // the globe needs a canvas and the stars would differ between the build and
+  // the browser. Both wait for mount, so the markup the crawler reads and the
+  // markup React hydrates are the same — a dark hero with the copy in it.
+  const mounted = useMounted();
   const state = useGlobeData();
   const [selected, setSelected] = useState<GlobeTrip | null>(null);
   const [interacting, setInteracting] = useState(false);
@@ -64,15 +70,23 @@ export default function GlobeHero() {
       style={{ background: 'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)' }}
     >
       {/* animated deep-space backdrop (shows through the transparent space around the globe) */}
-      <StarField />
-      <div className="globe-orb pointer-events-none" aria-hidden />
-      <div className="globe-orb-2 pointer-events-none" aria-hidden />
-      <div className="globe-shoot pointer-events-none" style={{ top: '16%', left: '6%' }} aria-hidden />
+      {mounted && (
+        <>
+          <StarField />
+          <div className="globe-orb pointer-events-none" aria-hidden />
+          <div className="globe-orb-2 pointer-events-none" aria-hidden />
+          <div className="globe-shoot pointer-events-none" style={{ top: '16%', left: '6%' }} aria-hidden />
+        </>
+      )}
 
       <div className="absolute inset-0">
-        <Suspense fallback={<Fallback />}>
-          <MapGlobe trips={trips} onSelect={handleSelect} onInteracting={setInteracting} paused={selected !== null} />
-        </Suspense>
+        {mounted ? (
+          <Suspense fallback={<Fallback />}>
+            <MapGlobe trips={trips} onSelect={handleSelect} onInteracting={setInteracting} paused={selected !== null} />
+          </Suspense>
+        ) : (
+          <Fallback />
+        )}
       </div>
 
       {/* left scrim for text readability — fades while interacting / card open */}
@@ -95,7 +109,7 @@ export default function GlobeHero() {
             href={APP_STORE_URL}
             data-umami-event="appstore-click"
             data-umami-event-source="hero"
-            className="pointer-events-auto mt-8 inline-flex w-max items-center gap-2 rounded-xl bg-gradient-to-br from-[#FF6B00] to-[#FFB000] px-6 py-3 font-bold text-[#1a1209] shadow-lg"
+            className="pointer-events-auto mt-8 inline-flex min-h-[44px] w-max items-center gap-2 rounded-xl bg-gradient-to-br from-[#FF6B00] to-[#FFB000] px-6 py-3 text-[16px] font-bold text-[#1a1209] shadow-lg"
           >
             {t('home.globe.cta')}
           </a>
@@ -105,7 +119,7 @@ export default function GlobeHero() {
               <span><b className="text-[#FFB000]">{stats.cities}</b> {statWord('stat_cities', stats.cities)}</span>
             </div>
           )}
-          <p className="globe-hint mt-8 text-xs uppercase tracking-[0.15em] text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+          <p className="globe-hint mt-8 text-[12px] uppercase tracking-[0.15em] text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
             {t('home.globe.hint')}
           </p>
           <a
@@ -113,7 +127,7 @@ export default function GlobeHero() {
             target="_blank"
             rel="noopener noreferrer"
             data-umami-event="telegram-click"
-            className="pointer-events-auto mt-5 inline-flex items-center gap-1.5 text-xs text-white/45 transition-colors hover:text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
+            className="pointer-events-auto mt-5 inline-flex min-h-[44px] items-center gap-1.5 text-[13px] text-white/45 transition-colors hover:text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
           >
             <Send size={12} />
             {t('home.globe.join_cta')}
@@ -156,7 +170,7 @@ export default function GlobeHero() {
             if (el) window.scrollTo({ top: el.offsetHeight, behavior: 'smooth' });
           }}
           aria-label={t('home.globe.scroll')}
-          className="pointer-events-auto absolute bottom-5 left-1/2 z-20 grid h-11 w-11 -translate-x-1/2 place-items-center rounded-full bg-black/35 text-white/90 ring-1 ring-white/15 backdrop-blur-md md:hidden"
+          className="pointer-events-auto absolute bottom-5 left-1/2 z-20 grid h-[44px] w-[44px] -translate-x-1/2 place-items-center rounded-full bg-black/35 text-white/90 ring-1 ring-white/15 backdrop-blur-md md:hidden"
         >
           <ChevronDown size={22} className="animate-bounce" />
         </button>
