@@ -1,20 +1,9 @@
-import { createContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { useState, useEffect, useCallback, type ReactNode } from 'react';
 import en from './en.json';
 import ru from './ru.json';
+import { LanguageContext } from './LanguageContextValue';
 
 type Lang = 'en' | 'ru';
-
-interface LanguageContextType {
-  lang: Lang;
-  setLang: (lang: Lang) => void;
-  t: (key: string) => string;
-}
-
-export const LanguageContext = createContext<LanguageContextType>({
-  lang: 'en',
-  setLang: () => {},
-  t: (key) => key,
-});
 
 const dicts = { en, ru } as const;
 
