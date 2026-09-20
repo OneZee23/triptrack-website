@@ -343,3 +343,16 @@ html {
   .globe-orb-2 { animation: none; }
   .globe-shoot { display: none; }
 }
+
+/* Headings wrap on meaning rather than on width — a two-word orphan on the
+   second line of an h1 is the most visible typographic bug on a phone. */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Nothing on the site is allowed to widen the page. A single overflowing
+   element gives every screen a horizontal scrollbar, and on a phone that reads
+   as "broken" long before anyone finds what caused it. */
+html, body {
+  overflow-x: hidden;
+}
