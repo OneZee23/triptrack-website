@@ -12,7 +12,7 @@ import { ErrorNote, Spinner } from './ui';
 const TripMap = lazy(() => import('./TripMap'));
 
 export default function TripPage() {
-  const { t, lang } = useTranslation();
+  const { t, lang, href } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [trip, setTrip] = useState<TripDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export default function TripPage() {
 
   const back = (
     <Link
-      to="/app/trips"
+      to={href('/app/trips')}
       className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#1e1e23]/40 hover:text-[#1e1e23] transition-colors mb-6"
     >
       <ArrowLeft className="w-4 h-4" aria-hidden="true" />

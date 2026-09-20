@@ -92,7 +92,7 @@ function Shell() {
                 </Link>
               ))}
               <Link
-                to="/app"
+                to={href('/app')}
                 className={`flex min-h-[44px] items-center text-[15px] font-medium transition-colors ${here.startsWith('/app') ? 'text-[#1e1e23]' : 'text-[#1e1e23]/50 hover:text-[#1e1e23]'}`}
                 {...hover(t('app.nav.link'))}
               >
@@ -141,7 +141,7 @@ function Shell() {
                 </Link>
               ))}
               <Link
-                to="/app"
+                to={href('/app')}
                 className={`flex min-h-[44px] items-center text-[17px] font-medium ${here.startsWith('/app') ? 'text-[#1e1e23]' : 'text-[#1e1e23]/50'}`}
               >
                 {t('app.nav.link')}
