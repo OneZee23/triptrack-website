@@ -51,3 +51,68 @@ SPA на Vite без пререндера: поисковик получает �
    домен `trip-track.app`, Return URL `https://trip-track.app/app/login`.
 2. Прод бэкенда: `APPLE_BUNDLE_ID=com.onezee.TripTrack,app.trip-track.web`.
 3. Деплой бэкенда (CORS) и сайта.
+
+## 5. Как проверить вход локально
+
+Короткий ответ: **полностью — никак**. Sign in with Apple требует, чтобы
+`redirectURI` был `https` и вёл на домен, заранее записанный в Services ID;
+`http://localhost` Apple не принимает, а `crypto.subtle`, которым считается
+хеш нонса, есть только в защищённом контексте. Поэтому проверка делится на
+две части.
+
+**Что проверяется локально (всё, кроме самого Apple):**
+
+```bash
+cd trip-track-website
+npm test          # декодер полилинии, клиент API, форматы, гейт раздела
+npm run lint
+npm run build
+npm run dev       # http://localhost:5173/app → редирект на /app/login
+```
+
+Экран входа рисуется, кнопка нажимается, отказ Apple («SDK не загрузился»)
+показывается как положено. Список и экран поездки проверяются против
+настоящего прода, если в браузер руками положить сессию: в консоли
+
+```js
+localStorage.setItem('tt.app.session', JSON.stringify({
+  accessToken: '<из телефона или из логов бэкенда>',
+  refreshToken: '<оттуда же>',
+  account: { id: '<uuid>', displayName: 'Тест', email: null, avatarEmoji: '🚗' },
+}));
+```
+
+— и перезагрузить `/app/trips`. Так проверяются пагинация, превью
+маршрутов, карта, отметки и поведение при протухшем токене (обновление
+ровно один раз, потом выход).
+
+**Переменные окружения** (`.env.local`, в гит не едет):
+
+| Переменная | По умолчанию | Зачем |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | `https://api.trip-track.app` | локальный бэкенд, например `http://MacBook-Pro.local:3003` |
+| `VITE_APPLE_SERVICES_ID` | `app.trip-track.web` | Services ID, если владелец заведёт другой |
+
+**Что проверяется только на домене:**
+
+1. Apple Developer → Identifiers → Services ID `app.trip-track.web`:
+   Sign in with Apple включён, привязан к App ID `com.onezee.TripTrack`,
+   Domain `trip-track.app`, Return URL **`https://trip-track.app/app/login`**
+   (ровно тот, что шлёт клиент: `origin + '/app/login'`).
+2. На проде бэкенда `APPLE_BUNDLE_ID=com.onezee.TripTrack,app.trip-track.web`
+   — через запятую, не заменой: иначе перестанет проверяться вход с телефона.
+3. CORS на `https://trip-track.app` задеплоен.
+
+Нужно проверить до деплоя сайта — поднять туннель (`cloudflared tunnel
+--url http://localhost:5173`) и временно добавить его домен и
+`https://<туннель>/app/login` в тот же Services ID. Для одноразовой проверки
+это дешевле, чем деплой.
+
+**Нонс — единственное место, где легко ошибиться.** В вебе SDK ничего не
+хеширует: Apple кладёт в `nonce` то, что дали. Поэтому клиент шлёт
+`SHA-256(raw)` в `AppleID.auth.init` и **сырой** `raw` в `POST /auth/login`,
+где `AppleAuthService` хеширует его и сравнивает. Перепутаны местами —
+каждый вход падает с `INVALID_APPLE_TOKEN` и строкой
+`nonce claim mismatch (replay?)` в логах бэкенда; это и есть первое, что
+надо смотреть, если вход не пошёл. Формат хеша (нижний регистр hex) держит
+`src/app/appleSdk.test.ts`.
