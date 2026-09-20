@@ -3,6 +3,9 @@ name: Deploy to VPS
 on:
   push:
     branches: [master]
+  # Ручной перезапуск из вкладки Actions: когда деплой упал по сети между
+  # раннером и VPS, повторить его без пустого коммита в master.
+  workflow_dispatch:
 
 # Build the Docker image on the GitHub-hosted runner (fast network,
 # plenty of RAM, persistent buildx cache via type=gha), push to ghcr.io,
