@@ -16,20 +16,21 @@ export default function TripPage() {
   const { id } = useParams<{ id: string }>();
   const [trip, setTrip] = useState<TripDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [errorText, setErrorText] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (!id) return;
     setLoading(true);
-    setErrorText(null);
+    setErrorCode(null);
     try {
       setTrip(await tripDetail(id));
     } catch (error: unknown) {
-      setErrorText(t(errorKey(codeOf(error))));
+      // Kept as a code, translated at render — see TripsPage.
+      setErrorCode(codeOf(error) ?? 'UNKNOWN');
     } finally {
       setLoading(false);
     }
-  }, [id, t]);
+  }, [id]);
 
   useEffect(() => {
     void load();
@@ -44,6 +45,8 @@ export default function TripPage() {
     }
     return decodePreviewPolyline(trip.previewPolyline) ?? [];
   }, [trip]);
+
+  const errorText = errorCode ? t(errorKey(errorCode)) : null;
 
   const back = (
     <Link

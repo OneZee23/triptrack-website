@@ -17,12 +17,12 @@ export default function TripsPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [errorText, setErrorText] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const load = useCallback(async (offset: number) => {
     if (offset === 0) setLoading(true);
     else setLoadingMore(true);
-    setErrorText(null);
+    setErrorCode(null);
     try {
       const page = await listTrips(PAGE, offset);
       // Trips stay in component state only: nothing personal is written to
@@ -30,16 +30,21 @@ export default function TripsPage() {
       setTrips((prev) => (offset === 0 ? page.trips : [...prev, ...page.trips]));
       setTotal(page.total);
     } catch (error: unknown) {
-      setErrorText(t(errorKey(codeOf(error))));
+      // The CODE is what we keep: translating here would put `t` in this
+      // callback's deps, and switching language would refetch page one and
+      // throw away everything "Show more" had collected.
+      setErrorCode(codeOf(error) ?? 'UNKNOWN');
     } finally {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     void load(0);
   }, [load]);
+
+  const errorText = errorCode ? t(errorKey(errorCode)) : null;
 
   if (loading) return <Spinner label={t('app.trips.loading')} />;
 
