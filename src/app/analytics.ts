@@ -1,23 +1,20 @@
-// Keeping trip ids out of analytics.
+// Keeping trip ids out of analytics — ВТОРОЙ замок, а не первый.
 //
-// Umami is loaded globally by a tag in `index.html` and auto-tracks page
-// views, so `/app/trips/<uuid>` would ship a personal identifier to the
-// analytics server in the page path. Umami's documented per-visitor
-// opt-out is the `umami.disabled` flag in localStorage, which the tracker
-// re-reads on every send.
+// Первый стоит в `index.html`: у тега Umami выключен автотрек
+// (`data-auto-track="false"`), и просмотры страниц шлёт теперь только
+// `src/lib/analytics.ts`, которая молчит на всём, что под `/app`. Пока
+// автотрек был включён, `/app/trips/<uuid>` уезжал на сервер аналитики
+// путём страницы, и флаг ниже этого не закрывал: тег отложенный, но он
+// исполняется РАНЬШЕ любого нашего кода, поэтому самый первый заход прямо
+// по ссылке на поездку успевал отправиться.
 //
-// The flag is set on entering the section and, once there is a session,
-// LEFT set — that is what covers the case the flag cannot otherwise reach:
-// a direct landing on a trip URL, where the deferred tracker runs and
-// sends its page view before any React code of ours exists. A visitor who
-// never signed in gets tracking back when they leave the section, and
-// signing out restores it too.
-//
-// Residual gap, deliberately recorded rather than hidden: the very first
-// visit to a trip URL on a browser that has never signed in here cannot be
-// suppressed from inside the app. Closing it needs `data-auto-track="false"`
-// (or a path exclusion) on the tag in `index.html`, which belongs to whoever
-// owns that file. See docs/web-app-security.md.
+// Флаг оставлен сознательно. Он — документированный per-visitor opt-out
+// Umami, который трекер перечитывает на каждой отправке, и он продолжает
+// работать, даже если тег когда-нибудь вернут к автотреку или добавят в
+// него второй счётчик: здесь нужен замок, который не зависит от того, как
+// настроен чужой скрипт. Ставится на входе в раздел и, пока есть сессия, НЕ
+// снимается; посетитель, который не вошёл, получает аналитику обратно на
+// выходе из раздела, и выход из аккаунта её тоже возвращает.
 
 const UMAMI_DISABLED = 'umami.disabled';
 

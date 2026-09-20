@@ -23,8 +23,21 @@
     <meta name="description" content="A trip tracker for iPhone that records every drive by itself and keeps it as a drive diary: route, photos, stats, places and a fog of war map you uncover." />
     <!--/app-head-->
 
-    <!-- Analytics — Umami (cookieless, self-hosted) -->
-    <script defer src="https://analytics.trip-track.app/script.js" data-website-id="1e458188-3307-4fb1-b14f-2620e0d4f5ae"></script>
+    <!-- Analytics — Umami (cookieless, self-hosted).
+
+         `data-auto-track="false"` — не настройка вкуса, а единственное
+         место, где закрывается утечка: с автотреком Umami сам отправляет
+         ПУТЬ страницы, а в разделе «Мои поездки» путь — это
+         `/app/trips/<uuid>`, то есть идентификатор личной поездки на
+         сервере аналитики. Флаг `umami.disabled` из `src/app/analytics.ts`
+         эту дыру закрыть не мог: тег отложенный, но он исполняется РАНЬШЕ
+         нашего кода, и самый первый заход по ссылке на поездку уезжал
+         целиком.
+
+         Просмотры маркетинговых страниц шлёт теперь `trackPageView()`
+         (`src/lib/analytics.ts`), которую зовёт `AppLayout` на каждой
+         смене адреса и которая молчит на всём, что начинается с `/app`. -->
+    <script defer src="https://analytics.trip-track.app/script.js" data-website-id="1e458188-3307-4fb1-b14f-2620e0d4f5ae" data-auto-track="false"></script>
   </head>
   <body>
     <div id="root"><!--app-html--></div>

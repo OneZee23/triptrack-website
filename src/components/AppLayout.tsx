@@ -1,10 +1,11 @@
-import { useState, Suspense, useMemo, lazy } from 'react';
+import { useState, Suspense, useMemo, useEffect, lazy } from 'react';
 import { Outlet, Link, useLocation } from 'react-router';
 import { Globe, Apple, Menu, X } from 'lucide-react';
 import { LanguageProvider } from '../i18n/LanguageContext';
 import { useTranslation } from '../i18n/useTranslation';
 import { useMounted } from '../lib/useMounted';
 import { routeFromPath } from '../lib/site';
+import { trackPageView } from '../lib/analytics';
 import { CursorContext } from './CursorContext';
 import logo from '../assets/avatar.png';
 
@@ -54,6 +55,15 @@ function Shell() {
     setPrevPathname(location.pathname);
     setMobileMenuOpen(false);
   }
+
+  // Просмотры страниц шлёт приложение, а не тег: у тега автотрек выключен,
+  // иначе `/app/trips/<uuid>` уезжал бы в аналитику идентификатором личной
+  // поездки (см. index.html и lib/analytics.ts). `trackPageView` сама молчит
+  // на всём, что под `/app`, поэтому здесь нет второй проверки — второй
+  // проверке свойственно разойтись с первой.
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
 
   const here = routeFromPath(location.pathname);
   const toggleLang = () => setLang(lang === 'en' ? 'ru' : 'en');
