@@ -1,4 +1,3 @@
-import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
 import { AppStoreBadge } from '../components/AppStoreBadge';

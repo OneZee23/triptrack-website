@@ -110,7 +110,10 @@ export default function MapGlobe({
   const hintRef = useRef<HTMLDivElement | null>(null);
   const hintDismissedRef = useRef(false);
   const [hintGone, setHintGone] = useState(false);
-  const [failed, setFailed] = useState(false);
+  // Pure capability check (creates a throwaway canvas, doesn't touch the DOM
+  // tree) — computed at init instead of in the mount effect so there's no
+  // synchronous setState-in-effect.
+  const [failed, setFailed] = useState(() => !isWebGLAvailable());
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -155,14 +158,102 @@ export default function MapGlobe({
     else window.setTimeout(fly, 3200); // let the globe spin (with the hint) for a beat first
   }
 
+  function addTripLayers(map: MapLibreMap) {
+    if (map.getSource(ROUTES_SOURCE)) return;
+    map.addSource(ROUTES_SOURCE, { type: 'geojson', data: buildRoutes(tripsRef.current) });
+    map.addSource(POINTS_SOURCE, { type: 'geojson', data: buildEndpoints(tripsRef.current) });
+
+    map.addLayer({
+      id: ROUTE_GLOW_LAYER,
+      type: 'line',
+      source: ROUTES_SOURCE,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': BRAND_ORANGE,
+        'line-opacity': 0.55,
+        'line-blur': 6,
+        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 9, 6, 20, 12, 34],
+      },
+    });
+    map.addLayer({
+      id: ROUTE_LINE_LAYER,
+      type: 'line',
+      source: ROUTES_SOURCE,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': BRAND_ORANGE,
+        'line-opacity': 1,
+        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 3.5, 6, 6, 12, 9],
+      },
+    });
+    map.addLayer({
+      id: ROUTE_FLOW_LAYER,
+      type: 'line',
+      source: ROUTES_SOURCE,
+      layout: { 'line-cap': 'butt', 'line-join': 'round' },
+      paint: {
+        'line-color': '#FFF2DD',
+        'line-opacity': 0.95,
+        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 2, 6, 4, 12, 6],
+        'line-dasharray': DASH_SEQUENCE[0],
+      },
+    });
+    // pulsing beacon under each endpoint (animated radius/opacity in the rAF loop)
+    map.addLayer({
+      id: ENDPOINT_PULSE_LAYER,
+      type: 'circle',
+      source: POINTS_SOURCE,
+      paint: {
+        'circle-radius': 10,
+        'circle-color': BRAND_ORANGE,
+        'circle-opacity': 0.3,
+        'circle-blur': 0.5,
+      },
+    });
+    map.addLayer({
+      id: ENDPOINT_LAYER,
+      type: 'circle',
+      source: POINTS_SOURCE,
+      paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 5, 6, 7.5, 12, 10],
+        'circle-color': ['match', ['get', 'kind'], 'start', '#FFFFFF', 'end', BRAND_ORANGE, '#FFFFFF'],
+        'circle-stroke-color': BRAND_ORANGE,
+        'circle-stroke-width': 2,
+        'circle-opacity': 1,
+      },
+    });
+
+    layersAddedRef.current = true;
+
+    const handleClick = (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
+      const id = e.features?.[0]?.properties?.id as string | undefined;
+      if (!id) return;
+      const trip = tripsRef.current.find((t) => t.id === id);
+      if (trip) onSelectRef.current(trip);
+    };
+    for (const layer of [ROUTE_LINE_LAYER, ROUTE_GLOW_LAYER, ENDPOINT_LAYER]) {
+      map.on('click', layer, handleClick);
+      map.on('mouseenter', layer, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', layer, () => {
+        map.getCanvas().style.cursor = '';
+      });
+    }
+  }
+
+  function setData(map: MapLibreMap, list: GlobeTrip[]) {
+    (map.getSource(ROUTES_SOURCE) as GeoJSONSource | undefined)?.setData(buildRoutes(list));
+    (map.getSource(POINTS_SOURCE) as GeoJSONSource | undefined)?.setData(buildEndpoints(list));
+  }
+
   useEffect(() => {
     if (mapRef.current) return; // StrictMode double-mount guard
+    // When WebGL is unavailable, `failed` is already true on the first render,
+    // so the fallback branch renders instead of the container div below and
+    // this ref stays null — no separate `failed` check needed here.
     const container = containerRef.current;
     if (!container) return;
-    if (!isWebGLAvailable()) {
-      setFailed(true);
-      return;
-    }
 
     // Touch devices: let ONE finger spin/pan the globe (+ pinch to zoom). With
     // cooperativeGestures the map needs two fingers and one-finger drag scrolls
@@ -187,6 +278,10 @@ export default function MapGlobe({
       });
     } catch (err) {
       console.error('[MapGlobe] init failed', err);
+      // Mount-only effect ([] deps) reporting a one-time external-system
+      // (WebGL context) construction failure — not the render-loop that this
+      // rule guards against, so no cascading-render risk.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFailed(true);
       return;
     }
@@ -362,95 +457,6 @@ export default function MapGlobe({
       mapRef.current = null;
     };
   }, []);
-
-  function addTripLayers(map: MapLibreMap) {
-    if (map.getSource(ROUTES_SOURCE)) return;
-    map.addSource(ROUTES_SOURCE, { type: 'geojson', data: buildRoutes(tripsRef.current) });
-    map.addSource(POINTS_SOURCE, { type: 'geojson', data: buildEndpoints(tripsRef.current) });
-
-    map.addLayer({
-      id: ROUTE_GLOW_LAYER,
-      type: 'line',
-      source: ROUTES_SOURCE,
-      layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: {
-        'line-color': BRAND_ORANGE,
-        'line-opacity': 0.55,
-        'line-blur': 6,
-        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 9, 6, 20, 12, 34],
-      },
-    });
-    map.addLayer({
-      id: ROUTE_LINE_LAYER,
-      type: 'line',
-      source: ROUTES_SOURCE,
-      layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: {
-        'line-color': BRAND_ORANGE,
-        'line-opacity': 1,
-        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 3.5, 6, 6, 12, 9],
-      },
-    });
-    map.addLayer({
-      id: ROUTE_FLOW_LAYER,
-      type: 'line',
-      source: ROUTES_SOURCE,
-      layout: { 'line-cap': 'butt', 'line-join': 'round' },
-      paint: {
-        'line-color': '#FFF2DD',
-        'line-opacity': 0.95,
-        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 2, 6, 4, 12, 6],
-        'line-dasharray': DASH_SEQUENCE[0],
-      },
-    });
-    // pulsing beacon under each endpoint (animated radius/opacity in the rAF loop)
-    map.addLayer({
-      id: ENDPOINT_PULSE_LAYER,
-      type: 'circle',
-      source: POINTS_SOURCE,
-      paint: {
-        'circle-radius': 10,
-        'circle-color': BRAND_ORANGE,
-        'circle-opacity': 0.3,
-        'circle-blur': 0.5,
-      },
-    });
-    map.addLayer({
-      id: ENDPOINT_LAYER,
-      type: 'circle',
-      source: POINTS_SOURCE,
-      paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 5, 6, 7.5, 12, 10],
-        'circle-color': ['match', ['get', 'kind'], 'start', '#FFFFFF', 'end', BRAND_ORANGE, '#FFFFFF'],
-        'circle-stroke-color': BRAND_ORANGE,
-        'circle-stroke-width': 2,
-        'circle-opacity': 1,
-      },
-    });
-
-    layersAddedRef.current = true;
-
-    const handleClick = (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
-      const id = e.features?.[0]?.properties?.id as string | undefined;
-      if (!id) return;
-      const trip = tripsRef.current.find((t) => t.id === id);
-      if (trip) onSelectRef.current(trip);
-    };
-    for (const layer of [ROUTE_LINE_LAYER, ROUTE_GLOW_LAYER, ENDPOINT_LAYER]) {
-      map.on('click', layer, handleClick);
-      map.on('mouseenter', layer, () => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', layer, () => {
-        map.getCanvas().style.cursor = '';
-      });
-    }
-  }
-
-  function setData(map: MapLibreMap, list: GlobeTrip[]) {
-    (map.getSource(ROUTES_SOURCE) as GeoJSONSource | undefined)?.setData(buildRoutes(list));
-    (map.getSource(POINTS_SOURCE) as GeoJSONSource | undefined)?.setData(buildEndpoints(list));
-  }
 
   useEffect(() => {
     const map = mapRef.current;
