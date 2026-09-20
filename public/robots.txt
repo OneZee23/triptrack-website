@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# The signed-in section is private: no crawling, and every page there
+# also carries <meta name="robots" content="noindex, nofollow">.
+Disallow: /app
+
 Sitemap: https://trip-track.app/sitemap.xml

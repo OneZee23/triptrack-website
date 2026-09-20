@@ -47,6 +47,7 @@ export default function AppLayout() {
               <Link to="/features" className={`text-sm font-medium transition-colors ${location.pathname === '/features' ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40 hover:text-[#1e1e23]'}`} onMouseEnter={() => setHoverState({text: t('nav.features'), active: true})} onMouseLeave={() => setHoverState(null)}>{t('nav.features')}</Link>
               <Link to="/about" className={`text-sm font-medium transition-colors ${location.pathname === '/about' ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40 hover:text-[#1e1e23]'}`} onMouseEnter={() => setHoverState({text: t('nav.about'), active: true})} onMouseLeave={() => setHoverState(null)}>{t('nav.about')}</Link>
               <Link to="/roadmap" className={`text-sm font-medium transition-colors ${location.pathname === '/roadmap' ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40 hover:text-[#1e1e23]'}`} onMouseEnter={() => setHoverState({text: t('nav.roadmap'), active: true})} onMouseLeave={() => setHoverState(null)}>{t('nav.roadmap')}</Link>
+              <Link to="/app" className={`text-sm font-medium transition-colors ${location.pathname.startsWith('/app') ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40 hover:text-[#1e1e23]'}`} onMouseEnter={() => setHoverState({text: t('app.nav.link'), active: true})} onMouseLeave={() => setHoverState(null)}>{t('app.nav.link')}</Link>
             </nav>
 
             <div className="flex items-center gap-4 md:gap-6">
@@ -83,6 +84,7 @@ export default function AppLayout() {
               <Link to="/features" className={`text-lg font-medium py-2 ${location.pathname === '/features' ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40'}`}>{t('nav.features')}</Link>
               <Link to="/about" className={`text-lg font-medium py-2 ${location.pathname === '/about' ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40'}`}>{t('nav.about')}</Link>
               <Link to="/roadmap" className={`text-lg font-medium py-2 ${location.pathname === '/roadmap' ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40'}`}>{t('nav.roadmap')}</Link>
+              <Link to="/app" className={`text-lg font-medium py-2 ${location.pathname.startsWith('/app') ? 'text-[#1e1e23]' : 'text-[#1e1e23]/40'}`}>{t('app.nav.link')}</Link>
               <Link to="/download" className="bg-[#EB571E] text-white rounded-full px-6 py-3 text-center font-bold flex items-center justify-center gap-2 mt-2">
                 <Apple className="w-5 h-5" />
                 {t('nav.download_free')}

@@ -20,6 +20,19 @@ export const router = createBrowserRouter([
         lazy: () => import("./pages/GoogleTimeline").then((m) => ({ Component: m.default })),
       },
       { path: "fog-of-war-map", lazy: () => import("./pages/FogOfWarMap").then((m) => ({ Component: m.default })) },
+      // "My trips": the signed-in section. One object, its children lazy,
+      // so the whole thing (Apple SDK glue, API client, MapLibre) stays out
+      // of every marketing route's chunk. `noindex` is set in the component
+      // and mirrored by `Disallow: /app` in robots.txt.
+      {
+        path: "app",
+        lazy: () => import("./app/AppShell").then((m) => ({ Component: m.default })),
+        children: [
+          { path: "login", lazy: () => import("./app/LoginPage").then((m) => ({ Component: m.default })) },
+          { path: "trips", lazy: () => import("./app/TripsPage").then((m) => ({ Component: m.default })) },
+          { path: "trips/:id", lazy: () => import("./app/TripPage").then((m) => ({ Component: m.default })) },
+        ],
+      },
       // Catch-all. Shared-trip links (/s/<code>) are meant to be proxied to
       // the backend by nginx; if that proxy is missing or the code is dead,
       // they land here and get told where the trip actually lives.

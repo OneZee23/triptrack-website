@@ -11,7 +11,7 @@
     "hero_title": "Your drives. Remembered.",
     "hero_subtitle": "TripTrack quietly records every trip and turns it into a visual diary — routes, photos, stats, all on your phone.",
     "download_free": "Download Free",
-    "hero_note": "Free forever \u00b7 No sign-up \u00b7 100% on-device",
+    "hero_note": "Free forever · No sign-up · 100% on-device",
     "may_trips": "May Trips",
     "coastline_run": "Coastline Run",
     "trip": "Trip",
@@ -36,12 +36,12 @@
     "step2_recording": "Recording",
     "step3_title": "Look back",
     "step3_desc": "Route, photos, stats — every drive becomes a memory you can revisit.",
-    "rating": "5.0 on the App Store \u00b7 60+ trips recorded",
-    "review1": "\"\u041f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u043e\u0433\u043e\u043d\u044c. \u041b\u044e\u0431\u043b\u044e \u0440\u0430\u0437\u043d\u044b\u0435 \u0442\u0440\u0435\u043a\u0435\u0440\u044b. \u042d\u0442\u043e\u0442 \u043f\u043e\u043a\u0430\u0437\u0430\u043b\u0441\u044f \u0438\u043d\u0442\u0435\u0440\u0435\u0441\u043d\u044b\u043c, \u0441\u043b\u0435\u0436\u0443 \u0437\u0430 \u043d\u0438\u043c \u0442\u0435\u043f\u0435\u0440\u044c.\"",
-    "review1_author": "OKOPOK \u00b7 App Store",
+    "rating": "5.0 on the App Store · 60+ trips recorded",
+    "review1": "\"Приложение огонь. Люблю разные трекеры. Этот показался интересным, слежу за ним теперь.\"",
+    "review1_author": "OKOPOK · App Store",
     "cta_title": "Your roads. Your story.",
     "cta_button": "Download TripTrack",
-    "cta_note": "iOS 17+ \u2022 Free \u2022 No account \u2022 Privacy-first",
+    "cta_note": "iOS 17+ • Free • No account • Privacy-first",
     "modal_auto_recorded": "Recorded automatically",
     "modal_add_photos": "Add photos & notes",
     "modal_try_free": "Get TripTrack Free",
@@ -85,7 +85,7 @@
     "encrypted_offline": "Encrypted Offline",
     "gamification_title": "Level up as you drive.",
     "gamification_desc": "Earn badges, grow your driver profile, and unlock achievements for every road trip milestone.",
-    "gamification_note": "30 driver levels \u00b7 10 vehicle stickers \u00b7 Hidden achievements",
+    "gamification_note": "30 driver levels · 10 vehicle stickers · Hidden achievements",
     "locked": "Locked",
     "comparison_title": "Why TripTrack?",
     "comparison_features": "Feature",
@@ -129,6 +129,58 @@
     "telegram": "Telegram",
     "youtube": "YouTube",
     "email": "Email",
-    "made_with": "Made with \u2764\ufe0f and 71,000 km behind the wheel"
+    "made_with": "Made with ❤️ and 71,000 km behind the wheel"
+  },
+  "app": {
+    "nav": {
+      "link": "My trips"
+    },
+    "meta": {
+      "title": "My trips — TripTrack",
+      "description": "Your own trips from the TripTrack app, on the web. Private: only you can see them."
+    },
+    "loading": "Loading…",
+    "retry": "Try again",
+    "sign_out": "Sign out",
+    "units_note": "Distances in kilometres, speed in km/h.",
+    "account": {
+      "no_name": "Your account"
+    },
+    "login": {
+      "title": "Sign in with Apple",
+      "lead": "The same trips you record in the app — and only you can see them here.",
+      "button": "Sign in with Apple",
+      "busy": "Signing in…",
+      "note": "Apple shares your name and email with TripTrack, nothing else. Nothing on this page is public, and nothing is shared with anyone."
+    },
+    "trips": {
+      "title": "My trips",
+      "count": "{n} in total",
+      "loading": "Loading your trips…",
+      "more": "Show more",
+      "untitled": "Trip",
+      "empty_title": "No trips yet",
+      "empty_body": "Record your first one in the app — it shows up here the next time it syncs."
+    },
+    "trip": {
+      "back": "All trips",
+      "distance": "Distance",
+      "duration": "Time on the road",
+      "avg_speed": "Average speed",
+      "max_speed": "Top speed",
+      "checkpoints": "Checkpoints",
+      "checkpoint_n": "Checkpoint {n}",
+      "no_track": "The server has no route for this trip."
+    },
+    "error": {
+      "network": "Couldn't reach the server. Check your connection and try again.",
+      "session": "Your session has ended. Please sign in again.",
+      "banned": "This account is suspended.",
+      "apple": "Apple couldn't confirm the sign-in. Please try again.",
+      "apple_sdk": "Sign in with Apple didn't load. Check your connection or any content blocker, then try again.",
+      "rate_limit": "Too many attempts. Please try again in a few minutes.",
+      "trip_missing": "This trip is no longer on the server.",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }
