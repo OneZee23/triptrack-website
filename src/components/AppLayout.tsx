@@ -1,15 +1,14 @@
-import { useState, useEffect, createContext, Suspense, useMemo } from 'react';
-import { motion, useMotionValue } from 'motion/react';
+import { useState, Suspense, useMemo, lazy } from 'react';
 import { Outlet, Link, useLocation } from 'react-router';
 import { Globe, Apple, Menu, X } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
+import { CursorContext } from './CursorContext';
 import logo from '../assets/avatar.png';
 
-interface CursorContextType {
-  setHoverState: (state: { text: string; active: boolean } | null) => void;
-}
-
-export const CursorContext = createContext<CursorContextType>({ setHoverState: () => {} });
+// `motion` is a sizeable dependency and the cursor is a decorative desktop
+// flourish — lazy-loading it keeps `motion` out of the entry chunk that every
+// route pays for.
+const CustomCursor = lazy(() => import('./CustomCursor'));
 
 export default function AppLayout() {
   const [hoverState, setHoverState] = useState<{ text: string; active: boolean } | null>(null);
@@ -17,21 +16,14 @@ export default function AppLayout() {
   const location = useLocation();
   const { t, lang, setLang } = useTranslation();
 
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
-
-  useEffect(() => {
+  // Close the mobile menu when the route changes. Adjusted during render (not
+  // an effect) per https://react.dev/learn/you-might-not-need-an-effect —
+  // avoids the extra commit a setState-in-effect would cause.
+  const [prevPathname, setPrevPathname] = useState(location.pathname);
+  if (location.pathname !== prevPathname) {
+    setPrevPathname(location.pathname);
     setMobileMenuOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }
 
   const toggleLang = () => setLang(lang === 'en' ? 'ru' : 'en');
 
@@ -125,27 +117,9 @@ export default function AppLayout() {
         </footer>
 
         {/* Custom cursor */}
-        <motion.div
-          className="fixed top-0 left-0 pointer-events-none z-[100] items-center justify-center overflow-hidden hidden md:flex"
-          style={{ x: mouseX, y: mouseY, translateX: '-50%', translateY: '-50%' }}
-          animate={{
-            width: hoverState?.active ? 120 : 20,
-            height: hoverState?.active ? 40 : 20,
-            backgroundColor: hoverState?.active ? '#1e1e23' : '#EB571E',
-            borderRadius: hoverState?.active ? 20 : 10,
-            scale: 1
-          }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
-          <motion.span
-            className="text-white font-medium text-sm whitespace-nowrap"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: hoverState?.active ? 1 : 0 }}
-            transition={{ duration: 0.15 }}
-          >
-            {hoverState?.text || ''}
-          </motion.span>
-        </motion.div>
+        <Suspense fallback={null}>
+          <CustomCursor hoverState={hoverState} />
+        </Suspense>
       </div>
     </CursorContext.Provider>
   );
