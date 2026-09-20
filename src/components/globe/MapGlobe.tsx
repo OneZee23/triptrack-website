@@ -8,6 +8,7 @@ import type { Map as MapLibreMap, GeoJSONSource, MapMouseEvent, MapGeoJSONFeatur
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { GlobeTrip } from './types';
 import { GlobeHint } from './GlobeHint';
+import { prefersReducedMotion } from './webgl';
 import type { Feature, FeatureCollection, LineString, Point } from 'geojson';
 
 // Keyless OpenFreeMap "Liberty" vector street style (closest no-key match to Mapbox streets-v12).
@@ -70,28 +71,24 @@ function buildEndpoints(trips: GlobeTrip[]): FeatureCollection<Point, { id: stri
   return { type: 'FeatureCollection', features };
 }
 
-function isWebGLAvailable(): boolean {
-  try {
-    const canvas = document.createElement('canvas');
-    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl2') || canvas.getContext('webgl')));
-  } catch {
-    return false;
-  }
-}
-function prefersReducedMotion(): boolean {
-  return typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 export default function MapGlobe({
   trips,
   onSelect,
   onInteracting,
   paused = false,
+  onFailed,
 }: {
   trips: GlobeTrip[];
   onSelect: (t: GlobeTrip) => void;
   onInteracting?: (active: boolean) => void;
   paused?: boolean;
+  /**
+   * WebGL was there when GlobeHero asked but the map would not construct.
+   * Reported UP rather than drawn here: this component is mounted full-bleed
+   * UNDER the hero copy, so anything it paints instead of a globe lands on
+   * top of the headline. The hero re-lays itself out around the poster.
+   */
+  onFailed?: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -110,11 +107,11 @@ export default function MapGlobe({
   const hintRef = useRef<HTMLDivElement | null>(null);
   const hintDismissedRef = useRef(false);
   const [hintGone, setHintGone] = useState(false);
-  // Pure capability check (creates a throwaway canvas, doesn't touch the DOM
-  // tree) — computed at init instead of in the mount effect so there's no
-  // synchronous setState-in-effect.
-  const [failed, setFailed] = useState(() => !isWebGLAvailable());
+  const onFailedRef = useRef(onFailed);
 
+  useEffect(() => {
+    onFailedRef.current = onFailed;
+  }, [onFailed]);
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
@@ -249,9 +246,8 @@ export default function MapGlobe({
 
   useEffect(() => {
     if (mapRef.current) return; // StrictMode double-mount guard
-    // When WebGL is unavailable, `failed` is already true on the first render,
-    // so the fallback branch renders instead of the container div below and
-    // this ref stays null — no separate `failed` check needed here.
+    // WebGL availability was settled by GlobeHero before this chunk was even
+    // requested; what is left to survive here is a constructor that throws.
     const container = containerRef.current;
     if (!container) return;
 
@@ -278,11 +274,7 @@ export default function MapGlobe({
       });
     } catch (err) {
       console.error('[MapGlobe] init failed', err);
-      // Mount-only effect ([] deps) reporting a one-time external-system
-      // (WebGL context) construction failure — not the render-loop that this
-      // rule guards against, so no cascading-render risk.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setFailed(true);
+      onFailedRef.current?.();
       return;
     }
     mapRef.current = map;
@@ -469,32 +461,6 @@ export default function MapGlobe({
     setData(map, trips);
     fitToTrips(map, trips);
   }, [trips]);
-
-  if (failed) {
-    return (
-      <div
-        role="img"
-        aria-label="Interactive map unavailable"
-        style={{
-          width: '100%',
-          height: '100%',
-          minHeight: 320,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'radial-gradient(circle at 50% 40%, #1b2a4a 0%, #0a0f1e 70%)',
-          color: '#cbd5e1',
-          textAlign: 'center',
-          padding: 24,
-        }}
-      >
-        <div>
-          <div style={{ fontSize: 40, marginBottom: 8 }}>🗺️</div>
-          <div>Map couldn’t load in this browser.</div>
-        </div>
-      </div>
-    );
-  }
 
   // transparent so the section's deep-space backdrop shows around the globe when zoomed out
   return (

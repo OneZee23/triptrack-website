@@ -1,25 +1,29 @@
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Send, ChevronDown } from 'lucide-react';
+import { Send, ChevronDown, Globe2 } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useGlobeData } from '../../hooks/useGlobeData';
 import { useMounted } from '../../lib/useMounted';
 import { trackEvent } from '../../lib/analytics';
 import { TripCard } from './TripCard';
 import { StarField } from './StarField';
+import { GlobePoster } from './GlobePoster';
+import { useGlobePlan } from './webgl';
 import type { GlobeTrip } from './types';
 
 const MapGlobe = lazy(() => import('./MapGlobe'));
 const APP_STORE_URL = 'https://apps.apple.com/us/app/triptrack-road-journal/id6760650361';
 
-const Fallback = () => (
-  <div
-    aria-hidden
-    className="absolute inset-0"
-    style={{ background: 'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)' }}
-  />
-);
-
+/**
+ * Who gets the real map, and when.
+ *
+ * MapLibre plus its tiles measured 4.2 MB and ~2.1 s of blocked main thread on
+ * a throttled phone — more than the rest of the site put together, spent on
+ * the first thing a visitor sees. So the phone is shown the poster and a
+ * button, and the map is downloaded when somebody asks for it (`useGlobePlan`
+ * decides which browser is which). A desktop still gets it unprompted, but
+ * only once the browser is idle: the heading has to paint first.
+ */
 export default function GlobeHero() {
   const { t, lang } = useTranslation();
   // WebGL and a randomly-seeded starfield cannot exist in prerendered HTML:
@@ -30,6 +34,13 @@ export default function GlobeHero() {
   const state = useGlobeData();
   const [selected, setSelected] = useState<GlobeTrip | null>(null);
   const [interacting, setInteracting] = useState(false);
+  // Whether the browser can show a map at all is a LAYOUT fact, settled before
+  // anything is drawn — not a late failure painted over the hero copy, which
+  // is the bug this split exists to make impossible.
+  const plan = useGlobePlan();
+  const [asked, setAsked] = useState(false);
+  const [broke, setBroke] = useState(false);
+  const globe: 'poster' | 'live' | 'off' = plan === 'off' || broke ? 'off' : asked ? 'live' : 'poster';
   const sectionRef = useRef<HTMLElement>(null);
 
   const handleSelect = useCallback((trip: GlobeTrip) => {
@@ -41,6 +52,30 @@ export default function GlobeHero() {
   const stats = state.status === 'success' ? state.data.stats : null;
 
   const statWord = (base: string, n: number) => t(`home.globe.${base}_${new Intl.PluralRules(lang).select(n)}`);
+
+  // A desktop promotes itself to the live map once the browser goes idle, so
+  // the 1 MB chunk never competes with the first paint.
+  useEffect(() => {
+    if (plan !== 'auto') return;
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(() => setAsked(true), { timeout: 2500 })
+      : window.setTimeout(() => setAsked(true), 1200);
+    return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle as number);
+      else window.clearTimeout(idle as number);
+    };
+  }, [plan]);
+
+  const showMap = mounted && globe === 'live';
+  // With no map on screen the copy and the globe get a row each instead of
+  // sharing the screen — on a phone that is the difference between a hero and
+  // two things printed on top of one another.
+  const stacked = !showMap;
+
+  const spin = useCallback(() => {
+    trackEvent('globe-spin');
+    setAsked(true);
+  }, []);
 
   // close the trip card when the user scrolls the page (avoids the card sticking
   // over the hero as it scrolls away).
@@ -61,12 +96,20 @@ export default function GlobeHero() {
   }, [selected]);
 
   // hide the hero copy while exploring the map OR while a card is open.
-  const heroHidden = interacting || selected !== null;
+  const heroHidden = showMap && (interacting || selected !== null);
+
+  const poster = (
+    <div className="pointer-events-none absolute inset-0 grid place-items-center overflow-hidden">
+      <GlobePoster trips={trips} className="h-full w-full max-h-[min(100%,560px)] max-w-[min(100%,560px)]" />
+    </div>
+  );
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[90svh] min-h-[600px] overflow-hidden text-white md:h-[100svh]"
+      className={`relative w-full overflow-hidden text-white ${
+        stacked ? 'flex min-h-[560px] flex-col md:h-[100svh] md:min-h-[640px]' : 'h-[88svh] min-h-[560px] md:h-[100svh]'
+      }`}
       style={{ background: 'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)' }}
     >
       {/* animated deep-space backdrop (shows through the transparent space around the globe) */}
@@ -79,61 +122,104 @@ export default function GlobeHero() {
         </>
       )}
 
-      <div className="absolute inset-0">
-        {mounted ? (
-          <Suspense fallback={<Fallback />}>
-            <MapGlobe trips={trips} onSelect={handleSelect} onInteracting={setInteracting} paused={selected !== null} />
+      {/* The interactive map is full-bleed under the copy; the poster is not —
+          it lives in the row the stacked layout gives it, below the text. */}
+      {showMap && (
+        <div className="absolute inset-0">
+          <Suspense fallback={poster}>
+            <MapGlobe
+              trips={trips}
+              onSelect={handleSelect}
+              onInteracting={setInteracting}
+              paused={selected !== null}
+              onFailed={() => setBroke(true)}
+            />
           </Suspense>
-        ) : (
-          <Fallback />
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* left scrim for text readability — fades while interacting / card open */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-r from-[#06060a]/92 via-[#06060a]/45 to-transparent pointer-events-none transition-opacity duration-700 ${heroHidden ? 'opacity-0' : 'opacity-100'}`}
-      />
+      {/* left scrim for text readability — only under the full-bleed map */}
+      {showMap && (
+        <div
+          className={`absolute inset-0 bg-gradient-to-r from-[#06060a]/92 via-[#06060a]/45 to-transparent pointer-events-none transition-opacity duration-700 ${heroHidden ? 'opacity-0' : 'opacity-100'}`}
+        />
+      )}
 
       {/* hero copy — smart-hides while interacting / card open */}
       <div
-        className={`relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center pointer-events-none transition-all duration-500 ${heroHidden ? 'opacity-0 -translate-y-1' : 'opacity-100'}`}
+        className={`relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 pointer-events-none transition-all duration-500 sm:px-6 ${
+          stacked ? 'pt-28 pb-6 md:h-full md:justify-center md:py-0' : 'h-full justify-center'
+        } ${heroHidden ? 'opacity-0 -translate-y-1' : 'opacity-100'}`}
       >
         <div className="max-w-[620px]">
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] drop-shadow-[0_2px_14px_rgba(0,0,0,0.7)]">
+          <h1 className="text-[34px] sm:text-4xl md:text-6xl font-extrabold leading-[1.06] drop-shadow-[0_2px_14px_rgba(0,0,0,0.7)]">
             {t('home.globe.title')}
           </h1>
-          <p className="mt-5 text-lg text-white/85 max-w-md drop-shadow-[0_1px_10px_rgba(0,0,0,0.75)]">
+          <p className="mt-4 text-[17px] sm:text-lg text-white/85 max-w-md drop-shadow-[0_1px_10px_rgba(0,0,0,0.75)] md:mt-5">
             {t('home.globe.subtitle')}
           </p>
-          <a
-            href={APP_STORE_URL}
-            data-umami-event="appstore-click"
-            data-umami-event-source="hero"
-            className="pointer-events-auto mt-8 inline-flex min-h-[44px] w-max items-center gap-2 rounded-xl bg-gradient-to-br from-[#FF6B00] to-[#FFB000] px-6 py-3 text-[16px] font-bold text-[#1a1209] shadow-lg"
-          >
-            {t('home.globe.cta')}
-          </a>
+          <div className="mt-7 flex flex-wrap items-center gap-3 md:mt-8">
+            <a
+              href={APP_STORE_URL}
+              data-umami-event="appstore-click"
+              data-umami-event-source="hero"
+              className="pointer-events-auto inline-flex min-h-[48px] items-center gap-2 rounded-xl bg-gradient-to-br from-[#FF6B00] to-[#FFB000] px-6 py-3 text-[16px] font-bold text-[#1a1209] shadow-lg"
+            >
+              {t('home.globe.cta')}
+            </a>
+            {/* The one way the 1 MB map gets downloaded on a phone. */}
+            {globe === 'poster' && (
+              <button
+                type="button"
+                onClick={spin}
+                title={t('home.globe.spin_note')}
+                className="pointer-events-auto inline-flex min-h-[48px] items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-[15px] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+              >
+                <Globe2 aria-hidden size={17} />
+                {t('home.globe.spin')}
+              </button>
+            )}
+          </div>
           {stats && (
             <div className="mt-6 flex gap-5 text-sm text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)]">
               <span><b className="text-[#FFB000]">{stats.trips}</b> {statWord('stat_trips', stats.trips)}</span>
               <span><b className="text-[#FFB000]">{stats.cities}</b> {statWord('stat_cities', stats.cities)}</span>
             </div>
           )}
-          <p className="globe-hint mt-8 text-[12px] uppercase tracking-[0.15em] text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
-            {t('home.globe.hint')}
-          </p>
+          {/* «Drag · zoom · tap a trip» describes the live map. With the poster
+              on screen there is nothing to drag, and the line used to sit over
+              the hero telling people to do something impossible. */}
+          {showMap && (
+            <p className="globe-hint mt-8 text-[12px] uppercase tracking-[0.15em] text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+              {t('home.globe.hint')}
+            </p>
+          )}
+          {globe === 'off' && (
+            <p className="mt-6 max-w-sm text-[13px] leading-relaxed text-white/60 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+              {t('home.globe.no_webgl')}
+            </p>
+          )}
           <a
             href="https://t.me/onezee123"
             target="_blank"
             rel="noopener noreferrer"
             data-umami-event="telegram-click"
-            className="pointer-events-auto mt-5 inline-flex min-h-[44px] items-center gap-1.5 text-[13px] text-white/45 transition-colors hover:text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
+            className="pointer-events-auto mt-5 inline-flex min-h-[44px] items-center gap-1.5 text-[13px] text-white/60 transition-colors hover:text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
           >
-            <Send size={12} />
+            <Send aria-hidden size={12} />
             {t('home.globe.join_cta')}
           </a>
         </div>
       </div>
+
+      {/* The poster's own row. It grows into whatever the copy leaves, which is
+          why the copy can never be painted over on a narrow screen. On a wide
+          one it takes the right half, where the map would have been. */}
+      {stacked && (
+        <div className="relative z-0 min-h-[200px] flex-1 md:absolute md:inset-y-0 md:left-1/2 md:right-0 md:flex-none">
+          {poster}
+        </div>
+      )}
 
       {/* focus scrim + trip card (card opens on the LEFT, where the text was) */}
       <AnimatePresence>
@@ -152,7 +238,7 @@ export default function GlobeHero() {
       </AnimatePresence>
       <AnimatePresence>
         {selected && (
-          <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex h-full max-w-7xl items-center px-6">
+          <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex h-full max-w-7xl items-center px-5 sm:px-6">
             <div className="pointer-events-auto w-full max-w-[360px]">
               <TripCard trip={selected} onClose={() => setSelected(null)} />
             </div>
@@ -160,9 +246,10 @@ export default function GlobeHero() {
         )}
       </AnimatePresence>
 
-      {/* mobile: the globe takes one-finger gestures, so give an explicit way to
-          scroll past the hero (desktop scrolls/zooms with wheel, so md:hidden) */}
-      {!selected && (
+      {/* mobile: the live globe takes one-finger gestures, so give an explicit
+          way to scroll past the hero. The poster does not take them — there is
+          nothing to escape — so the button only exists alongside the map. */}
+      {showMap && !selected && (
         <button
           type="button"
           onClick={() => {
@@ -172,7 +259,7 @@ export default function GlobeHero() {
           aria-label={t('home.globe.scroll')}
           className="pointer-events-auto absolute bottom-5 left-1/2 z-20 grid h-[44px] w-[44px] -translate-x-1/2 place-items-center rounded-full bg-black/35 text-white/90 ring-1 ring-white/15 backdrop-blur-md md:hidden"
         >
-          <ChevronDown size={22} className="animate-bounce" />
+          <ChevronDown aria-hidden size={22} className="animate-bounce" />
         </button>
       )}
     </section>
