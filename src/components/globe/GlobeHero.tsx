@@ -41,6 +41,7 @@ export default function GlobeHero() {
   const plan = useGlobePlan();
   const [asked, setAsked] = useState(false);
   const [broke, setBroke] = useState(false);
+  const [mapPainted, setMapPainted] = useState(false);
   const globe: 'poster' | 'live' | 'off' = plan === 'off' || broke ? 'off' : asked ? 'live' : 'poster';
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -132,6 +133,10 @@ export default function GlobeHero() {
 
       {/* The interactive map is full-bleed under the copy; the poster is not —
           it lives in the row the stacked layout gives it, below the text. */}
+      {/* The poster stays underneath until the map has a style and its routes
+          on it. MapLibre's canvas is transparent until then, and without this
+          the hero went poster → empty gradient → globe. */}
+      {showMap && !mapPainted && <div className="absolute inset-0">{poster}</div>}
       {showMap && (
         <div className="absolute inset-0">
           <Suspense fallback={poster}>
@@ -141,6 +146,7 @@ export default function GlobeHero() {
               onInteracting={setInteracting}
               paused={selected !== null}
               onFailed={() => setBroke(true)}
+              onReady={() => setMapPainted(true)}
             />
           </Suspense>
         </div>

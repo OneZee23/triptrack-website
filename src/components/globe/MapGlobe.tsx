@@ -77,6 +77,7 @@ export default function MapGlobe({
   onInteracting,
   paused = false,
   onFailed,
+  onReady,
 }: {
   trips: GlobeTrip[];
   onSelect: (t: GlobeTrip) => void;
@@ -89,6 +90,8 @@ export default function MapGlobe({
    * top of the headline. The hero re-lays itself out around the poster.
    */
   onFailed?: () => void;
+  /** The style has loaded and the trips are on it — the poster can go. */
+  onReady?: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -108,10 +111,14 @@ export default function MapGlobe({
   const hintDismissedRef = useRef(false);
   const [hintGone, setHintGone] = useState(false);
   const onFailedRef = useRef(onFailed);
+  const onReadyRef = useRef(onReady);
 
   useEffect(() => {
     onFailedRef.current = onFailed;
   }, [onFailed]);
+  useEffect(() => {
+    onReadyRef.current = onReady;
+  }, [onReady]);
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
@@ -415,6 +422,7 @@ export default function MapGlobe({
       fitToTrips(map, tripsRef.current);
       positionHint();
       if (spin) startAnim();
+      onReadyRef.current?.();
     });
 
     const ro = new ResizeObserver(() => {
