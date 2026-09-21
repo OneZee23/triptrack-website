@@ -1,3 +1,4 @@
+import MailLink from './MailLink';
 import { useState, Suspense, useMemo, useEffect, lazy } from 'react';
 import { Outlet, Link, useLocation } from 'react-router';
 import { Globe, Apple, Menu, X } from 'lucide-react';
@@ -183,7 +184,7 @@ function Shell() {
             <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.github')}</a>
             <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.telegram')}</a>
             <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.youtube')}</a>
-            <a href="mailto:nikitona123@gmail.com" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.email')}</a>
+            <MailLink email="nikitona123@gmail.com" label={t('footer.email')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors" />
           </div>
           <div className="font-medium text-center">{t('footer.made_with')}</div>
         </footer>

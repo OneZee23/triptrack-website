@@ -1,3 +1,4 @@
+import MailLink from '../components/MailLink';
 import { Link } from 'react-router';
 import { Smartphone, Cloud, Bug, Cookie, ShieldCheck, Mail } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
@@ -69,9 +70,7 @@ export default function Privacy() {
       <Block icon={<Mail className="w-5 h-5 text-[#EB571E]" />} title={t('privacy.contact_title')}>
         <p className="text-[16px]">
           {t('privacy.contact_p1')}{' '}
-          <a href={`mailto:${CONTACT}`} className="text-[#EB571E] font-medium hover:underline break-all">
-            {CONTACT}
-          </a>
+          <MailLink email={CONTACT} label={CONTACT} className="text-[#EB571E] font-medium hover:underline break-all" />
         </p>
       </Block>
 
