@@ -16,6 +16,11 @@ FROM nginxinc/nginx-unprivileged:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx-cache.conf /etc/nginx/conf.d/00-globe-cache.conf
+# Заголовки безопасности — в snippets/, НЕ в conf.d/: всё в conf.d базовый
+# образ подключает сам внутрь http{}, и файл с add_header отработал бы
+# дважды. Оба файла `include`аются из default.conf явно.
+COPY nginx-headers.conf /etc/nginx/snippets/headers.conf
+COPY nginx-csp.conf /etc/nginx/snippets/csp.conf
 USER root
 RUN mkdir -p /var/cache/nginx/globe && chown -R 101:101 /var/cache/nginx/globe
 USER 101
