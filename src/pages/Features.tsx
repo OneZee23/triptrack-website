@@ -18,7 +18,7 @@ export default function Features() {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-5 sm:px-6 py-16 md:py-32 flex flex-col items-center relative z-10">
+    <div className="w-full max-w-7xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32 flex flex-col items-center relative z-10">
       <section className="text-center mb-16 relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] max-w-[150vw] bg-[#EB571E]/5 blur-[100px] rounded-full pointer-events-none -z-10" />
         <h1 className="text-[40px] md:text-[64px] font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('features.h1')}</h1>

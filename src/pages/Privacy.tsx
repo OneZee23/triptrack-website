@@ -19,7 +19,7 @@ export default function Privacy() {
   usePageMeta('/privacy');
 
   return (
-    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-16 md:py-32">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32">
       <header className="mb-12">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('privacy.h1')}</h1>
         <p className="text-[18px] text-[#1e1e23]/65 leading-relaxed">{t('privacy.lead')}</p>

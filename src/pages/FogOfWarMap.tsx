@@ -30,7 +30,7 @@ export default function FogOfWarMap() {
   usePageMeta('/fog-of-war-map');
 
   return (
-    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-16 md:py-32">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32">
       {/* Hero */}
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 rounded-full px-4 py-1.5 text-[14px] font-medium mb-8">

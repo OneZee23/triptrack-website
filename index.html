@@ -9,12 +9,10 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- One variable file carries every weight the site uses, and every page
-         paints a bold heading in the first frame, so it is worth fetching
-         before the stylesheet asks for it. The Cyrillic subset is NOT
-         preloaded here: this template serves both languages, and an English
-         page would download a face it has no character for. `/ru/` pages get
-         their own preload from scripts/prerender.mjs. -->
+    <!-- One variable file carries every weight the site uses, and the bold
+         heading paints in the first frame. The Cyrillic subset is not preloaded
+         here — this template serves both languages; /ru/ pages get their own
+         preload from scripts/prerender.mjs. -->
     <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Title, description, canonical, hreflang, Open Graph and JSON-LD are
@@ -28,18 +26,15 @@
 
     <!-- Analytics — Umami (cookieless, self-hosted).
 
-         `data-auto-track="false"` — не настройка вкуса, а единственное
-         место, где закрывается утечка: с автотреком Umami сам отправляет
-         ПУТЬ страницы, а в разделе «Мои поездки» путь — это
-         `/app/trips/<uuid>`, то есть идентификатор личной поездки на
-         сервере аналитики. Флаг `umami.disabled` из `src/app/analytics.ts`
-         эту дыру закрыть не мог: тег отложенный, но он исполняется РАНЬШЕ
-         нашего кода, и самый первый заход по ссылке на поездку уезжал
-         целиком.
-
-         Просмотры маркетинговых страниц шлёт теперь `trackPageView()`
-         (`src/lib/analytics.ts`), которую зовёт `AppLayout` на каждой
-         смене адреса и которая молчит на всём, что начинается с `/app`. -->
+         `data-auto-track="false"` is load-bearing, not taste: with auto-track
+         on, Umami sends the PATH, and under «My trips» the path is
+         /app/trips/<uuid> — a private trip's id on an analytics server. Page
+         views now come from trackPageView() in src/lib/analytics.ts, which is
+         silent on everything under /app. The full reasoning is in that file
+         and in docs/web-app-security.md; it is deliberately NOT repeated here,
+         because a comment in this template ships on every page AND, since
+         Chromium matches `unicode-range` against comment text too, a Russian
+         one made every English page download the 18 kB Cyrillic font subset. -->
     <script defer src="https://analytics.trip-track.app/script.js" data-website-id="1e458188-3307-4fb1-b14f-2620e0d4f5ae" data-auto-track="false"></script>
   </head>
   <body>

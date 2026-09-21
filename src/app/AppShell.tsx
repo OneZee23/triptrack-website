@@ -53,7 +53,7 @@ function Shell() {
   if (route === '/app') return <Navigate to={href(session ? '/app/trips' : '/app/login')} replace />;
 
   return (
-    <div className="flex-1 w-full pt-20 md:pt-32 pb-14 md:pb-20 px-6">
+    <div className="flex-1 w-full pt-28 md:pt-32 pb-14 md:pb-20 px-6">
       <div className="max-w-5xl mx-auto w-full">
         {session && (
           <div className="flex items-center justify-between gap-4 mb-8">

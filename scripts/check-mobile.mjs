@@ -7,7 +7,11 @@
  *   1. the page is wider than the screen (`scrollWidth > innerWidth`) — one
  *      overflowing element gives the whole document a sideways scroll;
  *   2. a link or button smaller than 44 px in either direction — Apple's own
- *      minimum, and the difference between "tap" and "aim".
+ *      minimum, and the difference between "tap" and "aim";
+ *   3. the page's <h1> sitting underneath the fixed header. The header does
+ *      not take a row of its own, so every page clears it with its own top
+ *      padding — and a padding trimmed for a phone stops clearing it without
+ *      breaking anything a test would otherwise notice.
  *
  * Both are checked per page PER LANGUAGE, because Russian strings run ~25 %
  * longer than English and the widths they break at are not the same ones.
@@ -112,6 +116,16 @@ const AUDIT = `(() => {
       if (wide.length >= 5) break;
     }
   }
+  // The header is fixed, so nothing is pushed down by it; a page that trims
+  // its top padding slides its own heading underneath.
+  let buried = null;
+  const header = document.querySelector('header');
+  const h1 = document.querySelector('h1');
+  if (header && h1) {
+    const hb = header.getBoundingClientRect().bottom;
+    const tb = h1.getBoundingClientRect().top;
+    if (tb < hb - 0.5) buried = Math.round(hb - tb);
+  }
   const small = [];
   for (const el of document.querySelectorAll('a[href], button, [role="button"], summary')) {
     const style = getComputedStyle(el);
@@ -124,7 +138,7 @@ const AUDIT = `(() => {
       + '" ' + Math.round(r.width) + '×' + Math.round(r.height));
     if (small.length >= 6) break;
   }
-  return { overflow, wide, small };
+  return { overflow, wide, small, buried };
 })()`;
 
 const { server, base } = await serve();
@@ -148,9 +162,10 @@ for (const width of WIDTHS) {
   for (const path of PAGES) {
     await page.goto(base + path, { waitUntil: 'load' });
     await page.waitForTimeout(350);
-    const { overflow, wide, small } = await page.evaluate(AUDIT);
+    const { overflow, wide, small, buried } = await page.evaluate(AUDIT);
     const where = `${path || '/'} @ ${width}px`;
     if (overflow > 1) problems.push(`${where}: page is ${overflow}px wider than the screen — ${wide.join('; ') || 'source not identified'}`);
+    if (buried) problems.push(`${where}: the <h1> runs ${buried}px under the fixed header`);
     for (const s of small) problems.push(`${where}: tap target under 44px — ${s}`);
   }
   await ctx.close();
@@ -164,4 +179,4 @@ if (problems.length) {
   for (const p of problems) console.error('  ' + p);
   process.exit(1);
 }
-console.log(`check-mobile: ${PAGES.length} pages × ${WIDTHS.length} widths — no overflow, no small tap targets.`);
+console.log(`check-mobile: ${PAGES.length} pages × ${WIDTHS.length} widths — no overflow, no small tap targets, no heading under the header.`);

@@ -10,7 +10,7 @@ export default function Download() {
   usePageMeta('/download');
 
   return (
-    <div className="flex-1 w-full flex flex-col items-center relative overflow-hidden py-16 md:py-32 px-5 sm:px-6">
+    <div className="flex-1 w-full flex flex-col items-center relative overflow-hidden pt-28 pb-16 md:py-32 px-5 sm:px-6">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] max-w-[150vw] bg-[#EB571E]/5 blur-[150px] rounded-full pointer-events-none -z-10" />
 
       <div className="flex flex-col items-center text-center max-w-3xl relative z-10 w-full">

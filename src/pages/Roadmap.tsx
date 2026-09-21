@@ -811,7 +811,7 @@ export default function Roadmap() {
   usePageMeta('/roadmap');
 
   return (
-    <div className="flex-1 w-full max-w-2xl mx-auto px-5 sm:px-6 py-16 md:py-32">
+    <div className="flex-1 w-full max-w-2xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32">
       {/* HERO */}
       <section className="text-center mb-14">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-5 text-[#1e1e23]">
