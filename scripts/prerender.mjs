@@ -41,10 +41,23 @@ function fileFor(path) {
   return path === '/' ? join(DIST, 'index.html') : join(DIST, path.replace(/^\/|\/$/g, ''), 'index.html');
 }
 
+/**
+ * The Cyrillic face, preloaded only where there is Cyrillic to set.
+ *
+ * The template preloads the latin subset because every page has latin in its
+ * first frame. A Russian page ALSO needs the Cyrillic one for its heading, and
+ * waiting for the stylesheet to ask is one round trip too many for the largest
+ * text on the screen. Adding it to the template instead would make every
+ * English page fetch 18 kB it has no character for.
+ */
+const CYRILLIC_PRELOAD =
+  '<link rel="preload" href="/fonts/inter-cyrillic.woff2" as="font" type="font/woff2" crossorigin />';
+
 function compose({ html, head, lang }) {
+  const fontHint = lang === 'ru' ? `\n    ${CYRILLIC_PRELOAD}` : '';
   return template
     .replace(/<html lang="[^"]*"/, `<html lang="${lang}"`)
-    .replace(HEAD_MARKER, `<!--app-head-->\n    ${head}\n    <!--/app-head-->`)
+    .replace(HEAD_MARKER, `<!--app-head-->\n    ${head}${fontHint}\n    <!--/app-head-->`)
     .replace(BODY_MARKER, html);
 }
 

@@ -30,12 +30,20 @@ OG_IMAGE_QUALITY = 80
 # screenshot, capped at 720px (see docs/releases or the CLAUDE.md brief for
 # where each width comes from).
 SCREENSHOTS = {
-    "screen-lockscreen.png": 480,   # Home.tsx step1, frame w-[240px]
+    "screen-lockscreen.png": 480,   # Home.tsx step1, frame w-[240px]  (see QUALITY_OVERRIDES)
     "screen-recording.png": 480,    # Home.tsx step2, frame w-[240px]
     "screen-detail.png": 480,       # Home.tsx step3, frame w-[240px]
     "screen-feed.png": 480,         # GoogleTimeline/FogOfWarMap, frame w-[240px]
     "screen-profile.png": 640,      # Features/Download, widest frame md:w-[320px]
 }
+
+
+# A screenshot of UI is flat colour and compresses to ~30 KB at the default
+# quality. The lock-screen shot is a photograph behind the UI, and at the same
+# setting it came out at 85 KB — three times its neighbours for a picture shown
+# 240 px wide. 68 is where the wallpaper stops costing more than the interface
+# on top of it.
+QUALITY_OVERRIDES = {"screen-lockscreen.png": "68"}
 
 
 def main() -> None:
@@ -59,7 +67,7 @@ def main() -> None:
 
         out_webp = OUT / (Path(name).stem + ".webp")
         subprocess.run(
-            [CWEBP, "-q", QUALITY, str(tmp_png), "-o", str(out_webp)],
+            [CWEBP, "-q", QUALITY_OVERRIDES.get(name, QUALITY), str(tmp_png), "-o", str(out_webp)],
             check=True,
             capture_output=True,
         )

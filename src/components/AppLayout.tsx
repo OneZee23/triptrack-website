@@ -70,7 +70,7 @@ function Shell() {
         <header className="fixed top-0 left-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-black/5">
           <div className="max-w-7xl mx-auto px-5 sm:px-6 h-20 flex items-center justify-between gap-3">
             <Link to={href('/')} className="flex min-h-[44px] items-center gap-3 group shrink-0" onClick={() => setHoverState(null)} {...hover(t('nav.home'))}>
-              <img src={logo} alt="" width={40} height={40} className="w-10 h-10 rounded-xl shadow-[0_0_20px_rgba(235,87,30,0.2)] group-hover:scale-105 transition-transform" />
+              <img src={logo} alt="" width={40} height={40} decoding="async" className="w-10 h-10 rounded-xl shadow-[0_0_20px_rgba(235,87,30,0.2)] group-hover:scale-105 transition-transform" />
               <div>
                 {/* Deliberately not an <h1>: the one heading of a page belongs
                     to the page, and a logo in every header would give each of
@@ -163,7 +163,7 @@ function Shell() {
         {/* Footer — warm light */}
         <footer className="w-full border-t border-black/5 bg-[#f4f2ee] py-12 px-5 sm:px-6 flex flex-col md:flex-row items-center justify-between text-[#1e1e23]/50 text-[15px] gap-6">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="" width={32} height={32} className="w-8 h-8 rounded-lg" />
+            <img src={logo} alt="" width={32} height={32} loading="lazy" decoding="async" className="w-8 h-8 rounded-lg" />
             <span className="font-bold text-[#1e1e23]/70">TripTrack</span>
             <span className="ml-2">&copy; 2026 OneZee</span>
           </div>

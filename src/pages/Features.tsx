@@ -53,7 +53,7 @@ export default function Features() {
             <p className="text-[15px] text-[#1e1e23]/50 font-medium">{t('features.gamification_note')}</p>
           </div>
           <div className="w-[260px] md:w-[300px] aspect-[9/16] rounded-[32px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2] flex-shrink-0">
-            <img src={screenProfile} alt={t('download.screenshot_alt')} width={640} height={1391} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
+            <img src={screenProfile} alt={t('download.screenshot_alt')} width={640} height={1391} loading="lazy" decoding="async" className="w-full h-[145%] object-cover object-bottom" />
           </div>
         </div>
       </section>

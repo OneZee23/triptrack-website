@@ -9,10 +9,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- The display face: every page paints a bold heading in the first frame,
-         so it is worth fetching before the stylesheet asks for it. The other
-         weights are not preloaded on purpose — they would compete with it. -->
-    <link rel="preload" href="/fonts/inter-700.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- One variable file carries every weight the site uses, and every page
+         paints a bold heading in the first frame, so it is worth fetching
+         before the stylesheet asks for it. The Cyrillic subset is NOT
+         preloaded here: this template serves both languages, and an English
+         page would download a face it has no character for. `/ru/` pages get
+         their own preload from scripts/prerender.mjs. -->
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Title, description, canonical, hreflang, Open Graph and JSON-LD are
          written per page and per language by scripts/prerender.mjs. This file

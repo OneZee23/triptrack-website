@@ -16,10 +16,13 @@ const PROBLEMS = [
   { icon: Target, key: 'noapp' },
 ] as const;
 
+// All three are below the hero — the first of them by a screen and a half —
+// so none of them is eager. Step 1 used to be, and it put an 85 KB photograph
+// on the critical path of a page whose largest element is a line of text.
 const STEPS = [
-  { n: '01', image: screenLockscreen, key: 'step1', ring: 'emerald', eager: true },
-  { n: '02', image: screenRecording, key: 'step2', ring: 'accent', eager: false },
-  { n: '03', image: screenDetail, key: 'step3', ring: 'red', eager: false },
+  { n: '01', image: screenLockscreen, key: 'step1', ring: 'emerald' },
+  { n: '02', image: screenRecording, key: 'step2', ring: 'accent' },
+  { n: '03', image: screenDetail, key: 'step3', ring: 'red' },
 ] as const;
 
 const RING: Record<string, string> = {
@@ -69,7 +72,8 @@ export default function Home() {
                   alt={t(`home.${step.key}_alt`)}
                   width={480}
                   height={1043}
-                  loading={step.eager ? 'eager' : 'lazy'}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-[150%] object-cover object-bottom"
                 />
               </div>
@@ -121,7 +125,7 @@ export default function Home() {
       <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 py-24 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="order-2 md:order-1 flex justify-center">
           <div className="w-[240px] max-w-full aspect-[9/16] rounded-[32px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2]">
-            <img src={screenDetail} alt={t('home.step3_alt')} width={480} height={1043} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
+            <img src={screenDetail} alt={t('home.step3_alt')} width={480} height={1043} loading="lazy" decoding="async" className="w-full h-[145%] object-cover object-bottom" />
           </div>
         </div>
         <div className="order-1 md:order-2">

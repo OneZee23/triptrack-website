@@ -22,6 +22,7 @@ export default function Download() {
             height={1391}
             loading="eager"
             fetchPriority="high"
+            decoding="async"
             className="w-full h-[145%] object-cover object-bottom"
           />
         </div>
