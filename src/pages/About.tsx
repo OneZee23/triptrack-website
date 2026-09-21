@@ -51,13 +51,13 @@ export default function About() {
   usePageMeta('/about');
 
   return (
-    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-32 flex flex-col items-center">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-16 md:py-32 flex flex-col items-center">
       {/* Header */}
       <img src={logo} alt="" width={80} height={80} decoding="async" className="w-20 h-20 rounded-2xl shadow-lg mb-8" />
       <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-center mb-4 text-[#1e1e23]">
         {lang === 'ru' ? 'Как появился TripTrack' : 'How TripTrack was born'}
       </h1>
-      <p className="text-[16px] text-[#1e1e23]/50 text-center mb-20">
+      <p className="text-[16px] text-[#1e1e23]/65 text-center mb-20">
         {lang === 'ru' ? 'Не стартап. Не бизнес. Просто нужное приложение.' : 'Not a startup. Not a business. Just a needed app.'}
       </p>
 
@@ -80,7 +80,7 @@ export default function About() {
                     {lang === 'ru' ? step.titleRu : step.titleEn}
                   </h3>
                 </div>
-                <p className="text-[#1e1e23]/55 leading-relaxed text-[15px]">
+                <p className="text-[#1e1e23]/65 leading-relaxed text-[15px]">
                   {lang === 'ru' ? step.textRu : step.textEn}
                 </p>
               </div>
@@ -97,7 +97,7 @@ export default function About() {
           </div>
           <div>
             <h3 className="text-lg font-bold mb-2 text-[#1e1e23]">{t('about.private_title')}</h3>
-            <p className="text-[16px] text-[#1e1e23]/60 leading-relaxed">{t('about.private_desc')}</p>
+            <p className="text-[16px] text-[#1e1e23]/65 leading-relaxed">{t('about.private_desc')}</p>
           </div>
         </div>
         <div className="bg-white border border-black/5 rounded-2xl p-8 flex items-start gap-5 shadow-sm">
@@ -106,7 +106,7 @@ export default function About() {
           </div>
           <div>
             <h3 className="text-lg font-bold mb-2 text-[#1e1e23]">{t('about.indie_title')}</h3>
-            <p className="text-[16px] text-[#1e1e23]/60 leading-relaxed">{t('about.indie_desc')}</p>
+            <p className="text-[16px] text-[#1e1e23]/65 leading-relaxed">{t('about.indie_desc')}</p>
           </div>
         </div>
       </div>

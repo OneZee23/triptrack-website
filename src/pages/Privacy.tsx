@@ -19,11 +19,11 @@ export default function Privacy() {
   usePageMeta('/privacy');
 
   return (
-    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-28 md:py-32">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-16 md:py-32">
       <header className="mb-12">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('privacy.h1')}</h1>
-        <p className="text-[18px] text-[#1e1e23]/60 leading-relaxed">{t('privacy.lead')}</p>
-        <p className="mt-5 text-[15px] text-[#1e1e23]/45 font-medium">{t('privacy.updated')}</p>
+        <p className="text-[18px] text-[#1e1e23]/65 leading-relaxed">{t('privacy.lead')}</p>
+        <p className="mt-5 text-[15px] text-[#1e1e23]/65 font-medium">{t('privacy.updated')}</p>
       </header>
 
       <section className="bg-white border border-black/5 rounded-2xl p-7 sm:p-8 shadow-sm mb-8">
@@ -49,7 +49,7 @@ export default function Privacy() {
         <p>{t('privacy.cloud_p3')}</p>
       </Block>
 
-      <Block icon={<Bug className="w-5 h-5 text-[#1e1e23]/50" />} title={t('privacy.crash_title')}>
+      <Block icon={<Bug className="w-5 h-5 text-[#1e1e23]/65" />} title={t('privacy.crash_title')}>
         <p>{t('privacy.crash_p1')}</p>
       </Block>
 

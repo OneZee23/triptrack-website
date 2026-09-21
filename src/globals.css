@@ -386,3 +386,33 @@ h1, h2, h3 {
 html, body {
   overflow-x: hidden;
 }
+
+/**
+ * Keyboard focus, and it is never removed.
+ *
+ * `:focus-visible` rather than `:focus`, so a mouse click does not leave a
+ * ring behind; brand orange with an offset, so the ring reads on the cream
+ * pages AND on the near-black hero without a second rule. The desktop
+ * `cursor: none` above means a keyboard visitor has no pointer to follow —
+ * this is the only thing telling them where they are.
+ */
+:focus-visible {
+  outline: 2px solid #EB571E;
+  outline-offset: 3px;
+}
+
+/**
+ * An in-page link (`/privacy#cookies`) scrolls its target to y = 0, which on
+ * this site is underneath a fixed header — the heading you followed the link
+ * for is the one thing you cannot see.
+ */
+:target {
+  scroll-margin-top: calc(6rem + env(safe-area-inset-top, 0px));
+}
+
+/* iOS inflates text in landscape unless told not to; it makes body copy and
+   headings drift apart at exactly the width where the layout is tightest. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}

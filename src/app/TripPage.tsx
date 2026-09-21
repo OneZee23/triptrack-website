@@ -51,7 +51,7 @@ export default function TripPage() {
   const back = (
     <Link
       to={href('/app/trips')}
-      className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#1e1e23]/40 hover:text-[#1e1e23] transition-colors mb-6"
+      className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#1e1e23]/65 hover:text-[#1e1e23] transition-colors mb-6"
     >
       <ArrowLeft className="w-4 h-4" aria-hidden="true" />
       {t('app.trip.back')}
@@ -79,7 +79,7 @@ export default function TripPage() {
       <h1 className="text-[28px] md:text-[36px] font-bold tracking-tight text-[#1e1e23] mb-2">
         {trip.title?.trim() || t('app.trips.untitled')}
       </h1>
-      <p className="text-[15px] text-[#1e1e23]/40 font-medium mb-8">
+      <p className="text-[15px] text-[#1e1e23]/65 font-medium mb-8">
         {formatDate(trip.startDate, language)}
         {trip.region ? ` · ${trip.region}` : ''}
       </p>
@@ -89,7 +89,7 @@ export default function TripPage() {
           <TripMap coords={coords} />
         </Suspense>
       ) : (
-        <div className="rounded-3xl bg-[#f4f2ee] border border-black/5 flex items-center justify-center text-[15px] text-[#1e1e23]/40 px-6 text-center" style={{ height: 220 }}>
+        <div className="rounded-3xl bg-[#f4f2ee] border border-black/5 flex items-center justify-center text-[15px] text-[#1e1e23]/65 px-6 text-center" style={{ height: 220 }}>
           {t('app.trip.no_track')}
         </div>
       )}
@@ -120,7 +120,7 @@ export default function TripPage() {
                   {checkpoint.name?.trim()
                     || t('app.trip.checkpoint_n').replace('{n}', String(index + 1))}
                 </span>
-                <span className="text-[14px] text-[#1e1e23]/40 font-medium whitespace-nowrap">
+                <span className="text-[14px] text-[#1e1e23]/65 font-medium whitespace-nowrap">
                   {formatDistance(checkpoint.distanceFromStart, language)}
                   {' · '}
                   {formatDuration(checkpoint.elapsedFromStart, language)}
@@ -147,7 +147,7 @@ export default function TripPage() {
 function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="rounded-2xl bg-white border border-black/5 px-5 py-4">
-      <div className="text-[12px] uppercase tracking-wider text-[#1e1e23]/30 font-semibold mb-1">{label}</div>
+      <div className="text-[12px] uppercase tracking-wider text-[#1e1e23]/65 font-semibold mb-1">{label}</div>
       <div className={`text-[22px] font-bold ${accent ? 'text-[#EB571E]' : 'text-[#1e1e23]'}`}>{value}</div>
     </div>
   );

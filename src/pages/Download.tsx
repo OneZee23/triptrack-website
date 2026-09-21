@@ -10,7 +10,7 @@ export default function Download() {
   usePageMeta('/download');
 
   return (
-    <div className="flex-1 w-full flex flex-col items-center relative overflow-hidden py-28 md:py-32 px-5 sm:px-6">
+    <div className="flex-1 w-full flex flex-col items-center relative overflow-hidden py-16 md:py-32 px-5 sm:px-6">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] max-w-[150vw] bg-[#EB571E]/5 blur-[150px] rounded-full pointer-events-none -z-10" />
 
       <div className="flex flex-col items-center text-center max-w-3xl relative z-10 w-full">
@@ -30,7 +30,7 @@ export default function Download() {
         <h1 className="text-[40px] md:text-[64px] font-bold tracking-tighter mb-7 leading-tight text-[#1e1e23]">
           {t('download.h1')}
         </h1>
-        <p className="text-[18px] text-[#1e1e23]/60 mb-10 max-w-xl leading-relaxed">{t('download.hero_subtitle')}</p>
+        <p className="text-[18px] text-[#1e1e23]/65 mb-10 max-w-xl leading-relaxed">{t('download.hero_subtitle')}</p>
 
         <div className="mb-14">
           <AppStoreBadge className="h-[64px]" />
@@ -43,15 +43,15 @@ export default function Download() {
 
         <div className="flex flex-col items-center gap-8 border-t border-black/5 pt-14 mt-14 w-full">
           <div className="flex flex-col md:flex-row justify-center gap-6 text-left">
-            <div className="flex items-center gap-4 text-[#1e1e23]/60">
+            <div className="flex items-center gap-4 text-[#1e1e23]/65">
               <div className="w-10 h-10 rounded-full bg-[#f4f2ee] flex items-center justify-center shrink-0"><Smartphone className="w-5 h-5 text-[#1e1e23]" /></div>
               <span className="font-medium text-[16px]">{t('download.req_ios')}</span>
             </div>
-            <div className="flex items-center gap-4 text-[#1e1e23]/60">
+            <div className="flex items-center gap-4 text-[#1e1e23]/65">
               <div className="w-10 h-10 rounded-full bg-[#f4f2ee] flex items-center justify-center shrink-0"><Apple className="w-5 h-5 text-[#1e1e23]" /></div>
               <span className="font-medium text-[16px]">{t('download.req_iphone')}</span>
             </div>
-            <div className="flex items-center gap-4 text-[#1e1e23]/60">
+            <div className="flex items-center gap-4 text-[#1e1e23]/65">
               <div className="w-10 h-10 rounded-full bg-[#f4f2ee] flex items-center justify-center text-[#1e1e23] font-bold font-mono shrink-0">0</div>
               <span className="font-medium text-[16px]">{t('download.req_free')}</span>
             </div>

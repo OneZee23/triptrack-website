@@ -4,7 +4,7 @@ export const ACCENT = '#EB571E';
 
 export function Spinner({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-3 text-[#1e1e23]/40 py-16 justify-center" role="status">
+    <div className="flex items-center gap-3 text-[#1e1e23]/65 py-16 justify-center" role="status">
       <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
       <span className="text-[15px] font-medium">{label}</span>
     </div>

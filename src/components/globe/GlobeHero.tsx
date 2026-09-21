@@ -107,7 +107,9 @@ export default function GlobeHero() {
   return (
     <section
       ref={sectionRef}
-      className={`relative w-full overflow-hidden text-white ${
+      // -mt cancels the safe-area padding <main> adds: the hero is the one
+      // section that is SUPPOSED to run up under the header.
+      className={`relative -mt-[env(safe-area-inset-top,0px)] w-full overflow-hidden text-white ${
         stacked ? 'flex min-h-[560px] flex-col md:h-[100svh] md:min-h-[640px]' : 'h-[88svh] min-h-[560px] md:h-[100svh]'
       }`}
       style={{ background: 'radial-gradient(circle at 60% 42%, #16284d 0%, #0a1126 42%, #05060c 80%)' }}
@@ -148,7 +150,7 @@ export default function GlobeHero() {
       {/* hero copy — smart-hides while interacting / card open */}
       <div
         className={`relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 pointer-events-none transition-all duration-500 sm:px-6 ${
-          stacked ? 'pt-28 pb-6 md:h-full md:justify-center md:py-0' : 'h-full justify-center'
+          stacked ? 'pt-[calc(6rem+env(safe-area-inset-top,0px))] pb-6 md:h-full md:justify-center md:py-0' : 'h-full justify-center'
         } ${heroHidden ? 'opacity-0 -translate-y-1' : 'opacity-100'}`}
       >
         <div className="max-w-[620px]">

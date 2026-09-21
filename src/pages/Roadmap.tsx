@@ -783,8 +783,8 @@ const DOT_COLOR: Record<Status, string> = {
 const BADGE_CLASS: Record<Status, string> = {
   done: 'bg-[#2EAE50]/10 text-[#2EAE50]',
   current: 'bg-[#EB571E]/10 text-[#EB571E]',
-  planned: 'bg-[#1e1e23]/5 text-[#1e1e23]/40',
-  future: 'bg-[#1e1e23]/5 text-[#1e1e23]/30',
+  planned: 'bg-[#1e1e23]/5 text-[#1e1e23]/65',
+  future: 'bg-[#1e1e23]/5 text-[#1e1e23]/65',
 };
 
 const CARD_CLASS: Record<Status, string> = {
@@ -811,13 +811,13 @@ export default function Roadmap() {
   usePageMeta('/roadmap');
 
   return (
-    <div className="flex-1 w-full max-w-2xl mx-auto px-5 sm:px-6 py-32">
+    <div className="flex-1 w-full max-w-2xl mx-auto px-5 sm:px-6 py-16 md:py-32">
       {/* HERO */}
       <section className="text-center mb-14">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-5 text-[#1e1e23]">
           {lang === 'ru' ? 'Куда движется TripTrack' : 'Where TripTrack is heading'}
         </h1>
-        <p className="text-[#1e1e23]/60 text-[17px] md:text-[18px] leading-relaxed max-w-xl mx-auto">
+        <p className="text-[#1e1e23]/65 text-[17px] md:text-[18px] leading-relaxed max-w-xl mx-auto">
           {lang === 'ru' ? (
             <>
               Это автодневник поездок — не спид-трекер, не отчёт для налоговой, не планер отпусков.
@@ -851,7 +851,7 @@ export default function Roadmap() {
             <div className="text-3xl font-bold tracking-tight text-[#EB571E] mb-1">
               {stat.num}
             </div>
-            <div className="text-[13px] text-[#1e1e23]/50 leading-tight">
+            <div className="text-[13px] text-[#1e1e23]/65 leading-tight">
               {l(stat.label)}
             </div>
           </div>
@@ -869,7 +869,7 @@ export default function Roadmap() {
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 text-[#1e1e23]">
           {lang === 'ru' ? 'Что уже работает в приложении' : 'What\'s already in the app'}
         </h2>
-        <p className="text-[#1e1e23]/50 text-[15px] md:text-[16px] leading-relaxed">
+        <p className="text-[#1e1e23]/65 text-[15px] md:text-[16px] leading-relaxed">
           {lang === 'ru'
             ? 'Каждая версия закрыта в TestFlight или App Store. Это не «скоро», это «уже».'
             : 'Every version listed below is in TestFlight or the App Store. Not "coming soon" — already there.'}
@@ -886,7 +886,7 @@ export default function Roadmap() {
                 className="w-3 h-3 rounded-full flex-shrink-0"
                 style={{ backgroundColor: DOT_COLOR[quarter.status] }}
               />
-              <h3 className="text-[14px] font-bold uppercase tracking-widest text-[#1e1e23]/35">
+              <h3 className="text-[14px] font-bold uppercase tracking-widest text-[#1e1e23]/65">
                 {l(quarter.label)}
               </h3>
             </div>
@@ -936,7 +936,7 @@ export default function Roadmap() {
                           {ms.name}
                         </span>
                       )}
-                      <span className="text-[13px] text-[#1e1e23]/25 ml-auto">
+                      <span className="text-[13px] text-[#1e1e23]/65 ml-auto">
                         {l(ms.date)}
                       </span>
                     </div>
@@ -952,7 +952,7 @@ export default function Roadmap() {
                       {ms.features.map((f, fi) => (
                         <li
                           key={fi}
-                          className="flex items-start gap-2 text-[15px] text-[#1e1e23]/60 leading-relaxed"
+                          className="flex items-start gap-2 text-[15px] text-[#1e1e23]/65 leading-relaxed"
                         >
                           <span
                             className="mt-[7px] w-1 h-1 rounded-full flex-shrink-0"
@@ -981,7 +981,7 @@ export default function Roadmap() {
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 text-[#1e1e23]">
           {lang === 'ru' ? 'Что лежит на верстаке' : 'What\'s on the build bench'}
         </h2>
-        <p className="text-[#1e1e23]/50 text-[15px] md:text-[16px] leading-relaxed">
+        <p className="text-[#1e1e23]/65 text-[15px] md:text-[16px] leading-relaxed">
           {lang === 'ru'
             ? 'Активная работа — должно приземлиться в одном из следующих релизов. Без обещаний по датам, но это уже не идеи на бумаге.'
             : 'Active work — should land in one of the next few releases. No date promises, but these aren\'t paper ideas anymore.'}
@@ -1002,7 +1002,7 @@ export default function Roadmap() {
                 <h3 className="text-base font-semibold text-[#1e1e23] mb-1.5">
                   {l(item.title)}
                 </h3>
-                <p className="text-[15px] text-[#1e1e23]/60 leading-relaxed mb-2">
+                <p className="text-[15px] text-[#1e1e23]/65 leading-relaxed mb-2">
                   {l(item.body)}
                 </p>
                 {item.meta && (
@@ -1020,15 +1020,15 @@ export default function Roadmap() {
       {/* SECTION HEADER — Horizon */}
       <section className="mb-8">
         <div className="flex items-center gap-3 mb-3">
-          <Lightbulb className="w-5 h-5 text-[#1e1e23]/45" />
-          <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-[#1e1e23]/45">
+          <Lightbulb className="w-5 h-5 text-[#1e1e23]/65" />
+          <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-[#1e1e23]/65">
             {lang === 'ru' ? '03 — На горизонте' : '03 — On the horizon'}
           </span>
         </div>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 text-[#1e1e23]">
           {lang === 'ru' ? 'Что мы рассматриваем' : 'What we\'re thinking about'}
         </h2>
-        <p className="text-[#1e1e23]/50 text-[15px] md:text-[16px] leading-relaxed">
+        <p className="text-[#1e1e23]/65 text-[15px] md:text-[16px] leading-relaxed">
           {lang === 'ru'
             ? 'Идеи, которые нам нравятся. Слушаем водителей перед тем, как обещать. Скажи нам, что для тебя важнее — это сдвинет очередь.'
             : 'Ideas we like. We listen to drivers before we commit. Tell us which ones matter — it shifts the queue.'}
@@ -1042,13 +1042,13 @@ export default function Roadmap() {
             className="bg-white border border-black/5 rounded-2xl p-4 shadow-sm flex gap-3"
           >
             <div className="w-9 h-9 rounded-lg bg-[#1e1e23]/[0.04] flex items-center justify-center flex-shrink-0">
-              <item.icon className="w-4 h-4 text-[#1e1e23]/55" />
+              <item.icon className="w-4 h-4 text-[#1e1e23]/65" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-[14px] font-semibold text-[#1e1e23] mb-1 leading-snug">
                 {l(item.title)}
               </h3>
-              <p className="text-[15px] text-[#1e1e23]/60 leading-relaxed">
+              <p className="text-[15px] text-[#1e1e23]/65 leading-relaxed">
                 {l(item.body)}
               </p>
             </div>
@@ -1059,15 +1059,15 @@ export default function Roadmap() {
       {/* SECTION HEADER — Not doing (anti-positioning) */}
       <section className="mb-8">
         <div className="flex items-center gap-3 mb-3">
-          <XIcon className="w-5 h-5 text-[#1e1e23]/40" />
-          <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-[#1e1e23]/40">
+          <XIcon className="w-5 h-5 text-[#1e1e23]/65" />
+          <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-[#1e1e23]/65">
             {lang === 'ru' ? '04 — Чем мы НЕ занимаемся' : '04 — What we\'re NOT'}
           </span>
         </div>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 text-[#1e1e23]">
           {lang === 'ru' ? 'То, что мы решили не строить' : 'The things we\'ve chosen not to build'}
         </h2>
-        <p className="text-[#1e1e23]/50 text-[15px] md:text-[16px] leading-relaxed">
+        <p className="text-[#1e1e23]/65 text-[15px] md:text-[16px] leading-relaxed">
           {lang === 'ru'
             ? 'Хороший продукт — это столько же про «нет», сколько про «да». Если эти вещи нужны тебе — отличные инструменты есть, мы рекомендуем.'
             : 'A good product is as much about "no" as "yes." If you need these things, great apps exist for them — we recommend you use them.'}
@@ -1082,7 +1082,7 @@ export default function Roadmap() {
           >
             <div className="flex items-center gap-3 mb-2.5">
               <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0 relative">
-                <item.icon className="w-4 h-4 text-[#1e1e23]/40" />
+                <item.icon className="w-4 h-4 text-[#1e1e23]/65" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-9 h-[1.5px] bg-[#1e1e23]/30 rotate-[-30deg]" />
                 </div>
@@ -1091,7 +1091,7 @@ export default function Roadmap() {
                 {l(item.title)}
               </h3>
             </div>
-            <p className="text-[15px] text-[#1e1e23]/60 leading-relaxed">
+            <p className="text-[15px] text-[#1e1e23]/65 leading-relaxed">
               {l(item.body)}
             </p>
           </div>
@@ -1108,7 +1108,7 @@ export default function Roadmap() {
             ? 'Что бы ты добавил следующим?'
             : 'What would you build next?'}
         </h3>
-        <p className="text-[#1e1e23]/60 text-center mb-8 max-w-md mx-auto text-[15px] leading-relaxed">
+        <p className="text-[#1e1e23]/65 text-center mb-8 max-w-md mx-auto text-[15px] leading-relaxed">
           {lang === 'ru'
             ? 'TripTrack делает водитель — для водителей. Реальный фидбэк двигает приоритеты. Telegram-канал открытый: предлагай, голосуй, спорь.'
             : 'TripTrack is built by a driver, for drivers. Real feedback moves priorities. The Telegram channel is open — pitch, vote, argue.'}

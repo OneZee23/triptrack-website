@@ -6,7 +6,7 @@ import { CheckCircle2, XCircle, MapPin, Eye, EyeOff, Compass, Trophy } from 'luc
 import screenFeed from '../assets/screen-feed.webp';
 
 const STEPS = [
-  { icon: <EyeOff className="w-5 h-5 text-[#1e1e23]/35" />, key: 'step1' },
+  { icon: <EyeOff className="w-5 h-5 text-[#1e1e23]/65" />, key: 'step1' },
   { icon: <MapPin className="w-5 h-5 text-[#EB571E]" />, key: 'step2' },
   { icon: <Eye className="w-5 h-5 text-[#2EAE50]" />, key: 'step3' },
   { icon: <Compass className="w-5 h-5 text-[#F5A623]" />, key: 'step4' },
@@ -30,7 +30,7 @@ export default function FogOfWarMap() {
   usePageMeta('/fog-of-war-map');
 
   return (
-    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-28 md:py-32">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-16 md:py-32">
       {/* Hero */}
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 rounded-full px-4 py-1.5 text-[14px] font-medium mb-8">
@@ -38,7 +38,7 @@ export default function FogOfWarMap() {
           {t('fog.badge')}
         </div>
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('fog.h1')}</h1>
-        <p className="text-[18px] text-[#1e1e23]/60 max-w-2xl mx-auto leading-relaxed">{t('fog.lead')}</p>
+        <p className="text-[18px] text-[#1e1e23]/65 max-w-2xl mx-auto leading-relaxed">{t('fog.lead')}</p>
       </div>
 
       {/* Fog illustration — the page is about a picture, so it shows one */}
@@ -77,7 +77,7 @@ export default function FogOfWarMap() {
               <div className="w-10 h-10 rounded-full bg-[#f4f2ee] flex items-center justify-center shrink-0">{step.icon}</div>
               <div>
                 <h3 className="font-bold text-[#1e1e23] mb-1 text-[17px]">{t(`fog.${step.key}_title`)}</h3>
-                <p className="text-[15px] text-[#1e1e23]/60 leading-relaxed">{t(`fog.${step.key}_desc`)}</p>
+                <p className="text-[15px] text-[#1e1e23]/65 leading-relaxed">{t(`fog.${step.key}_desc`)}</p>
               </div>
             </div>
           ))}
@@ -91,9 +91,9 @@ export default function FogOfWarMap() {
           <table className="w-full text-[15px] min-w-[420px]">
             <thead>
               <tr className="border-b border-black/5">
-                <th className="py-3 px-5 sm:px-6 text-left text-[#1e1e23]/40 font-medium text-[12px] uppercase tracking-wider">{t('fog.feature')}</th>
+                <th className="py-3 px-5 sm:px-6 text-left text-[#1e1e23]/65 font-medium text-[12px] uppercase tracking-wider">{t('fog.feature')}</th>
                 <th className="py-3 px-4 text-center font-bold text-[#1e1e23]">TripTrack</th>
-                <th className="py-3 px-4 text-center text-[#1e1e23]/45">Fog of World</th>
+                <th className="py-3 px-4 text-center text-[#1e1e23]/65">Fog of World</th>
               </tr>
             </thead>
             <tbody>
@@ -102,7 +102,7 @@ export default function FogOfWarMap() {
                   <td className="py-3 px-5 sm:px-6 text-[#1e1e23]/70">{t(`fog.${row.key}`)}</td>
                   <td className="py-3 px-4 text-center"><CheckCircle2 aria-hidden className="w-5 h-5 text-[#2EAE50] mx-auto" /></td>
                   <td className="py-3 px-4 text-center">
-                    {row.fow ? <CheckCircle2 aria-hidden className="w-5 h-5 text-[#1e1e23]/20 mx-auto" /> : <XCircle aria-hidden className="w-5 h-5 text-red-400/40 mx-auto" />}
+                    {row.fow ? <CheckCircle2 aria-hidden className="w-5 h-5 text-[#1e1e23]/65 mx-auto" /> : <XCircle aria-hidden className="w-5 h-5 text-red-500/80 mx-auto" />}
                   </td>
                 </tr>
               ))}
@@ -124,7 +124,7 @@ export default function FogOfWarMap() {
           <Trophy aria-hidden className="w-6 h-6 text-[#F5A623]" />
           {t('fog.cta_title')}
         </h2>
-        <p className="text-[#1e1e23]/50 mb-8 text-[15px]">{t('fog.cta_note')}</p>
+        <p className="text-[#1e1e23]/65 mb-8 text-[15px]">{t('fog.cta_note')}</p>
         <AppStoreBadge className="h-[56px]" />
         <nav className="mt-10 flex flex-wrap justify-center gap-x-7 gap-y-1 text-[16px] font-medium">
           <Link to={href('/features')} className="flex min-h-[44px] items-center text-[#EB571E] hover:underline">{t('fog.link_features')}</Link>

@@ -18,11 +18,11 @@ export default function Features() {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-5 sm:px-6 py-28 md:py-32 flex flex-col items-center relative z-10">
+    <div className="w-full max-w-7xl mx-auto px-5 sm:px-6 py-16 md:py-32 flex flex-col items-center relative z-10">
       <section className="text-center mb-16 relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] max-w-[150vw] bg-[#EB571E]/5 blur-[100px] rounded-full pointer-events-none -z-10" />
         <h1 className="text-[40px] md:text-[64px] font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('features.h1')}</h1>
-        <p className="text-[18px] text-[#1e1e23]/60 max-w-2xl mx-auto leading-relaxed">{t('features.hero_subtitle')}</p>
+        <p className="text-[18px] text-[#1e1e23]/65 max-w-2xl mx-auto leading-relaxed">{t('features.hero_subtitle')}</p>
         <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-4 text-left text-[16px] leading-relaxed text-[#1e1e23]/65">
           <p>{t('features.intro_p1')}</p>
           <p>{t('features.intro_p2')}</p>
@@ -39,18 +39,18 @@ export default function Features() {
           <div key={card.title} className="rounded-[28px] border border-black/5 bg-white p-7 shadow-sm">
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4f2ee]">{card.icon}</div>
             <h2 className="mb-3 text-[20px] font-bold text-[#1e1e23]">{t(card.title)}</h2>
-            <p className="text-[15px] leading-relaxed text-[#1e1e23]/60">{t(card.desc)}</p>
+            <p className="text-[15px] leading-relaxed text-[#1e1e23]/65">{t(card.desc)}</p>
           </div>
         ))}
       </section>
 
       {/* GAMIFICATION — profile screenshot first (looks good) */}
-      <section className="w-full max-w-5xl mx-auto pb-24 relative z-10">
+      <section className="w-full max-w-5xl mx-auto pb-14 md:pb-24 relative z-10">
         <div className="flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-[40px] font-bold mb-6 text-[#1e1e23]">{t('features.gamification_title')}</h2>
-            <p className="text-[16px] text-[#1e1e23]/60 mb-8 leading-relaxed max-w-lg">{t('features.gamification_desc')}</p>
-            <p className="text-[15px] text-[#1e1e23]/50 font-medium">{t('features.gamification_note')}</p>
+            <p className="text-[16px] text-[#1e1e23]/65 mb-8 leading-relaxed max-w-lg">{t('features.gamification_desc')}</p>
+            <p className="text-[15px] text-[#1e1e23]/65 font-medium">{t('features.gamification_note')}</p>
           </div>
           <div className="w-[260px] md:w-[300px] aspect-[9/16] rounded-[32px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2] flex-shrink-0">
             <img src={screenProfile} alt={t('download.screenshot_alt')} width={640} height={1391} loading="lazy" decoding="async" className="w-full h-[145%] object-cover object-bottom" />
@@ -59,16 +59,16 @@ export default function Features() {
       </section>
 
       {/* COMPARISON TABLE */}
-      <section className="w-full max-w-5xl mx-auto py-24 text-left border-t border-black/5">
+      <section className="w-full max-w-5xl mx-auto py-14 md:py-24 text-left border-t border-black/5">
         <h2 className="text-[40px] font-bold mb-16 text-center text-[#1e1e23]">{t('features.comparison_title')}</h2>
         <div className="overflow-x-auto pb-8 bg-white rounded-3xl border border-black/5 shadow-sm">
           <table className="w-full min-w-[600px] border-collapse">
             <thead>
               <tr className="border-b border-black/5">
-                <th className="py-6 px-6 text-left font-bold text-[12px] uppercase tracking-wider text-[#1e1e23]/35 w-1/3">{t('features.comparison_features')}</th>
+                <th className="py-6 px-6 text-left font-bold text-[12px] uppercase tracking-wider text-[#1e1e23]/65 w-1/3">{t('features.comparison_features')}</th>
                 <th className="py-6 px-4 text-center font-bold text-[#1e1e23] text-[20px]">TripTrack</th>
-                <th className="py-6 px-4 text-center font-bold text-[14px] text-[#1e1e23]/40">Google Timeline</th>
-                <th className="py-6 px-4 text-center font-bold text-[14px] text-[#1e1e23]/40">Polarsteps</th>
+                <th className="py-6 px-4 text-center font-bold text-[14px] text-[#1e1e23]/65">Google Timeline</th>
+                <th className="py-6 px-4 text-center font-bold text-[14px] text-[#1e1e23]/65">Polarsteps</th>
               </tr>
             </thead>
             <tbody>
@@ -86,7 +86,7 @@ export default function Features() {
       </section>
 
       {/* CTA */}
-      <div className="pt-12 pb-24 w-full flex flex-col items-center border-b border-black/5">
+      <div className="pt-8 pb-14 md:pt-12 md:pb-24 w-full flex flex-col items-center border-b border-black/5">
         <Link to={href('/download')} className="bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full px-12 py-5 text-[20px] font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_2px_20px_rgba(235,87,30,0.3)] mb-4">{t('features.get_started')}</Link>
         <nav className="mt-6 flex flex-wrap justify-center gap-x-7 gap-y-1 text-[16px] font-medium">
           <Link to={href('/fog-of-war-map')} className="flex min-h-[44px] items-center text-[#EB571E] hover:underline">{t('features.link_fog')}</Link>
@@ -95,11 +95,11 @@ export default function Features() {
       </div>
 
       {/* BENTO GRID — feature details at the bottom */}
-      <section className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 pt-24">
+      <section className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 pt-14 md:pt-24">
         <div className="md:col-span-2 row-span-2 bg-white border border-black/5 rounded-[32px] p-10 relative overflow-hidden group shadow-sm">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#EB571E]/5 blur-[80px] rounded-full group-hover:bg-[#EB571E]/10 transition-colors" />
           <h3 className="text-[24px] font-bold mb-4 relative z-10 text-[#1e1e23]">{t('features.records_title')}</h3>
-          <p className="text-[16px] text-[#1e1e23]/50 mb-8 max-w-sm relative z-10 leading-relaxed">{t('features.records_desc')}</p>
+          <p className="text-[16px] text-[#1e1e23]/65 mb-8 max-w-sm relative z-10 leading-relaxed">{t('features.records_desc')}</p>
           <div className="w-full h-[400px] bg-[#141518] rounded-3xl border border-black/10 mt-auto relative overflow-hidden flex items-center justify-center shadow-lg flex-col p-6">
             <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
             <div className="text-[#EB571E] font-mono text-[80px] font-bold leading-none mb-4 z-10">45<span className="text-[24px]">km/h</span></div>
@@ -110,7 +110,7 @@ export default function Features() {
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between group h-[340px] shadow-sm">
           <div>
             <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.photos_title')}</h3>
-            <p className="text-[#1e1e23]/60 text-[15px] leading-relaxed">{t('features.photos_desc')}</p>
+            <p className="text-[#1e1e23]/65 text-[15px] leading-relaxed">{t('features.photos_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-[#f4f2ee] rounded-2xl mt-6 border border-black/5 flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden relative">
             <div className="w-20 h-20 bg-white rounded-xl rotate-12 absolute -right-4 -bottom-4 shadow-md border border-black/5" />
@@ -121,7 +121,7 @@ export default function Features() {
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between group h-[340px] shadow-sm">
           <div>
             <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.stats_title')}</h3>
-            <p className="text-[#1e1e23]/60 text-[15px] leading-relaxed">{t('features.stats_desc')}</p>
+            <p className="text-[#1e1e23]/65 text-[15px] leading-relaxed">{t('features.stats_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-[#f4f2ee] rounded-2xl mt-6 border border-black/5 flex flex-col items-center justify-center p-4 group-hover:scale-105 transition-transform gap-2">
              <div className="w-full flex justify-between items-end h-12 gap-2">
@@ -133,7 +133,7 @@ export default function Features() {
         <div className="md:col-span-2 bg-white border border-black/5 rounded-[32px] p-10 flex flex-col md:flex-row gap-8 items-center overflow-hidden relative group shadow-sm">
           <div className="flex-1 relative z-10">
             <h3 className="text-[24px] font-bold mb-4 text-[#1e1e23]">{t('features.fog_title')}</h3>
-            <p className="text-[16px] text-[#1e1e23]/50 max-w-sm leading-relaxed">{t('features.fog_desc')}</p>
+            <p className="text-[16px] text-[#1e1e23]/65 max-w-sm leading-relaxed">{t('features.fog_desc')}</p>
           </div>
           <div className="w-full md:w-1/2 h-[240px] bg-[#141518] rounded-3xl border border-black/10 relative overflow-hidden shadow-lg">
             <div className="absolute inset-0 bg-[#0a1628] z-10" />
@@ -154,7 +154,7 @@ export default function Features() {
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between shadow-sm">
           <div>
             <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.private_title')}</h3>
-            <p className="text-[#1e1e23]/60 text-[15px] leading-relaxed">{t('features.private_desc')}</p>
+            <p className="text-[#1e1e23]/65 text-[15px] leading-relaxed">{t('features.private_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-emerald-50 rounded-2xl mt-6 border border-emerald-500/20 flex flex-col items-center justify-center text-emerald-600 gap-3">
             <Lock className="w-8 h-8" />
