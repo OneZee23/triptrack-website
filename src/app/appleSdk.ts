@@ -31,7 +31,8 @@ declare global {
   }
 }
 
-const SDK_URL = 'https://appleid.cdn-apple.com/appleid/auth/js/appleid.auth.js';
+const SDK_URL =
+  'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
 
 let pending: Promise<AppleIdAuth> | null = null;
 
