@@ -188,12 +188,18 @@ export default function GlobeHero() {
               </button>
             )}
           </div>
-          {stats && (
-            <div className="mt-6 flex gap-5 text-sm text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)]">
-              <span><b className="text-[#FFB000]">{stats.trips}</b> {statWord('stat_trips', stats.trips)}</span>
-              <span><b className="text-[#FFB000]">{stats.cities}</b> {statWord('stat_cities', stats.cities)}</span>
-            </div>
-          )}
+          {/* The row is on the page from the first frame even when the numbers
+              are not. They arrive with `/api/globe` about two seconds in, and
+              inserting a line of text at that point pushed everything below it
+              down — it was the whole of the home page's layout shift. */}
+          <div className="mt-6 flex min-h-[20px] gap-5 text-sm text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)]">
+            {stats && (
+              <>
+                <span><b className="text-[#FFB000]">{stats.trips}</b> {statWord('stat_trips', stats.trips)}</span>
+                <span><b className="text-[#FFB000]">{stats.cities}</b> {statWord('stat_cities', stats.cities)}</span>
+              </>
+            )}
+          </div>
           {/* «Drag · zoom · tap a trip» describes the live map. With the poster
               on screen there is nothing to drag, and the line used to sit over
               the hero telling people to do something impossible. */}
