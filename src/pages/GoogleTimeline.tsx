@@ -24,15 +24,15 @@ export default function GoogleTimeline() {
   usePageMeta('/google-timeline-alternative');
 
   return (
-    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 py-28 md:py-32">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32">
       {/* Hero */}
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-2 bg-red-50 text-red-600 rounded-full px-4 py-1.5 text-[14px] font-medium mb-8">
           <XCircle className="w-4 h-4 shrink-0" />
           {t('gt.badge')}
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('gt.h1')}</h1>
-        <p className="text-[18px] text-[#1e1e23]/60 max-w-2xl mx-auto leading-relaxed">{t('gt.lead')}</p>
+        <h1 className="text-[30px] sm:text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('gt.h1')}</h1>
+        <p className="text-[18px] text-[#1e1e23]/65 max-w-2xl mx-auto leading-relaxed">{t('gt.lead')}</p>
       </div>
 
       {/* What happened */}
@@ -52,9 +52,9 @@ export default function GoogleTimeline() {
           <table className="w-full text-[15px] min-w-[420px]">
             <thead>
               <tr className="border-b border-black/5">
-                <th className="py-3 px-5 sm:px-6 text-left text-[#1e1e23]/40 font-medium text-[12px] uppercase tracking-wider">{t('gt.feature')}</th>
+                <th className="py-3 px-5 sm:px-6 text-left text-[#1e1e23]/65 font-medium text-[12px] uppercase tracking-wider">{t('gt.feature')}</th>
                 <th className="py-3 px-4 text-center font-bold text-[#1e1e23]">TripTrack</th>
-                <th className="py-3 px-4 text-center text-[#1e1e23]/45">Google Timeline</th>
+                <th className="py-3 px-4 text-center text-[#1e1e23]/65">Google Timeline</th>
               </tr>
             </thead>
             <tbody>
@@ -63,7 +63,7 @@ export default function GoogleTimeline() {
                   <td className="py-3 px-5 sm:px-6 text-[#1e1e23]/70">{t(`gt.${row.key}`)}</td>
                   <td className="py-3 px-4 text-center"><CheckCircle2 aria-hidden className="w-5 h-5 text-[#2EAE50] mx-auto" /></td>
                   <td className="py-3 px-4 text-center">
-                    {row.gt ? <CheckCircle2 aria-hidden className="w-5 h-5 text-[#1e1e23]/20 mx-auto" /> : <XCircle aria-hidden className="w-5 h-5 text-red-400/40 mx-auto" />}
+                    {row.gt ? <CheckCircle2 aria-hidden className="w-5 h-5 text-[#1e1e23]/65 mx-auto" /> : <XCircle aria-hidden className="w-5 h-5 text-red-500/80 mx-auto" />}
                   </td>
                 </tr>
               ))}
@@ -82,7 +82,7 @@ export default function GoogleTimeline() {
           <div key={card.title} className="bg-white border border-black/5 rounded-2xl p-6 shadow-sm text-center">
             {card.icon}
             <h3 className="font-bold text-[#1e1e23] mb-1 text-[17px]">{t(card.title)}</h3>
-            <p className="text-[15px] text-[#1e1e23]/55 leading-relaxed">{t(card.desc)}</p>
+            <p className="text-[15px] text-[#1e1e23]/65 leading-relaxed">{t(card.desc)}</p>
           </div>
         ))}
       </div>
@@ -99,14 +99,14 @@ export default function GoogleTimeline() {
       {/* Screenshot */}
       <div className="flex justify-center mb-12">
         <div className="w-[240px] aspect-[9/16] rounded-[28px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2]">
-          <img src={screenFeed} alt={t('gt.screenshot_alt')} width={480} height={1043} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
+          <img src={screenFeed} alt={t('gt.screenshot_alt')} width={480} height={1043} loading="lazy" decoding="async" className="w-full h-[145%] object-cover object-bottom" />
         </div>
       </div>
 
       {/* CTA */}
       <div className="text-center">
         <h2 className="text-[26px] md:text-3xl font-bold mb-4 text-[#1e1e23]">{t('gt.cta_title')}</h2>
-        <p className="text-[#1e1e23]/50 mb-8 text-[15px]">{t('gt.cta_note')}</p>
+        <p className="text-[#1e1e23]/65 mb-8 text-[15px]">{t('gt.cta_note')}</p>
         <AppStoreBadge className="h-[56px]" />
         <nav className="mt-10 flex flex-wrap justify-center gap-x-7 gap-y-1 text-[16px] font-medium">
           <Link to={href('/fog-of-war-map')} className="flex min-h-[44px] items-center text-[#EB571E] hover:underline">{t('gt.link_fog')}</Link>

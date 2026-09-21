@@ -53,7 +53,7 @@ function Shell() {
   if (route === '/app') return <Navigate to={href(session ? '/app/trips' : '/app/login')} replace />;
 
   return (
-    <div className="flex-1 w-full pt-28 md:pt-32 pb-20 px-6">
+    <div className="flex-1 w-full pt-28 md:pt-32 pb-14 md:pb-20 px-6">
       <div className="max-w-5xl mx-auto w-full">
         {session && (
           <div className="flex items-center justify-between gap-4 mb-8">
@@ -68,7 +68,7 @@ function Shell() {
             <button
               type="button"
               onClick={() => { void signOut(); }}
-              className="flex items-center gap-2 text-[14px] font-semibold text-[#1e1e23]/40 hover:text-[#1e1e23] transition-colors"
+              className="flex items-center gap-2 text-[14px] font-semibold text-[#1e1e23]/65 hover:text-[#1e1e23] transition-colors"
             >
               <LogOut className="w-4 h-4" aria-hidden="true" />
               {t('app.sign_out')}
@@ -78,7 +78,7 @@ function Shell() {
 
         <Outlet />
 
-        <p className="mt-12 text-[13px] text-[#1e1e23]/30 text-center" lang={lang}>
+        <p className="mt-12 text-[13px] text-[#1e1e23]/65 text-center" lang={lang}>
           {t('app.units_note')}
         </p>
       </div>

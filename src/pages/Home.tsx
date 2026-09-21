@@ -16,10 +16,13 @@ const PROBLEMS = [
   { icon: Target, key: 'noapp' },
 ] as const;
 
+// All three are below the hero — the first of them by a screen and a half —
+// so none of them is eager. Step 1 used to be, and it put an 85 KB photograph
+// on the critical path of a page whose largest element is a line of text.
 const STEPS = [
-  { n: '01', image: screenLockscreen, key: 'step1', ring: 'emerald', eager: true },
-  { n: '02', image: screenRecording, key: 'step2', ring: 'accent', eager: false },
-  { n: '03', image: screenDetail, key: 'step3', ring: 'red', eager: false },
+  { n: '01', image: screenLockscreen, key: 'step1', ring: 'emerald' },
+  { n: '02', image: screenRecording, key: 'step2', ring: 'accent' },
+  { n: '03', image: screenDetail, key: 'step3', ring: 'red' },
 ] as const;
 
 const RING: Record<string, string> = {
@@ -40,20 +43,20 @@ export default function Home() {
       <GlobeHero />
 
       {/* PROBLEM STATEMENT */}
-      <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 py-20 border-t border-black/5 mt-10">
+      <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 py-12 md:py-20 border-t border-black/5 mt-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {PROBLEMS.map(({ icon: Icon, key }) => (
             <div key={key} className="bg-white border border-black/5 p-8 rounded-[32px] hover:-translate-y-2 transition-transform shadow-sm">
               <Icon aria-hidden className="w-8 h-8 text-[#EB571E] mb-6" />
               <h2 className="text-xl font-semibold mb-3 text-[#1e1e23]">{t(`home.problem_${key}_title`)}</h2>
-              <p className="text-[#1e1e23]/60 text-[15px] leading-relaxed">{t(`home.problem_${key}_desc`)}</p>
+              <p className="text-[#1e1e23]/65 text-[15px] leading-relaxed">{t(`home.problem_${key}_desc`)}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 py-24 md:py-32 text-center relative border-t border-black/5">
+      <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 py-16 md:py-32 text-center relative border-t border-black/5">
         <h2 className="text-[32px] md:text-[40px] font-bold mb-20 text-[#1e1e23]">{t('home.how_title')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
           <div aria-hidden className="absolute top-[20%] left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-emerald-500/20 via-[#EB571E]/50 to-red-500/20 hidden md:block" />
@@ -69,12 +72,13 @@ export default function Home() {
                   alt={t(`home.${step.key}_alt`)}
                   width={480}
                   height={1043}
-                  loading={step.eager ? 'eager' : 'lazy'}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-[150%] object-cover object-bottom"
                 />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-[#1e1e23]">{t(`home.${step.key}_title`)}</h3>
-              <p className="text-[#1e1e23]/60 text-[15px] px-4 leading-relaxed">{t(`home.${step.key}_desc`)}</p>
+              <p className="text-[#1e1e23]/65 text-[15px] px-4 leading-relaxed">{t(`home.${step.key}_desc`)}</p>
             </div>
           ))}
         </div>
@@ -82,7 +86,7 @@ export default function Home() {
 
       {/* ATLAS — the fog of war map */}
       <section className="w-full bg-[#f4f2ee] border-y border-black/5">
-        <div className="max-w-6xl mx-auto px-5 sm:px-6 py-24 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="max-w-6xl mx-auto px-5 sm:px-6 py-14 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
               <Compass aria-hidden className="w-6 h-6 text-[#EB571E]" />
@@ -118,10 +122,10 @@ export default function Home() {
       </section>
 
       {/* PLACES AND JOURNEYS */}
-      <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 py-24 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 py-14 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="order-2 md:order-1 flex justify-center">
           <div className="w-[240px] max-w-full aspect-[9/16] rounded-[32px] overflow-hidden shadow-lg border border-black/5 bg-[#f8f6f2]">
-            <img src={screenDetail} alt={t('home.step3_alt')} width={480} height={1043} loading="lazy" className="w-full h-[145%] object-cover object-bottom" />
+            <img src={screenDetail} alt={t('home.step3_alt')} width={480} height={1043} loading="lazy" decoding="async" className="w-full h-[145%] object-cover object-bottom" />
           </div>
         </div>
         <div className="order-1 md:order-2">
@@ -141,7 +145,7 @@ export default function Home() {
 
       {/* PRIVACY */}
       <section className="w-full bg-[#f4f2ee] border-y border-black/5">
-        <div className="max-w-4xl mx-auto px-5 sm:px-6 py-24 md:py-28 text-center">
+        <div className="max-w-4xl mx-auto px-5 sm:px-6 py-14 md:py-28 text-center">
           <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
             <ShieldCheck aria-hidden className="w-6 h-6 text-[#2EAE50]" />
           </div>
@@ -161,7 +165,7 @@ export default function Home() {
       </section>
 
       {/* SOCIAL PROOF */}
-      <section className="w-full py-24 md:py-28 text-center relative z-10 px-5 sm:px-6">
+      <section className="w-full py-14 md:py-28 text-center relative z-10 px-5 sm:px-6">
         <div className="flex justify-center items-center gap-2 mb-4" aria-hidden>
           {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="w-6 h-6 fill-[#EB571E] text-[#EB571E]" />)}
         </div>
@@ -169,7 +173,7 @@ export default function Home() {
         <div className="max-w-2xl mx-auto">
           <figure className="bg-white border border-black/5 p-8 sm:p-10 rounded-3xl text-center shadow-sm">
             <blockquote className="text-[18px] leading-relaxed mb-6 text-[#1e1e23] italic">{t('home.review1')}</blockquote>
-            <figcaption className="font-semibold text-[14px] text-[#1e1e23]/50">
+            <figcaption className="font-semibold text-[14px] text-[#1e1e23]/65">
               OKOPOK &middot;{' '}
               <a href="https://apps.apple.com/us/app/triptrack-road-journal/id6760650361" target="_blank" rel="noopener noreferrer" className="text-[#EB571E] hover:underline">App Store</a>
             </figcaption>
@@ -191,14 +195,14 @@ export default function Home() {
       </section>
 
       {/* FAQ — the questions here are the ones in the FAQPage JSON-LD */}
-      <section className="w-full max-w-3xl mx-auto px-5 sm:px-6 py-20 md:py-24">
+      <section className="w-full max-w-3xl mx-auto px-5 sm:px-6 py-12 md:py-24">
         <h2 className="text-[30px] md:text-[40px] font-bold mb-10 text-center text-[#1e1e23]">{t('home.faq_title')}</h2>
         <div className="flex flex-col gap-3">
           {FAQ_IDS.map((id) => (
             <details key={id} className="group rounded-2xl border border-black/5 bg-white px-6 shadow-sm">
               <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-[17px] font-semibold text-[#1e1e23] [&::-webkit-details-marker]:hidden">
                 {t(`home.faq.${id}.q`)}
-                <ChevronDown aria-hidden className="w-5 h-5 shrink-0 text-[#1e1e23]/40 transition-transform group-open:rotate-180" />
+                <ChevronDown aria-hidden className="w-5 h-5 shrink-0 text-[#1e1e23]/65 transition-transform group-open:rotate-180" />
               </summary>
               <p className="pb-5 text-[16px] leading-relaxed text-[#1e1e23]/65">{t(`home.faq.${id}.a`)}</p>
             </details>
@@ -207,7 +211,7 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="w-full max-w-4xl mx-auto px-5 sm:px-6 py-24 md:py-32 text-center relative z-10">
+      <section className="w-full max-w-4xl mx-auto px-5 sm:px-6 py-16 md:py-32 text-center relative z-10">
         <h2 className="text-[36px] md:text-[64px] font-bold tracking-tighter mb-8 text-[#1e1e23]">{t('home.cta_title')}</h2>
         <div className="mb-6 flex justify-center">
           <AppStoreBadge className="h-[60px]" />
@@ -215,7 +219,7 @@ export default function Home() {
         <Link to={href('/download')} className="inline-flex min-h-[44px] items-center text-[16px] font-semibold text-[#EB571E] hover:underline">
           {t('home.cta_button')}
         </Link>
-        <p className="mt-8 text-[14px] text-[#1e1e23]/45 font-medium">{t('home.cta_note')}</p>
+        <p className="mt-8 text-[14px] text-[#1e1e23]/65 font-medium">{t('home.cta_note')}</p>
       </section>
     </div>
   );

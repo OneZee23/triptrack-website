@@ -62,7 +62,7 @@ export default function LoginPage() {
       <h1 className="text-[32px] md:text-[44px] font-bold tracking-tight text-[#1e1e23] mb-4">
         {t('app.login.title')}
       </h1>
-      <p className="text-[17px] text-[#1e1e23]/50 leading-relaxed mb-10">
+      <p className="text-[17px] text-[#1e1e23]/65 leading-relaxed mb-10">
         {t('app.login.lead')}
       </p>
 
@@ -76,7 +76,7 @@ export default function LoginPage() {
         {busy ? t('app.login.busy') : t('app.login.button')}
       </button>
 
-      <p className="text-[14px] text-[#1e1e23]/40 leading-relaxed mt-8 max-w-md">
+      <p className="text-[14px] text-[#1e1e23]/65 leading-relaxed mt-8 max-w-md">
         {t('app.login.note')}
       </p>
 

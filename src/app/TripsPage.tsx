@@ -56,7 +56,7 @@ export default function TripsPage() {
     return (
       <div className="flex flex-col items-center text-center py-10">
         <h1 className="text-[28px] font-bold text-[#1e1e23] mb-3">{t('app.trips.empty_title')}</h1>
-        <p className="text-[17px] text-[#1e1e23]/50 mb-10 max-w-md leading-relaxed">
+        <p className="text-[17px] text-[#1e1e23]/65 mb-10 max-w-md leading-relaxed">
           {t('app.trips.empty_body')}
         </p>
         <AppStoreBadge className="h-[56px]" />
@@ -70,7 +70,7 @@ export default function TripsPage() {
         <h1 className="text-[28px] md:text-[36px] font-bold tracking-tight text-[#1e1e23]">
           {t('app.trips.title')}
         </h1>
-        <span className="text-[14px] text-[#1e1e23]/40 font-medium">
+        <span className="text-[14px] text-[#1e1e23]/65 font-medium">
           {t('app.trips.count').replace('{n}', String(total))}
         </span>
       </div>
@@ -121,7 +121,7 @@ function TripCard({ trip, to, lang, untitled }: { trip: TripSummary; to: string;
         <h2 className="font-bold text-[17px] text-[#1e1e23] truncate">
           {trip.title?.trim() || untitled}
         </h2>
-        <div className="flex items-center gap-4 mt-2 text-[13px] text-[#1e1e23]/40 font-medium">
+        <div className="flex items-center gap-4 mt-2 text-[13px] text-[#1e1e23]/65 font-medium">
           <span className="flex items-center gap-1.5">
             <CalendarDays className="w-3.5 h-3.5" aria-hidden="true" />
             {formatDate(trip.startDate, lang)}
@@ -135,7 +135,7 @@ function TripCard({ trip, to, lang, untitled }: { trip: TripSummary; to: string;
         </div>
         <div className="flex items-baseline gap-3 mt-3">
           <span className="text-[20px] font-bold text-[#EB571E]">{formatDistance(trip.distance, lang)}</span>
-          <span className="text-[15px] text-[#1e1e23]/40 font-medium">{formatDuration(duration, lang)}</span>
+          <span className="text-[15px] text-[#1e1e23]/65 font-medium">{formatDuration(duration, lang)}</span>
         </div>
       </div>
     </Link>

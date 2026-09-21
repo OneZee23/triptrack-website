@@ -26,19 +26,19 @@ export default function NotFound() {
           <Compass className="w-8 h-8 text-[#EB571E]" />
         </div>
 
-        <p className="font-mono text-[14px] tracking-[0.2em] text-[#1e1e23]/40 mb-6">404</p>
+        <p className="font-mono text-[14px] tracking-[0.2em] text-[#1e1e23]/65 mb-6">404</p>
 
         <h1 className="text-[36px] md:text-[56px] font-bold tracking-tighter mb-8 leading-tight text-[#1e1e23]">
           {t(isSharedTrip ? 'notfound.title_trip' : 'notfound.title_page')}
         </h1>
 
-        <p className="text-[18px] text-[#1e1e23]/60 mb-14 max-w-xl leading-relaxed">
+        <p className="text-[18px] text-[#1e1e23]/65 mb-14 max-w-xl leading-relaxed">
           {t(isSharedTrip ? 'notfound.body_trip' : 'notfound.body_page')}
         </p>
 
         {isSharedTrip && (
           <div className="mb-12 flex flex-col items-center gap-6">
-            <p className="text-[16px] text-[#1e1e23]/60">{t('notfound.open_app')}</p>
+            <p className="text-[16px] text-[#1e1e23]/65">{t('notfound.open_app')}</p>
             <AppStoreBadge className="h-[56px]" />
           </div>
         )}

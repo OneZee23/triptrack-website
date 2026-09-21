@@ -5,7 +5,7 @@ const APP_STORE_URL = 'https://apps.apple.com/us/app/triptrack-road-journal/id67
 export function AppStoreBadge({ className = 'h-[56px]' }: { className?: string }) {
   return (
     <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer" className="inline-block hover:scale-105 active:scale-95 transition-transform">
-      <img src={badge} alt="Download on the App Store" className={className} />
+      <img src={badge} alt="Download on the App Store" width={180} height={60} decoding="async" className={className} />
     </a>
   );
 }
