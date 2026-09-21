@@ -31,7 +31,7 @@ export default function GoogleTimeline() {
           <XCircle className="w-4 h-4 shrink-0" />
           {t('gt.badge')}
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('gt.h1')}</h1>
+        <h1 className="text-[30px] sm:text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('gt.h1')}</h1>
         <p className="text-[18px] text-[#1e1e23]/65 max-w-2xl mx-auto leading-relaxed">{t('gt.lead')}</p>
       </div>
 

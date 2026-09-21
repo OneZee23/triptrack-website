@@ -27,7 +27,7 @@ export default function Download() {
           />
         </div>
 
-        <h1 className="text-[40px] md:text-[64px] font-bold tracking-tighter mb-7 leading-tight text-[#1e1e23]">
+        <h1 className="text-[32px] sm:text-[40px] md:text-[64px] font-bold tracking-tighter mb-7 leading-tight text-[#1e1e23]">
           {t('download.h1')}
         </h1>
         <p className="text-[18px] text-[#1e1e23]/65 mb-10 max-w-xl leading-relaxed">{t('download.hero_subtitle')}</p>

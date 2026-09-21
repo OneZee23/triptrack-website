@@ -814,7 +814,7 @@ export default function Roadmap() {
     <div className="flex-1 w-full max-w-2xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32">
       {/* HERO */}
       <section className="text-center mb-14">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-5 text-[#1e1e23]">
+        <h1 className="text-[30px] sm:text-4xl md:text-6xl font-bold tracking-tighter mb-5 text-[#1e1e23]">
           {lang === 'ru' ? 'Куда движется TripTrack' : 'Where TripTrack is heading'}
         </h1>
         <p className="text-[#1e1e23]/65 text-[17px] md:text-[18px] leading-relaxed max-w-xl mx-auto">

@@ -54,7 +54,7 @@ export default function About() {
     <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32 flex flex-col items-center">
       {/* Header */}
       <img src={logo} alt="" width={80} height={80} decoding="async" className="w-20 h-20 rounded-2xl shadow-lg mb-8" />
-      <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-center mb-4 text-[#1e1e23]">
+      <h1 className="text-[30px] sm:text-4xl md:text-6xl font-bold tracking-tighter text-center mb-4 text-[#1e1e23]">
         {lang === 'ru' ? 'Как появился TripTrack' : 'How TripTrack was born'}
       </h1>
       <p className="text-[16px] text-[#1e1e23]/65 text-center mb-20">

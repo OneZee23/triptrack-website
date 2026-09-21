@@ -21,7 +21,7 @@ export default function Features() {
     <div className="w-full max-w-7xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32 flex flex-col items-center relative z-10">
       <section className="text-center mb-16 relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] max-w-[150vw] bg-[#EB571E]/5 blur-[100px] rounded-full pointer-events-none -z-10" />
-        <h1 className="text-[40px] md:text-[64px] font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('features.h1')}</h1>
+        <h1 className="text-[32px] sm:text-[40px] md:text-[64px] font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('features.h1')}</h1>
         <p className="text-[18px] text-[#1e1e23]/65 max-w-2xl mx-auto leading-relaxed">{t('features.hero_subtitle')}</p>
         <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-4 text-left text-[16px] leading-relaxed text-[#1e1e23]/65">
           <p>{t('features.intro_p1')}</p>
