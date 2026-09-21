@@ -24,8 +24,24 @@ function start(ready?: { id: PageId; Component: ComponentType }) {
       <RouterProvider router={createBrowserRouter(clientRoutes(ready))} />
     </StrictMode>
   );
-  if (container.firstElementChild) hydrateRoot(container, app);
-  else createRoot(container).render(app);
+  // Hydrate only when the markup already in #root belongs to THIS address.
+  //
+  // Every prerendered page has a file of its own, so `ready` is exactly the
+  // test: it is set when the URL matched a page we could import. Anything else
+  // — the signed-in `/app` area, an unknown address — is served the home page
+  // as an SPA shell by `try_files ... /index.html`, and that markup is not
+  // this route's. Attaching to it asked React Router to hydrate a route whose
+  // component was still a promise; with no `HydrateFallback` it declines, logs
+  // a warning and LEAVES THE HOME PAGE ON SCREEN. A link straight to
+  // /app/login, or a shared /app/trips/<id>, never rendered at all.
+  if (ready && container.firstElementChild) {
+    hydrateRoot(container, app);
+  } else {
+    // createRoot appends; the shell's markup has to go first or the home page
+    // stays underneath whatever renders.
+    container.replaceChildren();
+    createRoot(container).render(app);
+  }
 }
 
 const id = pageIdFor(window.location.pathname);

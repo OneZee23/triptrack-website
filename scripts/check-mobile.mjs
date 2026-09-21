@@ -49,6 +49,17 @@ const PAGES = [
   '/ru/app/login',
 ];
 
+/**
+ * Pages that are NOT prerendered get the home page as an SPA shell, so when
+ * one of them fails to render the browser shows the home page and nothing
+ * looks broken — no error, no blank screen, correct-looking layout. These
+ * expectations are the only thing that tells the difference.
+ */
+const MUST_CONTAIN = {
+  '/app/login': 'Apple',
+  '/ru/app/login': 'Apple',
+};
+
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css',
   '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png',
@@ -164,6 +175,10 @@ for (const width of WIDTHS) {
     await page.waitForTimeout(350);
     const { overflow, wide, small, buried } = await page.evaluate(AUDIT);
     const where = `${path || '/'} @ ${width}px`;
+    const needle = MUST_CONTAIN[path];
+    if (needle && !(await page.evaluate((n) => document.body.innerText.includes(n), needle))) {
+      problems.push(`${where}: page did not render — no "${needle}" on it (the SPA shell's home page is what you are looking at)`);
+    }
     if (overflow > 1) problems.push(`${where}: page is ${overflow}px wider than the screen — ${wide.join('; ') || 'source not identified'}`);
     if (buried) problems.push(`${where}: the <h1> runs ${buried}px under the fixed header`);
     for (const s of small) problems.push(`${where}: tap target under 44px — ${s}`);
