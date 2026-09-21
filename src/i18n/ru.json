@@ -71,7 +71,9 @@
       "stat_max": "Макс. скорость",
       "unit_kmh": "км/ч",
       "unit_h": "ч",
-      "unit_min": "мин"
+      "unit_min": "мин",
+      "stat_trips_other": "поездки",
+      "stat_cities_other": "города"
     },
     "atlas": {
       "title": "Карта начинается тёмной",

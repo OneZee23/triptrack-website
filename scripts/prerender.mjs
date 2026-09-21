@@ -57,8 +57,8 @@ function compose({ html, head, lang }) {
   const fontHint = lang === 'ru' ? `\n    ${CYRILLIC_PRELOAD}` : '';
   return template
     .replace(/<html lang="[^"]*"/, `<html lang="${lang}"`)
-    .replace(HEAD_MARKER, `<!--app-head-->\n    ${head}${fontHint}\n    <!--/app-head-->`)
-    .replace(BODY_MARKER, html);
+    .replace(HEAD_MARKER, () => `<!--app-head-->\n    ${head}${fontHint}\n    <!--/app-head-->`)
+    .replace(BODY_MARKER, () => html);
 }
 
 const written = [];
