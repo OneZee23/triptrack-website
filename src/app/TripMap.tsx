@@ -10,6 +10,13 @@ import { ACCENT } from './ui';
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
 const FIT = { padding: 48, maxZoom: 15 } as const;
 
+/**
+ * 55 % of the viewport, floored so it stays a map on a short phone and capped
+ * so it does not become the whole screen on a desktop. A fixed 420 px was a
+ * third of a laptop and half of an iPhone SE, which is the wrong way round.
+ */
+const HEIGHT = 'clamp(260px, 55svh, 480px)';
+
 /** The full recorded track. Loaded lazily by the trip screen so MapLibre
  *  (~1 MB) never reaches the list or the sign-in page. */
 export default function TripMap({ coords }: { coords: [number, number][] }) {
@@ -31,6 +38,10 @@ export default function TripMap({ coords }: { coords: [number, number][] }) {
         fitBoundsOptions: FIT,
         // Attribution stays on: the tiles are OpenFreeMap/OpenStreetMap.
         attributionControl: { compact: true },
+        // On a phone this map is a picture inside a scrolling page, not the
+        // page itself: one finger has to scroll past it. (The globe on the
+        // home page is the opposite case and turns this off deliberately.)
+        cooperativeGestures: true,
       });
     } catch {
       return;
@@ -96,5 +107,5 @@ export default function TripMap({ coords }: { coords: [number, number][] }) {
     };
   }, [coords]);
 
-  return <div ref={ref} className="w-full rounded-3xl overflow-hidden border border-black/5" style={{ height: 420 }} />;
+  return <div ref={ref} className="w-full rounded-3xl overflow-hidden border border-black/5" style={{ height: HEIGHT }} />;
 }

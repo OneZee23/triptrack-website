@@ -1,17 +1,18 @@
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
 import { Send, ChevronDown, Globe2 } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useGlobeData } from '../../hooks/useGlobeData';
 import { useMounted } from '../../lib/useMounted';
 import { trackEvent } from '../../lib/analytics';
-import { TripCard } from './TripCard';
 import { StarField } from './StarField';
 import { GlobePoster } from './GlobePoster';
 import { useGlobePlan } from './webgl';
 import type { GlobeTrip } from './types';
 
 const MapGlobe = lazy(() => import('./MapGlobe'));
+// `motion` and the card's own mini-map live behind this import; see the note
+// in TripCardLayer for why the hero does not pay for them up front.
+const TripCardLayer = lazy(() => import('./TripCardLayer'));
 const APP_STORE_URL = 'https://apps.apple.com/us/app/triptrack-road-journal/id6760650361';
 
 /**
@@ -43,8 +44,13 @@ export default function GlobeHero() {
   const globe: 'poster' | 'live' | 'off' = plan === 'off' || broke ? 'off' : asked ? 'live' : 'poster';
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Latched, never cleared: the layer stays mounted after the first open so
+  // that closing the card is an exit animation rather than a disappearance.
+  const [cardUsed, setCardUsed] = useState(false);
+
   const handleSelect = useCallback((trip: GlobeTrip) => {
     trackEvent('trip-card-open', { id: trip.id, title: trip.title ?? trip.region ?? '' });
+    setCardUsed(true);
     setSelected(trip);
   }, []);
 
@@ -224,29 +230,11 @@ export default function GlobeHero() {
       )}
 
       {/* focus scrim + trip card (card opens on the LEFT, where the text was) */}
-      <AnimatePresence>
-        {selected && (
-          <motion.div
-            key="scrim"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="absolute inset-0 z-[15] bg-black/55 backdrop-blur-sm"
-            onClick={() => setSelected(null)}
-            aria-hidden
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {selected && (
-          <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex h-full max-w-7xl items-center px-5 sm:px-6">
-            <div className="pointer-events-auto w-full max-w-[360px]">
-              <TripCard trip={selected} onClose={() => setSelected(null)} />
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
+      {cardUsed && (
+        <Suspense fallback={null}>
+          <TripCardLayer trip={selected} onClose={() => setSelected(null)} />
+        </Suspense>
+      )}
 
       {/* mobile: the live globe takes one-finger gestures, so give an explicit
           way to scroll past the hero. The poster does not take them — there is

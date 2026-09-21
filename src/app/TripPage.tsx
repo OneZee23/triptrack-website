@@ -85,7 +85,7 @@ export default function TripPage() {
       </p>
 
       {coords.length > 1 ? (
-        <Suspense fallback={<div className="w-full rounded-3xl bg-[#f4f2ee] border border-black/5" style={{ height: 420 }} />}>
+        <Suspense fallback={<div className="w-full rounded-3xl bg-[#f4f2ee] border border-black/5" style={{ height: 'clamp(260px, 55svh, 480px)' }} />}>
           <TripMap coords={coords} />
         </Suspense>
       ) : (
