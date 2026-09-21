@@ -117,16 +117,29 @@ function unwrap<T>(http: number, envelope: Envelope<T> | null): T {
 // One refresh in flight at a time: a trips list and its detail request can
 // both meet an expired token in the same tick, and two refreshes would race
 // to rotate the same token — the loser's retry would then fail for real.
-let refreshInFlight: Promise<string | null> | null = null;
+let refreshInFlight: Promise<string> | null = null;
 
-async function refreshTokens(): Promise<string | null> {
+/** Throws `SESSION_EXPIRED` when the server REFUSED the refresh, and
+ *  `NETWORK` when the refresh could not be asked at all.
+ *
+ *  Различать эти два случая обязательно. «Не дозвонились» — это не ответ
+ *  сервера, а отсутствие ответа: refresh-токен в браузере при этом цел и,
+ *  благодаря терпимой ротации на бэкенде, останется рабочим. Пока эти
+ *  случаи были одним `null`, отвалившийся на секунду Wi-Fi стирал сессию и
+ *  требовал входа заново — та же поломка, из-за которой на iOS записано
+ *  правило «из аккаунта человека выводит только человек» (0.7.0). Пятисотые
+ *  здесь тоже транзиент: сервер жив ровно настолько, чтобы сказать «мне
+ *  плохо», а не «этого токена нет». */
+async function refreshTokens(): Promise<string> {
   const current = readSession();
-  if (!current) return null;
+  if (!current) throw new ApiError(CODE_SESSION_EXPIRED);
+  // rawPost сам бросает `NETWORK`, если запрос не ушёл.
   const { http, envelope } = await rawPost<{ accessToken: string; refreshToken: string }>(
     '/auth/refresh',
     { refreshToken: current.refreshToken },
   );
-  if (!envelope || envelope.status !== 'ok' || http >= 500) return null;
+  if (!envelope || http >= 500) throw new ApiError(CODE_NETWORK);
+  if (envelope.status !== 'ok') throw new ApiError(CODE_SESSION_EXPIRED);
   const next: Session = {
     accessToken: envelope.payload.accessToken,
     refreshToken: envelope.payload.refreshToken,
@@ -136,13 +149,14 @@ async function refreshTokens(): Promise<string | null> {
   return next.accessToken;
 }
 
-function refreshOnce(): Promise<string | null> {
+function refreshOnce(): Promise<string> {
   if (!refreshInFlight) {
-    refreshInFlight = refreshTokens()
-      .catch(() => null)
-      .finally(() => {
-        refreshInFlight = null;
-      });
+    // `finally`, а не `catch`: отказ обязан достаться КАЖДОМУ, кто ждал
+    // это обновление, — иначе один запрос увидел бы «сеть», а
+    // параллельный ему «сессии нет».
+    refreshInFlight = refreshTokens().finally(() => {
+      refreshInFlight = null;
+    });
   }
   return refreshInFlight;
 }
@@ -165,8 +179,12 @@ async function authedPost<T>(path: string, body: unknown): Promise<T> {
   const first = await rawPost<T>(path, body, session.accessToken);
   if (!isUnauthorized(first.http, first.envelope)) return unwrap(first.http, first.envelope);
 
-  const token = await refreshOnce();
-  if (!token) {
+  let token: string;
+  try {
+    token = await refreshOnce();
+  } catch (error: unknown) {
+    // Сеть — не решение сервера: сессию оставляем, человек повторит.
+    if (error instanceof ApiError && error.code === CODE_NETWORK) throw error;
     setSession(null);
     throw new ApiError(CODE_SESSION_EXPIRED);
   }

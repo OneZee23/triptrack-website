@@ -117,6 +117,40 @@ describe('authenticated calls', () => {
     expect(refreshes).toHaveLength(1);
   });
 
+  it('keeps the session when the refresh could not be ASKED', async () => {
+    // Отвалившийся на секунду Wi-Fi — не решение сервера. Токен в браузере
+    // цел, терпимая ротация на бэкенде его не убила, и повторная попытка
+    // через минуту пройдёт. Пока «не дозвонились» и «отказано» были одним
+    // ответом, сеть стирала сессию и требовала входа заново.
+    const fetchMock = queue({ body: NOT_AUTH }, { throws: true });
+
+    await expect(listTrips(20, 0)).rejects.toMatchObject({ code: CODE_NETWORK });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(getSession()).not.toBeNull();
+  });
+
+  it('keeps the session when the refresh answers 5xx', async () => {
+    // «Мне плохо» — это не «такого токена нет».
+    const fetchMock = queue({ body: NOT_AUTH }, { status: 503, body: {} });
+
+    await expect(listTrips(20, 0)).rejects.toMatchObject({ code: CODE_NETWORK });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(getSession()).not.toBeNull();
+  });
+
+  it('gives BOTH waiting calls the same verdict when a shared refresh fails', async () => {
+    // Одно обновление на двоих: если отказ достаётся только первому, второй
+    // «успешно» ушёл бы с мёртвым токеном.
+    queue({ body: NOT_AUTH }, { body: NOT_AUTH }, { throws: true });
+
+    const results = await Promise.allSettled([listTrips(20, 0), listTrips(20, 20)]);
+    for (const result of results) {
+      expect(result.status).toBe('rejected');
+      expect((result as PromiseRejectedResult).reason).toMatchObject({ code: CODE_NETWORK });
+    }
+    expect(getSession()).not.toBeNull();
+  });
+
   it('refuses to call at all without a session', async () => {
     setSession(null);
     const fetchMock = queue({ body: TRIPS });
