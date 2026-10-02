@@ -298,11 +298,11 @@
   "privacy": {
     "h1": "Privacy",
     "lead": "TripTrack records where you drive. That is about as personal as data gets, so this page says plainly what is kept, where it is kept, and what it takes to make all of it go away.",
-    "updated": "Last updated: 20 September 2026",
+    "updated": "Updated October 2, 2026",
     "summary_title": "The short version",
     "summary_1": "Trips, photos and statistics live on your iPhone. The app works with no account at all.",
-    "summary_2": "Anything reaches our server only while you keep Cloud Sync switched on, and only your own data.",
-    "summary_3": "No advertising, no trackers, nothing sold or shared. There is nothing here to sell.",
+    "summary_2": "Sync sends your data to our server after you sign in. Trips created on the website are also stored on the server so they can appear on your iPhone.",
+    "summary_3": "We don’t sell your data or use it for advertising. The services supporting sign-in, maps and the app are listed below.",
     "phone_title": "What stays on the phone",
     "phone_p1": "Every trip — its track, distance, speed, elevation, photos, notes, checkpoints, places, vehicles and the atlas of what you have opened — is stored in a database inside the app on your device. Photos you attach are copied into the app's own folder. None of it is sent anywhere by default.",
     "phone_p2": "Delete a trip and it is gone from the phone. Delete the app and everything goes with it, because there is no copy elsewhere unless you made one.",
@@ -322,7 +322,8 @@
     "rights_p1": "You can use the app with no account, delete any trip at any time, stop Cloud Sync whenever you like, unpublish anything you published, and delete the account together with everything on the server. All of it is in the app, and none of it requires writing to us first.",
     "rights_p2": "If you would rather ask a person — about what is stored, about a copy of your data, or about deleting it — write to the address below. The answer comes from the developer, because there is only one.",
     "contact_title": "Contact",
-    "contact_p1": "TripTrack is made by OneZee, an independent developer. Questions about this page, or about anything stored:"
+    "contact_p1": "TripTrack is made by OneZee, an independent developer. Questions about this page, or about anything stored:",
+    "web_trips": "On the website you can view synced trips and add manual trips with an active PRO subscription. A new trip is saved privately in your account. Drafts stay only in the tab’s memory: closing or reloading the page discards them. When address search and road routing are connected, our server sends the entered address or chosen waypoints to Geoapify. Your name, email, account token and other trip history are not sent there. Drawing points does not make road-routing requests. The home privacy zone configured on your iPhone is not applied to routes in the web editor: check their start and end before saving."
   },
   "app": {
     "nav": {
@@ -337,10 +338,10 @@
     },
     "login": {
       "title": "Sign in with Apple",
-      "lead": "The same trips you record in the app — and only you can see them here.",
+      "lead": "Your road history on a bigger screen: find trips, explore routes and return to your favourite places.",
       "button": "Sign in with Apple",
       "busy": "Signing in…",
-      "note": "Apple shares your name and email with TripTrack, nothing else. Nothing on this page is public, and nothing is shared with anyone."
+      "note": "Use the same Apple Account as in the app to see your synced trips. Only you can access them. Enter your Apple password only on Apple’s page."
     },
     "trips": {
       "title": "My trips",
@@ -359,7 +360,9 @@
       "max_speed": "Top speed",
       "checkpoints": "Checkpoints",
       "checkpoint_n": "Checkpoint {n}",
-      "no_track": "The server has no route for this trip."
+      "no_track": "The server has no route for this trip.",
+      "manual_label": "Manual trip",
+      "manual_note": "This route was added by hand. Average speed is calculated from distance and duration, not measured by GPS."
     },
     "error": {
       "network": "Couldn't reach the server. Check your connection and try again.",
@@ -369,7 +372,36 @@
       "apple_sdk": "Sign in with Apple didn't load. Check your connection or any content blocker, then try again.",
       "rate_limit": "Too many attempts. Please try again in a few minutes.",
       "trip_missing": "This trip is no longer on the server.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "pro": "An active PRO subscription couldn’t be confirmed. Open your subscription in the app, then refresh your status here."
+    },
+    "explorer": {
+      "eyebrow": "Your personal atlas",
+      "intro": "Every road becomes part of your story.",
+      "refresh": "Refresh trips",
+      "loaded": "Loaded {n} of {total}",
+      "synced": "History loaded",
+      "view": "Trip view",
+      "list": "History",
+      "map": "Map",
+      "search": "Trip name or region",
+      "to": "To",
+      "reset": "Clear filters",
+      "newest": "Newest first",
+      "date_error": "The start date must be on or before the end date.",
+      "no_results": "No matching trips",
+      "no_results_body": "Try a different date range or name.",
+      "private": "Only you can see your trips here",
+      "map_loading": "Opening the map…",
+      "overview": "Overview",
+      "fit": "Fit the whole route",
+      "close": "Close trip",
+      "track_loading": "Loading the detailed route…",
+      "no_coordinate": "Coordinates are unavailable for this checkpoint",
+      "details": "Trip details",
+      "overview_hint": "Choose a trip in your history or click a route.",
+      "mapped": "{n} of {total} on the map — the others have no route preview.",
+      "from": "From"
     }
   }
 }

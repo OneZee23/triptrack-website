@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { RouterProvider, createMemoryRouter } from 'react-router';
 import { clientRoutes } from '../routes';
 import { setSession } from './api';
+
+vi.mock('./TripsMap', () => ({ default: () => <div data-testid="trip-map" /> }));
 
 // The REAL route tree, so the test sees what the browser sees: `/app` mounted
 // under both language roots, `LanguageProvider` inside `AppLayout` reading the
@@ -42,6 +44,10 @@ afterEach(() => {
 describe('the /app guard', () => {
   it('sends a visitor without a session to the sign-in page', async () => {
     mount('/app/trips');
+    // The first route mounts cold lazy chunks, then redirects to another
+    // lazy page. Wait for those imports explicitly: parallel full-suite
+    // compilation can exceed the DOM query's default one-second timeout.
+    await vi.dynamicImportSettled();
     await waitFor(() => expect(signInButton()).toBeTruthy());
   });
 
@@ -146,10 +152,11 @@ describe('the /app section', () => {
       total: 1,
     });
     mount('/app/trips');
-    await waitFor(() => expect(screen.getByText('Krasnodar → Sochi')).toBeTruthy());
-    expect(screen.getByText('284.3 km')).toBeTruthy();
-    expect(screen.getByText('4 h 0 min')).toBeTruthy();
-    expect(screen.getByRole('link', { name: /Krasnodar → Sochi/ }).getAttribute('href'))
-      .toBe('/app/trips/0d2f5c1e-0000-4000-8000-000000000001');
+    const row = await screen.findByRole('button', { name: /Krasnodar → Sochi/ });
+    // The overview also shows the sum of all trip distances. The row is
+    // what this assertion checks, even when the library has just one trip.
+    expect(within(row).getByText('284.3 km')).toBeTruthy();
+    expect(within(row).getByText('4 h 0 min')).toBeTruthy();
+    expect(row.getAttribute('aria-pressed')).toBe('false');
   });
 });

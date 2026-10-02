@@ -1,49 +1,54 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { ArrowLeft, Flag } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import { tripDetail, type TripDetail } from './api';
 import { codeOf, errorKey } from './errors';
 import { formatDate, formatDistance, formatDuration, formatSpeed, tripDurationSeconds, type Lang } from './format';
-import { decodePreviewPolyline } from './polyline';
+import { detailCoordinates } from './tripExplorer';
 import { ErrorNote, Spinner } from './ui';
 
 // MapLibre is a megabyte; it arrives only when a trip is actually opened.
 const TripMap = lazy(() => import('./TripMap'));
 
 export default function TripPage() {
-  const { t, lang, href } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  return <TripContent key={id} id={id} />;
+}
+
+function TripContent({ id }: { id: string | undefined }) {
+  const { t, lang, href } = useTranslation();
   const [trip, setTrip] = useState<TripDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorCode, setErrorCode] = useState<string | null>(null);
+  const generation = useRef(0);
 
   const load = useCallback(async () => {
     if (!id) return;
+    const run = ++generation.current;
     setLoading(true);
     setErrorCode(null);
     try {
-      setTrip(await tripDetail(id));
+      const result = await tripDetail(id);
+      if (run === generation.current) setTrip(result);
     } catch (error: unknown) {
       // Kept as a code, translated at render — see TripsPage.
-      setErrorCode(codeOf(error) ?? 'UNKNOWN');
+      if (run === generation.current) setErrorCode(codeOf(error) ?? 'UNKNOWN');
     } finally {
-      setLoading(false);
+      if (run === generation.current) setLoading(false);
     }
   }, [id]);
 
   useEffect(() => {
     void load();
+    return () => { generation.current += 1; };
   }, [load]);
 
   // The recorded track when the server sent one; the preview polyline is
   // the fallback, so an older trip still draws something.
   const coords = useMemo<[number, number][]>(() => {
     if (!trip) return [];
-    if (trip.trackPoints && trip.trackPoints.length > 1) {
-      return trip.trackPoints.map((p) => [p.latitude, p.longitude]);
-    }
-    return decodePreviewPolyline(trip.previewPolyline) ?? [];
+    return detailCoordinates(trip);
   }, [trip]);
 
   const errorText = errorCode ? t(errorKey(errorCode)) : null;
@@ -84,6 +89,8 @@ export default function TripPage() {
         {trip.region ? ` · ${trip.region}` : ''}
       </p>
 
+      {trip.source === 'manual' && <p className="mb-6 rounded-2xl bg-[#EB571E]/6 px-5 py-4 text-sm leading-relaxed text-[#1e1e23]/70"><strong className="block text-[#1e1e23] mb-1">{t('app.trip.manual_label')}</strong>{t('app.trip.manual_note')}</p>}
+
       {coords.length > 1 ? (
         <Suspense fallback={<div className="w-full rounded-3xl bg-[#f4f2ee] border border-black/5" style={{ height: 'clamp(260px, 55svh, 480px)' }} />}>
           <TripMap coords={coords} />
@@ -98,7 +105,7 @@ export default function TripPage() {
         <Stat label={t('app.trip.distance')} value={formatDistance(trip.distance, language)} accent />
         <Stat label={t('app.trip.duration')} value={formatDuration(duration, language)} />
         <Stat label={t('app.trip.avg_speed')} value={formatSpeed(trip.averageSpeed, language)} />
-        <Stat label={t('app.trip.max_speed')} value={formatSpeed(trip.maxSpeed, language)} />
+        <Stat label={t('app.trip.max_speed')} value={trip.source === 'manual' ? '—' : formatSpeed(trip.maxSpeed, language)} />
       </div>
 
       {trip.description?.trim() && (

@@ -13,6 +13,8 @@ const BY_CODE: Record<string, string> = {
   INVALID_APPLE_TOKEN: 'app.error.apple',
   TOO_MANY_REQUESTS: 'app.error.rate_limit',
   TRIP_NOT_FOUND: 'app.error.trip_missing',
+  PRO_REQUIRED: 'app.error.pro',
+  PLUS_UNAVAILABLE: 'app.error.pro',
   VALIDATION_FAILED: 'app.error.generic',
 };
 

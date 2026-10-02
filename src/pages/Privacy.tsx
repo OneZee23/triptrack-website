@@ -59,6 +59,7 @@ export default function Privacy() {
         <p>{t('privacy.cookies_p2')}</p>
         <p>{t('privacy.cookies_p3')}</p>
         <p>{t('privacy.cookies_p4')}</p>
+        <p>{t('privacy.web_trips')}</p>
         <p className="font-medium text-[#1e1e23]/80">{t('privacy.cookies_p5')}</p>
       </Block>
 

@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { listTrips, getSession, setSession, ApiError, CODE_NETWORK, CODE_SESSION_EXPIRED } from './api';
+import { authedPost, listTrips, getSession, setSession, logout, onSessionChange, ApiError, CODE_NETWORK, CODE_SESSION_EXPIRED } from './api';
+import { readSession, writeSession, type Session } from './storage';
 
 type Reply = { status?: number; body?: unknown; throws?: boolean };
 
@@ -160,6 +161,12 @@ describe('authenticated calls', () => {
 });
 
 describe('failures', () => {
+  it('keeps a valid session when refresh is rate-limited', async () => {
+    queue({ body: NOT_AUTH }, { body: { status: 'error', code: 'TOO_MANY_REQUESTS' } });
+    await expect(listTrips(20, 0)).rejects.toMatchObject({ code: 'TOO_MANY_REQUESTS' });
+    expect(getSession()?.accessToken).toBe('access-1');
+  });
+
   it('reports a dead network as NETWORK, not as a server answer', async () => {
     queue({ throws: true });
     await expect(listTrips(20, 0)).rejects.toMatchObject({ code: CODE_NETWORK });
@@ -180,5 +187,144 @@ describe('failures', () => {
       json: () => Promise.reject(new SyntaxError('not json')),
     } as unknown as Response)));
     await expect(listTrips(20, 0)).rejects.toMatchObject({ code: 'UNKNOWN_SERVER_ERROR' });
+  });
+});
+
+describe('session changes while requests are running', () => {
+  it('drops personal data immediately on logout, before the server responds', async () => {
+    let finish!: (value: Response) => void;
+    vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>((resolve) => { finish = resolve; })));
+    const pending = logout();
+    expect(getSession()).toBeNull();
+    finish(await reply({ body: { status: 'ok' } }));
+    await pending;
+  });
+
+  it('does not restore a signed-out session when a refresh arrives late', async () => {
+    let finishRefresh!: (value: Response) => void;
+    const fetchMock = vi.fn()
+      .mockImplementationOnce(() => reply({ body: NOT_AUTH }))
+      .mockImplementationOnce(() => new Promise<Response>((resolve) => { finishRefresh = resolve; }))
+      .mockImplementationOnce(() => reply({ body: { status: 'ok' } }));
+    vi.stubGlobal('fetch', fetchMock);
+    const result = listTrips(20, 0).catch((error: unknown) => error);
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    await logout();
+    finishRefresh(await reply({ body: REFRESHED }));
+    expect(await result).toMatchObject({ code: CODE_SESSION_EXPIRED });
+    expect(getSession()).toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not replace a new account with the old account refresh', async () => {
+    let finishRefresh!: (value: Response) => void;
+    const fetchMock = vi.fn()
+      .mockImplementationOnce(() => reply({ body: NOT_AUTH }))
+      .mockImplementationOnce(() => new Promise<Response>((resolve) => { finishRefresh = resolve; }));
+    vi.stubGlobal('fetch', fetchMock);
+    const result = listTrips(20, 0).catch((error: unknown) => error);
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    setSession({
+      accessToken: 'other-access', refreshToken: 'other-refresh',
+      account: { id: 'other-account', displayName: null, email: null, avatarEmoji: '🚗' },
+    });
+    finishRefresh(await reply({ body: REFRESHED }));
+    expect(await result).toMatchObject({ code: CODE_SESSION_EXPIRED });
+    expect(getSession()?.account.id).toBe('other-account');
+    expect(getSession()?.accessToken).toBe('other-access');
+  });
+
+  it('rejects the old account trip response after changing accounts', async () => {
+    let finish!: (value: Response) => void;
+    vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>((resolve) => { finish = resolve; })));
+    const result = listTrips(20, 0).catch((error: unknown) => error);
+    setSession(null);
+    finish(await reply({ body: TRIPS }));
+    expect(await result).toMatchObject({ code: CODE_SESSION_EXPIRED });
+  });
+});
+
+describe('sessions shared between browser tabs', () => {
+  const other: Session = {
+    accessToken: 'other-access', refreshToken: 'other-refresh',
+    account: { id: 'other-account', displayName: 'Other', email: null, avatarEmoji: '🚗' },
+  };
+  const storageEvent = (value: Session | null) => window.dispatchEvent(new StorageEvent('storage', {
+    key: 'tt.app.session', newValue: value ? JSON.stringify(value) : null, storageArea: window.localStorage,
+  }));
+
+  it('refuses to send an old draft as another account even before the storage event arrives', async () => {
+    const fetchMock = queue({ body: { status: 'ok', payload: { id: 'trip' } } });
+    writeSession(other);
+    await expect(authedPost('/trips/manual/create', { title: 'Private draft' }))
+      .rejects.toMatchObject({ code: CODE_SESSION_EXPIRED });
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(getSession()).toBeNull();
+    expect(readSession()).toEqual(other);
+    await expect(listTrips(20, 0)).rejects.toMatchObject({ code: CODE_SESSION_EXPIRED });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('notifies the private UI when the other tab changes accounts without erasing its login', () => {
+    const listener = vi.fn();
+    const unsubscribe = onSessionChange(listener);
+    try {
+      writeSession(other);
+      storageEvent(other);
+      expect(listener).toHaveBeenLastCalledWith(null);
+      expect(getSession()).toBeNull();
+      expect(readSession()).toEqual(other);
+    } finally {
+      unsubscribe();
+    }
+  });
+
+  it('invalidates a queued logout even if the other tab has already signed in as the same person', () => {
+    const listener = vi.fn();
+    const unsubscribe = onSessionChange(listener);
+    try {
+      const replacement = { ...readSession()!, accessToken: 'new-login', refreshToken: 'new-refresh' };
+      writeSession(replacement);
+      storageEvent(null);
+      storageEvent(replacement);
+      expect(listener).toHaveBeenLastCalledWith(null);
+      expect(getSession()).toBeNull();
+      expect(readSession()).toEqual(replacement);
+    } finally {
+      unsubscribe();
+    }
+  });
+
+  it('accepts token rotation of the same account from another tab', async () => {
+    const fetchMock = queue({ body: TRIPS });
+    const replacement = { ...readSession()!, accessToken: 'rotated-access', refreshToken: 'rotated-refresh' };
+    writeSession(replacement);
+    await listTrips(20, 0);
+    expect(tokenOf(fetchMock.mock.calls[0])).toBe('rotated-access');
+    expect(getSession()?.account.id).toBe('acc');
+  });
+
+  it('does not log out the other account from a stale tab', async () => {
+    const fetchMock = queue({ body: { status: 'ok' } });
+    writeSession(other);
+    await logout();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(readSession()).toEqual(other);
+    expect(getSession()).toBeNull();
+  });
+
+  it('rejects an old refresh without restoring its account or clearing the new one', async () => {
+    let finishRefresh!: (value: Response) => void;
+    const fetchMock = vi.fn()
+      .mockImplementationOnce(() => reply({ body: NOT_AUTH }))
+      .mockImplementationOnce(() => new Promise<Response>((resolve) => { finishRefresh = resolve; }));
+    vi.stubGlobal('fetch', fetchMock);
+    const pending = listTrips(20, 0).catch((error: unknown) => error);
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    writeSession(other);
+    finishRefresh(await reply({ body: REFRESHED }));
+    expect(await pending).toMatchObject({ code: CODE_SESSION_EXPIRED });
+    expect(getSession()).toBeNull();
+    expect(readSession()).toEqual(other);
   });
 });

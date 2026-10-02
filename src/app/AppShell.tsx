@@ -47,16 +47,17 @@ function Shell() {
   // bounced into the English site by his own sign-in.
   const route = routeFromPath(pathname);
   const onLoginPage = route === '/app/login';
+  const explorer = route === '/app/trips' || route === '/app/trips/new';
   if (!session && !onLoginPage) return <Navigate to={href('/app/login')} replace />;
   if (session && onLoginPage) return <Navigate to={href('/app/trips')} replace />;
   // `/app` itself is just a door.
   if (route === '/app') return <Navigate to={href(session ? '/app/trips' : '/app/login')} replace />;
 
   return (
-    <div className="flex-1 w-full pt-28 md:pt-32 pb-14 md:pb-20 px-6">
-      <div className="max-w-5xl mx-auto w-full">
+    <div className={`flex-1 w-full px-4 md:px-7 ${explorer ? 'pt-24 pb-4' : 'pt-28 md:pt-32 pb-14 md:pb-20'}`}>
+      <div className={`${explorer ? 'max-w-[1800px]' : 'max-w-5xl'} mx-auto w-full`}>
         {session && (
-          <div className="flex items-center justify-between gap-4 mb-8">
+          <div className="flex items-center justify-between gap-4 mb-5">
             <div className="flex items-center gap-3 min-w-0">
               <span className="w-10 h-10 rounded-full bg-[#f4f2ee] flex items-center justify-center text-[20px] shrink-0" aria-hidden="true">
                 {session.account.avatarEmoji || '🚗'}
@@ -76,9 +77,9 @@ function Shell() {
           </div>
         )}
 
-        <Outlet />
+        <Outlet key={session?.account.id ?? 'guest'} />
 
-        <p className="mt-12 text-[13px] text-[#1e1e23]/65 text-center" lang={lang}>
+        <p className={`${explorer ? 'mt-3' : 'mt-12'} text-[11px] text-[#1e1e23]/65 text-center`} lang={lang}>
           {t('app.units_note')}
         </p>
       </div>

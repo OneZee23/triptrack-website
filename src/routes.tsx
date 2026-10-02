@@ -72,6 +72,7 @@ function childrenFrom(resolve: (id: PageId) => PageModule): RouteObject[] {
     children: [
       { path: 'login', lazy: () => import('./app/LoginPage').then((m) => ({ Component: m.default })) },
       { path: 'trips', lazy: () => import('./app/TripsPage').then((m) => ({ Component: m.default })) },
+      { path: 'trips/new', lazy: () => import('./app/ManualTripPage').then((m) => ({ Component: m.default })) },
       { path: 'trips/:id', lazy: () => import('./app/TripPage').then((m) => ({ Component: m.default })) },
     ],
   };

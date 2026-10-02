@@ -67,6 +67,7 @@ function Shell() {
   }, [location.pathname]);
 
   const here = routeFromPath(location.pathname);
+  const inApp = here === '/app' || here.startsWith('/app/');
   const toggleLang = () => setLang(lang === 'en' ? 'ru' : 'en');
   const hover = (text: string) => ({
     onMouseEnter: () => setHoverState({ text, active: true }),
@@ -75,7 +76,7 @@ function Shell() {
 
   return (
     <CursorContext.Provider value={useMemo(() => ({ setHoverState }), [setHoverState])}>
-      <div className="min-h-screen bg-[#f8f6f2] text-[#1e1e23] font-sans selection:bg-[#EB571E]/20 flex flex-col relative overflow-x-hidden">
+      <div className={`${inApp ? 'private-app ' : ''}min-h-screen bg-[#f8f6f2] text-[#1e1e23] font-sans selection:bg-[#EB571E]/20 flex flex-col relative overflow-x-hidden`}>
 
         {/* Header — light glass */}
         <header className="fixed top-0 left-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-black/5 pt-[env(safe-area-inset-top,0px)] px-[env(safe-area-inset-left,0px)]">
@@ -91,7 +92,7 @@ function Shell() {
               </div>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-5 xl:gap-8">
               {NAV.map((item) => (
                 <Link
                   key={item.path}
@@ -111,7 +112,7 @@ function Shell() {
               </Link>
             </nav>
 
-            <div className="flex items-center gap-1 md:gap-4">
+            <div className="flex items-center gap-1 lg:gap-4">
               <button
                 onClick={toggleLang}
                 className="flex h-[44px] items-center gap-1.5 px-3 text-[13px] font-semibold text-[#1e1e23]/65 hover:text-[#1e1e23] transition-colors"
@@ -123,14 +124,14 @@ function Shell() {
               </button>
               <Link
                 to={href('/download')}
-                className="hidden md:flex bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full h-[44px] px-5 text-[15px] font-bold items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-[0_2px_12px_rgba(235,87,30,0.3)]"
+                className="hidden lg:flex bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full h-[44px] px-5 text-[15px] font-bold items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-[0_2px_12px_rgba(235,87,30,0.3)]"
                 {...hover('App Store')}
               >
                 <Apple className="w-4 h-4" />
                 {t('nav.download_free')}
               </Link>
               <button
-                className="md:hidden w-[44px] h-[44px] flex items-center justify-center text-[#1e1e23]/65 hover:text-[#1e1e23] transition-colors"
+                className="lg:hidden w-[44px] h-[44px] flex items-center justify-center text-[#1e1e23]/65 hover:text-[#1e1e23] transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Toggle menu"
                 aria-expanded={mobileMenuOpen}
@@ -141,7 +142,7 @@ function Shell() {
           </div>
 
           {mobileMenuOpen && (
-            <div className="md:hidden bg-white/95 backdrop-blur-xl border-t border-black/5 px-5 py-4 flex flex-col gap-1">
+            <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-black/5 px-5 py-4 flex flex-col gap-1">
               {NAV.map((item) => (
                 <Link
                   key={item.path}
@@ -172,7 +173,7 @@ function Shell() {
         </main>
 
         {/* Footer — warm light */}
-        <footer className="w-full border-t border-black/5 bg-[#f4f2ee] py-12 px-5 sm:px-6 flex flex-col md:flex-row items-center justify-between text-[#1e1e23]/65 text-[15px] gap-6">
+        {!inApp && <footer className="w-full border-t border-black/5 bg-[#f4f2ee] py-12 px-5 sm:px-6 flex flex-col md:flex-row items-center justify-between text-[#1e1e23]/65 text-[15px] gap-6">
           <div className="flex items-center gap-2">
             <img src={logo} alt="" width={32} height={32} loading="lazy" decoding="async" className="w-8 h-8 rounded-lg" />
             <span className="font-bold text-[#1e1e23]/70">TripTrack</span>
@@ -187,10 +188,10 @@ function Shell() {
             <MailLink email="nikitona123@gmail.com" label={t('footer.email')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors" />
           </div>
           <div className="font-medium text-center">{t('footer.made_with')}</div>
-        </footer>
+        </footer>}
 
         {/* Custom cursor */}
-        {mounted && (
+        {mounted && !inApp && (
           <Suspense fallback={null}>
             <CustomCursor hoverState={hoverState} />
           </Suspense>

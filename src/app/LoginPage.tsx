@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Apple, Lock } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
-import { login } from './api';
+import { ApiError, login } from './api';
 import { codeOf, errorKey } from './errors';
 import { isCancelled, loadAppleSdk, randomNonce, sha256Hex } from './appleSdk';
 import { useAuth } from './useAuth';
@@ -26,6 +26,7 @@ export default function LoginPage() {
     try {
       const auth = await loadAppleSdk();
       const nonce = randomNonce();
+      const state = randomNonce();
       auth.init({
         clientId: CLIENT_ID,
         scope: 'name email',
@@ -34,8 +35,12 @@ export default function LoginPage() {
         usePopup: true,
         // Apple gets the HASH, the backend gets the raw value below.
         nonce: await sha256Hex(nonce),
+        state,
       });
       const response = await auth.signIn();
+      if (response.authorization?.state !== state || !response.authorization.id_token) {
+        throw new ApiError('INVALID_APPLE_TOKEN');
+      }
       const session = await login(response.authorization.id_token, nonce);
       signedIn(session);
       navigate(href('/app/trips'), { replace: true });

@@ -135,10 +135,10 @@
 
   /* Hide native cursor on desktop (custom cursor replaces it) */
   @media (hover: hover) {
-    html, body, *, *::before, *::after {
+    html:not(:has(.private-app)), body:not(:has(.private-app)), body:not(:has(.private-app)) *, body:not(:has(.private-app)) *::before, body:not(:has(.private-app)) *::after {
       cursor: none !important;
     }
-    button, a, input, textarea, select, [role="button"], [tabindex], [onclick] {
+    body:not(:has(.private-app)) :is(button, a, input, textarea, select, [role="button"], [tabindex], [onclick]) {
       cursor: none !important;
     }
   }
@@ -153,6 +153,9 @@
     }
   }
 }
+
+.private-app :is(button, a, [role="button"]) { cursor: pointer; }
+.private-app :is(input, textarea) { cursor: text; }
 
 /**
  * Base typography.

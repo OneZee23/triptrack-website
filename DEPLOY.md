@@ -1,5 +1,35 @@
 # Deploy TripTrack Website — trip-track.app
 
+## Текущий production-процесс (2 октября 2026)
+
+Рабочая ветка — `master`. Push запускает `.github/workflows/deploy.yml`:
+GitHub runner собирает образ, сохраняет предыдущий running image под
+`triptrack-web:rollback-before-<release-sha>`, передаёт новый образ на VPS
+через SSH и обновляет только `triptrack-web`. Аналитика и её база не
+перезапускаются. Прямая загрузка слоёв GHCR с VPS ранее зависала, поэтому
+не заменять передачу образа на `docker compose pull`.
+
+Проверить результат: GitHub Actions → обе jobs успешны; running image
+совпадает с новым image ID. Затем проверить HTTPS-сайт через браузер
+(Cloudflare может отвечать 403 небраузерному HTTP-клиенту), Apple login,
+личную карту и отсутствие редактора при закрытом серверном флаге.
+Сборка CI не является проверкой Apple-входа.
+
+Создание поездок закрыто `WEB_MANUAL_TRIPS_ENABLED=false` до исправленного
+iOS. Порядок совместного выпуска — [docs/STATE.md](docs/STATE.md).
+Backend использует свой GitLab pipeline, не этот workflow.
+
+Для отката на VPS используйте сохранённый rollback image с временным
+compose override для **одного** сервиса `triptrack-web`; не запускайте
+остальной compose-стек. Не удаляйте rollback tag до окончания проверки.
+Повтор той же CI-сборки сохраняет первоначальный backup.
+
+Ниже сохранена исходная инструкция создания нового VPS. `deploy.sh`
+относится к прежней сборке на сервере и не используется текущим pipeline.
+Для существующего production не нужно повторять provisioning или настройку
+аналитики. Секреты и адреса серверов не добавлять в репозиторий.
+
+
 ## 1. Create DigitalOcean Droplet
 
 - Ubuntu 24.04, $6/mo (1 vCPU, 1GB RAM)
@@ -182,7 +212,7 @@ After SSL works, go back to Cloudflare and turn Proxy ON (orange cloud) if you w
 3. Settings → Websites → Add website: `trip-track.app`
 4. Copy the Website ID
 5. Edit `index.html` in your repo — uncomment the Umami `<script>` tag and paste the Website ID
-6. Push to main → GitHub Actions auto-deploys
+6. Push to master → GitHub Actions auto-deploys
 
 ## 9. GitHub Actions CI/CD
 
@@ -194,7 +224,7 @@ In your GitHub repo → Settings → Secrets and variables → Actions, add:
 | `VPS_USER` | `onezee` |
 | `VPS_SSH_KEY` | Contents of `~/.ssh/id_ed25519` (private key) from your Mac |
 
-Now every push to `main` auto-deploys.
+Now every push to `master` auto-deploys.
 
 ## Useful Commands
 

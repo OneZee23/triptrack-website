@@ -27,24 +27,33 @@ export interface Session {
 
 const SESSION_KEY = 'tt.app.session';
 const DEVICE_KEY = 'tt.app.device';
+const memory = new Map<string, string>();
+const volatile = new Set<string>();
 
 /** Storage throws in Safari private mode and when site data is blocked;
  *  every access here is wrapped so a hardened browser degrades to "you have
  *  to sign in again each visit" instead of a white screen. */
 function readRaw(key: string): string | null {
+  if (volatile.has(key)) return memory.get(key) ?? null;
   try {
-    return window.localStorage.getItem(key);
+    const value = window.localStorage.getItem(key);
+    if (value === null) memory.delete(key);
+    else memory.set(key, value);
+    return value;
   } catch {
-    return null;
+    return memory.get(key) ?? null;
   }
 }
 
 function writeRaw(key: string, value: string | null): void {
+  if (value === null) memory.delete(key);
+  else memory.set(key, value);
   try {
     if (value === null) window.localStorage.removeItem(key);
     else window.localStorage.setItem(key, value);
+    volatile.delete(key);
   } catch {
-    /* storage unavailable — the session simply won't outlive the tab */
+    volatile.add(key);
   }
 }
 
@@ -70,6 +79,22 @@ export function readSession(): Session | null {
 
 export function writeSession(session: Session | null): void {
   writeRaw(SESSION_KEY, session ? JSON.stringify(session) : null);
+}
+
+/** The browser sends this only to OTHER tabs. An explicit logout still
+ * invalidates their UI if another login has already overwritten storage. */
+export function onStoredSessionChange(fn: (signedOut: boolean) => void): () => void {
+  const listener = (event: StorageEvent) => {
+    if (volatile.has(SESSION_KEY) || (event.key !== SESSION_KEY && event.key !== null)) return;
+    try {
+      if (event.storageArea && event.storageArea !== window.localStorage) return;
+    } catch {
+      return;
+    }
+    fn(event.key === null || event.newValue === null);
+  };
+  window.addEventListener('storage', listener);
+  return () => window.removeEventListener('storage', listener);
 }
 
 function randomUuid(): string {

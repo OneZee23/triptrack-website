@@ -110,7 +110,31 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          trap 'rm -f ~/.ssh/deploy_key' EXIT
           SSH="ssh -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=30 -o ServerAliveInterval=15"
+          # Loading :latest moves its old tag before the restart. Keep the
+          # running image under a release-specific tag so image prune cannot
+          # remove the rollback target. A rerun must retain the FIRST backup.
+          case "$GITHUB_SHA" in
+            ''|*[!0-9a-f]*) echo "Invalid release SHA" >&2; exit 1 ;;
+          esac
+          $SSH "$VPS_USER@$VPS_HOST" "bash -s -- $GITHUB_SHA" <<'REMOTE'
+          set -eu
+          cd /opt/triptrack-website
+          rollback_image="triptrack-web:rollback-before-$1"
+          if timeout 30 docker image inspect "$rollback_image" >/dev/null 2>&1; then
+            echo "Rollback image already retained: $rollback_image"
+          else
+            current_container=$(timeout 30 docker compose ps -q triptrack-web)
+            if [ -z "$current_container" ]; then
+              echo "No running website container; no previous image to retain"
+            else
+              current_image=$(timeout 30 docker inspect --format '{{.Image}}' "$current_container")
+              timeout 30 docker image tag "$current_image" "$rollback_image"
+              echo "Retained rollback image: $rollback_image ($current_image)"
+            fi
+          fi
+          REMOTE
           for attempt in 1 2 3; do
             echo "--- попытка $attempt: заливаю образ в docker load ---"
             if $SSH "$VPS_USER@$VPS_HOST" 'gunzip -c | docker load' < image.tar.gz; then
