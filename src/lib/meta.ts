@@ -65,36 +65,36 @@ export const PAGE_META: Record<MetaKey, Record<Lang, PageMeta>> = {
     en: {
       title: 'Features — what TripTrack records and remembers',
       description:
-        'Auto-recording, speed-coloured routes, photos pinned to the road, places you keep coming back to, journeys, a fog of war atlas and a garage. All on device.',
+        'Explore TripTrack: background recording, route photos, places, journeys, a vehicle garage and a fog of war atlas. View your synced trips in the browser.',
     },
     ru: {
       title: 'Возможности — что TripTrack пишет и помнит',
       description:
-        'Автозапись, маршрут в цветах скорости, фото на дороге, места, куда вы возвращаетесь, путешествия, атлас с туманом войны и гараж. Всё на самом телефоне.',
+        'Возможности TripTrack: запись в фоне, фото на маршруте, места, путешествия, гараж и атлас с туманом войны. Синхронизированные поездки доступны в браузере.',
     },
   },
   '/download': {
     en: {
       title: 'Download TripTrack — free trip tracker for iPhone',
       description:
-        'Get TripTrack free on the App Store. iPhone, iOS 17 or newer, no account, no ads. Start recording your first drive a minute after you open the app.',
+        'Download TripTrack for iPhone with iOS 17 or later. Record drives, keep photos and explore your routes for free. Apple sign-in is optional for cloud sync.',
     },
     ru: {
       title: 'Скачать TripTrack — трекер поездок для iPhone',
       description:
-        'Скачайте TripTrack бесплатно в App Store. iPhone, iOS 17 и новее, без аккаунта и рекламы. Первая поездка записывается через минуту после установки.',
+        'Скачайте TripTrack для iPhone с iOS 17 и новее. Записывайте поездки, храните фото и смотрите маршруты бесплатно. Вход через Apple нужен для синхронизации.',
     },
   },
   '/google-timeline-alternative': {
     en: {
       title: 'Google Timeline alternative for iPhone — TripTrack',
       description:
-        'Google switched off Timeline on the web and started deleting history. TripTrack is the Google Timeline alternative that keeps your drives on your iPhone.',
+        'Looking for a Google Timeline alternative for driving? Record trips on iPhone with TripTrack and explore your synced routes on a bigger map in the browser.',
     },
     ru: {
       title: 'Альтернатива Google Timeline для iPhone',
       description:
-        'Google выключил веб-Timeline и начал удалять историю. TripTrack — альтернатива Google Timeline, которая хранит ваши поездки на самом iPhone, а не в облаке.',
+        'Ищете альтернативу Google Timeline для поездок? TripTrack записывает маршруты на iPhone и показывает синхронизированную историю на большой карте в браузере.',
     },
   },
   '/fog-of-war-map': {
@@ -113,36 +113,36 @@ export const PAGE_META: Record<MetaKey, Record<Lang, PageMeta>> = {
     en: {
       title: 'About TripTrack — a drive diary built by a driver',
       description:
-        'One developer, one car and 71,000 kilometres behind the wheel. Why a drive diary had to exist after Google Timeline died, and what TripTrack refuses to do.',
+        'One developer building the driving diary he wanted to use: routes, photos and everyday memories. Learn how TripTrack began and why the core diary is free.',
     },
     ru: {
       title: 'О проекте — дневник поездок, сделанный водителем',
       description:
-        'Один разработчик, одна машина и 71 000 км за рулём. Почему дневник поездок пришлось сделать после смерти Google Timeline и чего TripTrack не делает никогда.',
+        'Один разработчик делает дневник, которым пользуется сам: маршруты, фотографии и воспоминания о поездках. Как появился TripTrack и почему его основа бесплатна.',
     },
   },
   '/roadmap': {
     en: {
       title: 'Roadmap — what ships next in TripTrack',
       description:
-        'Every version of the trip tracker and what comes next: places, journeys, the fog of war atlas, discoveries and honest units. Updated as each one ships.',
+        'What is available in TripTrack today, what is in Apple review and what is planned next. Follow the web viewer, optional PRO and future trip diary updates.',
     },
     ru: {
       title: 'Роудмап — что дальше в TripTrack',
       description:
-        'Все версии трекера поездок: что изменила каждая и что будет дальше — места, путешествия, атлас с туманом войны, находки и честные единицы. Обновляется всегда.',
+        'Что уже доступно в TripTrack, что проходит проверку Apple и что запланировано: просмотр поездок в браузере, необязательная PRO и будущие обновления дневника.',
     },
   },
   '/privacy': {
     en: {
-      title: 'Privacy — your drives stay on your phone',
+      title: 'Privacy — local trips and optional cloud sync',
       description:
-        'What TripTrack keeps on your iPhone, what leaves it only if you turn Cloud Sync on, why this site sets no tracking cookies, and how to delete it all at once.',
+        'How TripTrack stores trips on your iPhone, what optional cloud sync sends to our server, how the web viewer uses your data, and how to delete your account.',
     },
     ru: {
-      title: 'Приватность — поездки остаются на телефоне',
+      title: 'Приватность — поездки, синхронизация и сайт',
       description:
-        'Что TripTrack хранит на iPhone, что уезжает только при включённом Cloud Sync, почему на сайте нет отслеживающих cookies и как удалить всё сразу и навсегда.',
+        'Как TripTrack хранит поездки на iPhone, какие данные отправляет синхронизация, как работает просмотр в браузере и как удалить свой аккаунт вместе с данными.',
     },
   },
   app: {

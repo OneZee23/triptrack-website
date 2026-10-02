@@ -24,8 +24,8 @@
 | `/features` | `Features.tsx` | возможности приложения |
 | `/download` | `Download.tsx` | ссылки на сторы |
 | `/fog-of-war-map` | `FogOfWarMap.tsx` | посадочная под запрос «карта-туман» |
-| `/google-timeline` | `GoogleTimeline.tsx` | посадочная под миграцию с Google Timeline |
-| `/roadmap` | `Roadmap.tsx` | планы по версиям |
+| `/google-timeline-alternative` | `GoogleTimeline.tsx` | посадочная обзор отличий от Google Timeline |
+| `/roadmap` | `Roadmap.tsx` | актуальная доступность и планы |
 | `/about` | `About.tsx` | о проекте |
 | `/privacy` | `Privacy.tsx` | политика конфиденциальности |
 | `/app/login` | `src/app/LoginPage.tsx` | вход через Apple |
@@ -37,7 +37,7 @@
 У страниц есть русские адреса с префиксом `/ru`. Личный кабинет требует
 авторизацию, не индексируется и не отправляет просмотры в аналитику.
 
-Две страницы (`fog-of-war-map`, `google-timeline`) сделаны под поисковые запросы,
+Две страницы (`fog-of-war-map`, `google-timeline-alternative`) сделаны под поисковые запросы,
 а не под навигацию по сайту. Это SEO-вход, и правки там надо согласовывать
 с текстами в `docs/content-prompt.md`.
 

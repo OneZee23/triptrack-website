@@ -14,6 +14,17 @@ export default function Download() {
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] max-w-[150vw] bg-[#EB571E]/5 blur-[150px] rounded-full pointer-events-none -z-10" />
 
       <div className="flex flex-col items-center text-center max-w-3xl relative z-10 w-full">
+
+
+        <h1 className="text-[32px] sm:text-[40px] md:text-[64px] font-bold tracking-tighter mb-7 leading-tight text-[#1e1e23]">
+          {t('download.h1')}
+        </h1>
+        <p className="text-[18px] text-[#1e1e23]/65 mb-10 max-w-xl leading-relaxed">{t('download.hero_subtitle')}</p>
+
+        <div className="mb-14">
+          <AppStoreBadge className="h-[64px]" />
+        </div>
+
         <div className="w-[260px] md:w-[300px] aspect-[9/16] rounded-[32px] overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.1)] border border-black/5 bg-[#f8f6f2] mb-14">
           <img
             src={screenProfile}
@@ -27,18 +38,10 @@ export default function Download() {
           />
         </div>
 
-        <h1 className="text-[32px] sm:text-[40px] md:text-[64px] font-bold tracking-tighter mb-7 leading-tight text-[#1e1e23]">
-          {t('download.h1')}
-        </h1>
-        <p className="text-[18px] text-[#1e1e23]/65 mb-10 max-w-xl leading-relaxed">{t('download.hero_subtitle')}</p>
-
-        <div className="mb-14">
-          <AppStoreBadge className="h-[64px]" />
-        </div>
-
         <div className="max-w-2xl text-left flex flex-col gap-5 text-[16px] text-[#1e1e23]/65 leading-relaxed">
           <p>{t('download.p1')}</p>
           <p>{t('download.p2')}</p>
+          <p className="rounded-2xl bg-[#f0ece5] p-5">{t('download.pro_note')}</p>
         </div>
 
         <div className="flex flex-col items-center gap-8 border-t border-black/5 pt-14 mt-14 w-full">

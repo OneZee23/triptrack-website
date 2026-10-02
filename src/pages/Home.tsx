@@ -1,4 +1,4 @@
-import { Map, Camera, Target, Star, Compass, MapPin, ShieldCheck, ChevronDown, Sparkles } from 'lucide-react';
+import { Map, Camera, Target, Compass, MapPin, ShieldCheck, ChevronDown, Sparkles, Monitor } from 'lucide-react';
 import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
@@ -143,6 +143,21 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Your library is already available on the web. */}
+      <section className="w-full max-w-6xl mx-auto px-5 sm:px-6 pb-14 md:pb-24">
+        <div className="rounded-[32px] bg-[#1e252b] text-white p-7 sm:p-10 md:p-12 grid gap-7 md:grid-cols-[1fr_auto] md:items-center">
+          <div className="max-w-2xl">
+            <Monitor aria-hidden className="mb-5 h-8 w-8 text-[#ffb47d]" />
+            <h2 className="text-[28px] sm:text-[34px] font-bold text-balance">{t('home.web.title')}</h2>
+            <p className="mt-4 text-base leading-relaxed text-white/80">{t('home.web.desc')}</p>
+            <p className="mt-3 text-sm leading-relaxed text-white/65">{t('home.web.note')}</p>
+          </div>
+          <Link to={href('/app/trips')} className="inline-flex min-h-[48px] items-center justify-center gap-3 rounded-xl bg-white px-6 py-3 font-semibold text-[#1e252b] transition-[background-color,transform] hover:bg-[#fff0df] active:scale-[0.96]">
+            {t('home.web.cta')} <span aria-hidden>→</span>
+          </Link>
+        </div>
+      </section>
+
       {/* PRIVACY */}
       <section className="w-full bg-[#f4f2ee] border-y border-black/5">
         <div className="max-w-4xl mx-auto px-5 sm:px-6 py-14 md:py-28 text-center">
@@ -166,9 +181,6 @@ export default function Home() {
 
       {/* SOCIAL PROOF */}
       <section className="w-full py-14 md:py-28 text-center relative z-10 px-5 sm:px-6">
-        <div className="flex justify-center items-center gap-2 mb-4" aria-hidden>
-          {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="w-6 h-6 fill-[#EB571E] text-[#EB571E]" />)}
-        </div>
         <p className="text-[20px] font-bold mb-12 text-[#1e1e23]">{t('home.rating')}</p>
         <div className="max-w-2xl mx-auto">
           <figure className="bg-white border border-black/5 p-8 sm:p-10 rounded-3xl text-center shadow-sm">

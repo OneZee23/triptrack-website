@@ -2,22 +2,10 @@ import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
 import { AppStoreBadge } from '../components/AppStoreBadge';
-import { CheckCircle2, XCircle, Map, Shield, Smartphone } from 'lucide-react';
+import { CheckCircle2, Map, Shield, Smartphone } from 'lucide-react';
 import screenFeed from '../assets/screen-feed.webp';
 
-/** Rows of the comparison table: dictionary key + whether Timeline had it. */
-const ROWS: { key: string; gt: boolean }[] = [
-  { key: 'row_works', gt: false },
-  { key: 'row_auto', gt: true },
-  { key: 'row_speed', gt: false },
-  { key: 'row_photos', gt: false },
-  { key: 'row_stats', gt: false },
-  { key: 'row_offline', gt: false },
-  { key: 'row_noaccount', gt: false },
-  { key: 'row_ondevice', gt: false },
-  { key: 'row_fog', gt: false },
-  { key: 'row_badges', gt: false },
-];
+const CAPABILITIES = ["row_works", "row_auto", "row_speed", "row_photos", "row_stats", "row_offline", "row_noaccount", "row_ondevice", "row_fog", "row_badges"];
 
 export default function GoogleTimeline() {
   const { t, href } = useTranslation();
@@ -27,8 +15,8 @@ export default function GoogleTimeline() {
     <div className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32">
       {/* Hero */}
       <div className="text-center mb-16">
-        <div className="inline-flex items-center gap-2 bg-red-50 text-red-600 rounded-full px-4 py-1.5 text-[14px] font-medium mb-8">
-          <XCircle className="w-4 h-4 shrink-0" />
+        <div className="inline-flex items-center gap-2 bg-[#EB571E]/10 text-[#ad3e15] rounded-full px-4 py-1.5 text-[14px] font-medium mb-8">
+          <Map aria-hidden className="w-4 h-4 shrink-0" />
           {t('gt.badge')}
         </div>
         <h1 className="text-[30px] sm:text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-[#1e1e23]">{t('gt.h1')}</h1>
@@ -42,34 +30,20 @@ export default function GoogleTimeline() {
           <p>{t('gt.what_p1')}</p>
           <p>{t('gt.what_p2')}</p>
           <p>{t('gt.what_p3')}</p>
+          <a href="https://support.google.com/maps/answer/6258979" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-[#EB571E] underline underline-offset-4">{t('gt.source_link')}</a>
         </div>
       </section>
 
-      {/* Comparison */}
-      <section className="bg-white border border-black/5 rounded-2xl shadow-sm mb-8 overflow-hidden">
-        <h2 className="text-[20px] font-bold p-7 sm:p-8 pb-4 text-[#1e1e23]">{t('gt.table_title')}</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-[15px] min-w-[420px]">
-            <thead>
-              <tr className="border-b border-black/5">
-                <th className="py-3 px-5 sm:px-6 text-left text-[#1e1e23]/65 font-medium text-[12px] uppercase tracking-wider">{t('gt.feature')}</th>
-                <th className="py-3 px-4 text-center font-bold text-[#1e1e23]">TripTrack</th>
-                <th className="py-3 px-4 text-center text-[#1e1e23]/65">Google Timeline</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ROWS.map((row) => (
-                <tr key={row.key} className="border-b border-black/5 last:border-b-0">
-                  <td className="py-3 px-5 sm:px-6 text-[#1e1e23]/70">{t(`gt.${row.key}`)}</td>
-                  <td className="py-3 px-4 text-center"><CheckCircle2 aria-hidden className="w-5 h-5 text-[#2EAE50] mx-auto" /></td>
-                  <td className="py-3 px-4 text-center">
-                    {row.gt ? <CheckCircle2 aria-hidden className="w-5 h-5 text-[#1e1e23]/65 mx-auto" /> : <XCircle aria-hidden className="w-5 h-5 text-red-500/80 mx-auto" />}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <section className="bg-white border border-black/5 rounded-2xl p-7 sm:p-8 shadow-sm mb-8">
+        <h2 className="text-[22px] font-bold mb-6 text-[#1e1e23]">{t('gt.table_title')}</h2>
+        <ul className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+          {CAPABILITIES.map((key) => (
+            <li key={key} className="flex items-start gap-3 text-[15px] leading-relaxed text-[#1e1e23]/70">
+              <CheckCircle2 aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-[#2EAE50]" />
+              {t(`gt.${key}`)}
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* Key features */}
@@ -93,6 +67,7 @@ export default function GoogleTimeline() {
         <div className="flex flex-col gap-4 text-[16px] text-[#1e1e23]/65 leading-relaxed">
           <p>{t('gt.import_p1')}</p>
           <p>{t('gt.import_p2')}</p>
+          <a href="https://support.google.com/maps/answer/14169818" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-[#EB571E] underline underline-offset-4">{t('gt.export_link')}</a>
         </div>
       </section>
 

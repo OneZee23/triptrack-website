@@ -275,6 +275,8 @@ export default function MapGlobe({
         minZoom: 0.8,
         maxZoom: 16,
         attributionControl: false,
+        // A decorative globe does not need a 3x/4x backing canvas.
+        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         cooperativeGestures: !isTouch,
         dragRotate: true,
         pitchWithRotate: false,
@@ -361,6 +363,11 @@ export default function MapGlobe({
         }
         if (last === 0) last = ts;
         const dt = ts - last;
+        // Keep decorative camera/paint updates at 30 fps even on 120 Hz screens.
+        if (dt < 1000 / 30) {
+          rafRef.current = requestAnimationFrame(frame);
+          return;
+        }
         last = ts;
 
         const active = !pausedRef.current && !programmaticRef.current; // paused: card open / camera flying

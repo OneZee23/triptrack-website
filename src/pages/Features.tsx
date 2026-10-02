@@ -1,4 +1,4 @@
-import { Lock, CheckCircle2, XCircle, Compass, MapPin, Car } from 'lucide-react';
+import { Lock, CheckCircle2, Compass, MapPin, Car, Monitor } from 'lucide-react';
 import screenProfile from '../assets/screen-profile.webp';
 import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
@@ -8,14 +8,7 @@ export default function Features() {
   const { t, href } = useTranslation();
   usePageMeta('/features');
 
-  const comparisonRows = [
-    { name: t('features.auto_recording'), t: true, g: false, p: false },
-    { name: t('features.trip_diary'), t: true, g: false, p: true },
-    { name: t('features.attach_photos'), t: true, g: false, p: true },
-    { name: t('features.fog_map'), t: true, g: false, p: false },
-    { name: t('features.offline_private'), t: true, g: false, p: false },
-    { name: t('features.no_account'), t: true, g: false, p: false },
-  ];
+  const included = ['auto_recording', 'trip_diary', 'attach_photos', 'fog_map', 'offline_private', 'no_account'];
 
   return (
     <div className="w-full max-w-7xl mx-auto px-5 sm:px-6 pt-28 pb-16 md:py-32 flex flex-col items-center relative z-10">
@@ -58,36 +51,31 @@ export default function Features() {
         </div>
       </section>
 
-      {/* COMPARISON TABLE */}
-      <section className="w-full max-w-5xl mx-auto py-14 md:py-24 text-left border-t border-black/5">
-        <h2 className="text-[40px] font-bold mb-16 text-center text-[#1e1e23]">{t('features.comparison_title')}</h2>
-        <div className="overflow-x-auto pb-8 bg-white rounded-3xl border border-black/5 shadow-sm">
-          <table className="w-full min-w-[600px] border-collapse">
-            <thead>
-              <tr className="border-b border-black/5">
-                <th className="py-6 px-6 text-left font-bold text-[12px] uppercase tracking-wider text-[#1e1e23]/65 w-1/3">{t('features.comparison_features')}</th>
-                <th className="py-6 px-4 text-center font-bold text-[#1e1e23] text-[20px]">TripTrack</th>
-                <th className="py-6 px-4 text-center font-bold text-[14px] text-[#1e1e23]/65">Google Timeline</th>
-                <th className="py-6 px-4 text-center font-bold text-[14px] text-[#1e1e23]/65">Polarsteps</th>
-              </tr>
-            </thead>
-            <tbody>
-              {comparisonRows.map((row, i) => (
-                <tr key={i} className="border-b border-black/5 last:border-b-0 hover:bg-[#f8f6f2] transition-colors">
-                  <td className="py-6 px-6 font-medium text-[16px] text-[#1e1e23]/70">{row.name}</td>
-                  <td className="py-6 px-4 text-center"><CheckCircle2 className="w-6 h-6 text-[#2EAE50] mx-auto" /></td>
-                  <td className="py-6 px-4 text-center">{row.g ? <CheckCircle2 className="w-5 h-5 text-[#2EAE50]/60 mx-auto" /> : <XCircle className="w-5 h-5 text-red-400/50 mx-auto" />}</td>
-                  <td className="py-6 px-4 text-center">{row.p ? <CheckCircle2 className="w-5 h-5 text-[#2EAE50]/60 mx-auto" /> : <XCircle className="w-5 h-5 text-red-400/50 mx-auto" />}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <section className="mb-12 grid w-full max-w-5xl gap-6 lg:grid-cols-2">
+        <div className="rounded-[28px] border border-black/5 bg-white p-7 sm:p-8 shadow-sm">
+          <Monitor aria-hidden className="mb-5 h-7 w-7 text-[#EB571E]" />
+          <h2 className="mb-4 text-2xl font-bold">{t('features.web_title')}</h2>
+          <p className="text-[16px] leading-relaxed text-[#1e1e23]/70">{t('features.web_desc')}</p>
+          <Link to={href('/app')} className="mt-5 inline-flex min-h-11 items-center font-semibold text-[#EB571E] hover:underline">{t('features.web_link')} <span aria-hidden className="ml-2">→</span></Link>
+          <p className="mt-3 text-[14px] leading-relaxed text-[#1e1e23]/65">{t('features.web_note')}</p>
         </div>
+        <div className="rounded-[28px] border border-black/5 bg-[#f4f2ee] p-7 sm:p-8">
+          <h2 className="mb-4 text-2xl font-bold">{t('features.pro_title')}</h2>
+          <p className="text-[16px] leading-relaxed text-[#1e1e23]/70">{t('features.pro_desc')}</p>
+          <Link to={href('/roadmap')} className="mt-5 inline-flex min-h-11 items-center font-semibold text-[#EB571E] hover:underline">{t('features.roadmap_link')} <span aria-hidden className="ml-2">→</span></Link>
+        </div>
+      </section>
+
+      <section className="w-full max-w-5xl mx-auto py-12 text-left border-t border-black/5">
+        <h2 className="text-[28px] sm:text-[36px] font-bold mb-8 text-[#1e1e23]">{t('features.comparison_title')}</h2>
+        <ul className="grid gap-x-10 gap-y-4 sm:grid-cols-2">
+          {included.map((key) => <li key={key} className="flex items-center gap-3 text-[17px] text-[#1e1e23]/75"><CheckCircle2 aria-hidden className="h-5 w-5 shrink-0 text-[#2EAE50]" />{t(`features.${key}`)}</li>)}
+        </ul>
       </section>
 
       {/* CTA */}
       <div className="pt-8 pb-14 md:pt-12 md:pb-24 w-full flex flex-col items-center border-b border-black/5">
-        <Link to={href('/download')} className="bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full px-12 py-5 text-[20px] font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_2px_20px_rgba(235,87,30,0.3)] mb-4">{t('features.get_started')}</Link>
+        <Link to={href('/download')} className="bg-[#EB571E] hover:bg-[#d14e1a] text-white rounded-full px-12 py-5 text-[20px] font-bold transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_20px_rgba(235,87,30,0.3)] mb-4">{t('features.get_started')}</Link>
         <nav className="mt-6 flex flex-wrap justify-center gap-x-7 gap-y-1 text-[16px] font-medium">
           <Link to={href('/fog-of-war-map')} className="flex min-h-[44px] items-center text-[#EB571E] hover:underline">{t('features.link_fog')}</Link>
           <Link to={href('/google-timeline-alternative')} className="flex min-h-[44px] items-center text-[#EB571E] hover:underline">{t('features.link_timeline')}</Link>
@@ -98,18 +86,18 @@ export default function Features() {
       <section className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 pt-14 md:pt-24">
         <div className="md:col-span-2 row-span-2 bg-white border border-black/5 rounded-[32px] p-10 relative overflow-hidden group shadow-sm">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#EB571E]/5 blur-[80px] rounded-full group-hover:bg-[#EB571E]/10 transition-colors" />
-          <h3 className="text-[24px] font-bold mb-4 relative z-10 text-[#1e1e23]">{t('features.records_title')}</h3>
+          <h2 className="text-[24px] font-bold mb-4 relative z-10 text-[#1e1e23]">{t('features.records_title')}</h2>
           <p className="text-[16px] text-[#1e1e23]/65 mb-8 max-w-sm relative z-10 leading-relaxed">{t('features.records_desc')}</p>
           <div className="w-full h-[400px] bg-[#141518] rounded-3xl border border-black/10 mt-auto relative overflow-hidden flex items-center justify-center shadow-lg flex-col p-6">
             <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-            <div className="text-[#EB571E] font-mono text-[80px] font-bold leading-none mb-4 z-10">45<span className="text-[24px]">km/h</span></div>
+            <div className="text-[#EB571E] font-mono text-[80px] font-bold leading-none mb-4 z-10">45<span className="text-[24px]">{t('home.globe.unit_kmh')}</span></div>
             <div className="w-full max-w-md h-2 bg-white/10 rounded-full overflow-hidden z-10"><div className="w-1/2 h-full bg-[#EB571E] rounded-full" /></div>
           </div>
         </div>
 
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between group h-[340px] shadow-sm">
           <div>
-            <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.photos_title')}</h3>
+            <h2 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.photos_title')}</h2>
             <p className="text-[#1e1e23]/65 text-[15px] leading-relaxed">{t('features.photos_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-[#f4f2ee] rounded-2xl mt-6 border border-black/5 flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden relative">
@@ -120,7 +108,7 @@ export default function Features() {
 
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between group h-[340px] shadow-sm">
           <div>
-            <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.stats_title')}</h3>
+            <h2 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.stats_title')}</h2>
             <p className="text-[#1e1e23]/65 text-[15px] leading-relaxed">{t('features.stats_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-[#f4f2ee] rounded-2xl mt-6 border border-black/5 flex flex-col items-center justify-center p-4 group-hover:scale-105 transition-transform gap-2">
@@ -132,7 +120,7 @@ export default function Features() {
 
         <div className="md:col-span-2 bg-white border border-black/5 rounded-[32px] p-10 flex flex-col md:flex-row gap-8 items-center overflow-hidden relative group shadow-sm">
           <div className="flex-1 relative z-10">
-            <h3 className="text-[24px] font-bold mb-4 text-[#1e1e23]">{t('features.fog_title')}</h3>
+            <h2 className="text-[24px] font-bold mb-4 text-[#1e1e23]">{t('features.fog_title')}</h2>
             <p className="text-[16px] text-[#1e1e23]/65 max-w-sm leading-relaxed">{t('features.fog_desc')}</p>
           </div>
           <div className="w-full md:w-1/2 h-[240px] bg-[#141518] rounded-3xl border border-black/10 relative overflow-hidden shadow-lg">
@@ -153,7 +141,7 @@ export default function Features() {
 
         <div className="bg-white border border-black/5 rounded-[32px] p-8 flex flex-col justify-between shadow-sm">
           <div>
-            <h3 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.private_title')}</h3>
+            <h2 className="text-[20px] font-bold mb-2 text-[#1e1e23]">{t('features.private_title')}</h2>
             <p className="text-[#1e1e23]/65 text-[15px] leading-relaxed">{t('features.private_desc')}</p>
           </div>
           <div className="w-full h-[140px] bg-emerald-50 rounded-2xl mt-6 border border-emerald-500/20 flex flex-col items-center justify-center text-emerald-600 gap-3">

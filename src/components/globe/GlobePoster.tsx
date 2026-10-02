@@ -108,7 +108,7 @@ const R = SIZE / 2;
 /** The whole planet sits slightly inside its box so the atmosphere has room. */
 const SCALE = 0.86;
 
-export function GlobePoster({ trips, className = '' }: { trips: GlobeTrip[]; className?: string }) {
+export function GlobePoster({ trips, label = 'Globe with recorded road trips', className = '' }: { trips: GlobeTrip[]; label?: string; className?: string }) {
   const { grid, routes, dots, radius } = useMemo(() => {
     const { lat0, lon0 } = centreOf(trips);
     // A cap, not a budget: the globe endpoint returns a few dozen trips, and
@@ -140,7 +140,7 @@ export function GlobePoster({ trips, className = '' }: { trips: GlobeTrip[]; cla
       viewBox={`0 0 ${SIZE} ${SIZE}`}
       className={className}
       role="img"
-      aria-label="Globe with recorded road trips"
+      aria-label={label}
       focusable="false"
     >
       <defs>

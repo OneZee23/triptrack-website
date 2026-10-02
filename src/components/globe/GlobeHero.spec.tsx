@@ -1,18 +1,13 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import type { ComponentType, ReactNode } from 'react';
 
 // MapGlobe pulls in maplibre-gl (WebGL) which doesn't run in jsdom — stub it.
-vi.mock('./MapGlobe', () => ({ default: () => null }));
+vi.mock('./MapGlobe', () => ({ default: () => <div data-testid="interactive-globe" /> }));
 
-/**
- * `useGlobePlan` settles once per page load and caches the answer, so each case
- * that needs a different browser re-imports the module graph rather than
- * fighting the cache. The alternative — a reset hatch exported from production
- * code — would exist only for the tests.
- */
+/** Give each case a fresh lazy import and matching translation context. */
 async function mount(path = '/') {
   vi.resetModules();
   // Both halves come from the SAME fresh graph: a LanguageProvider imported at
@@ -71,10 +66,33 @@ describe('GlobeHero', () => {
     expect(screen.getByRole('img', { name: /globe with recorded road trips/i })).toBeTruthy();
   });
 
-  it('without WebGL: explains itself in the copy, offers no button, still shows the globe', async () => {
-    // No withWebGL() — jsdom's canvas has no context, which is the real case.
+  it('does not probe WebGL or load an interactive map just by opening the page', async () => {
+    const probe = vi.spyOn(HTMLCanvasElement.prototype, 'getContext');
+    const idle = vi.fn();
+    vi.stubGlobal('requestIdleCallback', idle);
     await mount();
-    expect(screen.getByText(/can’t show the interactive map/i)).toBeTruthy();
+    expect(probe).not.toHaveBeenCalled();
+    expect(idle).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('interactive-globe')).toBeNull();
+    expect(screen.getByRole('button', { name: /spin the globe/i })).toBeTruthy();
+  });
+
+  it('loads the interactive globe when requested and releases the probe context', async () => {
+    const loseContext = vi.fn();
+    const getExtension = vi.fn().mockReturnValue({ loseContext });
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({ getExtension } as unknown as RenderingContext);
+    await mount();
+    fireEvent.click(screen.getByRole('button', { name: /spin the globe/i }));
+    await waitFor(() => expect(screen.getByTestId('interactive-globe')).toBeTruthy());
+    expect(getExtension).toHaveBeenCalledWith('WEBGL_lose_context');
+    expect(loseContext).toHaveBeenCalledOnce();
+  });
+
+  it('keeps the poster and explains when the requested map cannot use WebGL', async () => {
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
+    await mount();
+    fireEvent.click(screen.getByRole('button', { name: /spin the globe/i }));
+    expect(screen.getByText(/interactive map could not load/i)).toBeTruthy();
     expect(screen.queryByRole('button', { name: /spin the globe/i })).toBeNull();
     expect(screen.queryByText(/drag · zoom/i)).toBeNull();
     expect(screen.getByRole('img', { name: /globe with recorded road trips/i })).toBeTruthy();

@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
 import { AppStoreBadge } from '../components/AppStoreBadge';
-import { CheckCircle2, XCircle, MapPin, Eye, EyeOff, Compass, Trophy } from 'lucide-react';
+import { CheckCircle2, MapPin, Eye, EyeOff, Compass, Trophy } from 'lucide-react';
 import screenFeed from '../assets/screen-feed.webp';
 
 const STEPS = [
@@ -12,18 +12,7 @@ const STEPS = [
   { icon: <Compass className="w-5 h-5 text-[#F5A623]" />, key: 'step4' },
 ];
 
-/** Comparison rows: dictionary key + whether Fog of World has it. */
-const ROWS: { key: string; fow: boolean }[] = [
-  { key: 'row_fog', fow: true },
-  { key: 'row_diary', fow: false },
-  { key: 'row_speed', fow: false },
-  { key: 'row_photos', fow: false },
-  { key: 'row_badges', fow: false },
-  { key: 'row_garage', fow: false },
-  { key: 'row_free', fow: false },
-  { key: 'row_offline', fow: true },
-  { key: 'row_noaccount', fow: false },
-];
+const CAPABILITIES = ["row_fog", "row_diary", "row_speed", "row_photos", "row_badges", "row_garage", "row_free", "row_offline", "row_noaccount"];
 
 export default function FogOfWarMap() {
   const { t, href } = useTranslation();
@@ -84,31 +73,16 @@ export default function FogOfWarMap() {
         </div>
       </section>
 
-      {/* Comparison */}
-      <section className="bg-white border border-black/5 rounded-2xl shadow-sm mb-8 overflow-hidden">
-        <h2 className="text-[20px] font-bold p-7 sm:p-8 pb-4 text-[#1e1e23]">{t('fog.table_title')}</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-[15px] min-w-[420px]">
-            <thead>
-              <tr className="border-b border-black/5">
-                <th className="py-3 px-5 sm:px-6 text-left text-[#1e1e23]/65 font-medium text-[12px] uppercase tracking-wider">{t('fog.feature')}</th>
-                <th className="py-3 px-4 text-center font-bold text-[#1e1e23]">TripTrack</th>
-                <th className="py-3 px-4 text-center text-[#1e1e23]/65">Fog of World</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ROWS.map((row) => (
-                <tr key={row.key} className="border-b border-black/5 last:border-b-0">
-                  <td className="py-3 px-5 sm:px-6 text-[#1e1e23]/70">{t(`fog.${row.key}`)}</td>
-                  <td className="py-3 px-4 text-center"><CheckCircle2 aria-hidden className="w-5 h-5 text-[#2EAE50] mx-auto" /></td>
-                  <td className="py-3 px-4 text-center">
-                    {row.fow ? <CheckCircle2 aria-hidden className="w-5 h-5 text-[#1e1e23]/65 mx-auto" /> : <XCircle aria-hidden className="w-5 h-5 text-red-500/80 mx-auto" />}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <section className="bg-white border border-black/5 rounded-2xl p-7 sm:p-8 shadow-sm mb-8">
+        <h2 className="text-[22px] font-bold mb-6 text-[#1e1e23]">{t('fog.table_title')}</h2>
+        <ul className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+          {CAPABILITIES.map((key) => (
+            <li key={key} className="flex items-start gap-3 text-[15px] leading-relaxed text-[#1e1e23]/70">
+              <CheckCircle2 aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-[#2EAE50]" />
+              {t(`fog.${key}`)}
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* Screenshot */}

@@ -5,8 +5,9 @@ import { useGlobeData } from '../../hooks/useGlobeData';
 import { useMounted } from '../../lib/useMounted';
 import { trackEvent } from '../../lib/analytics';
 import { StarField } from './StarField';
+import { GlobeBoundary } from './GlobeBoundary';
 import { GlobePoster } from './GlobePoster';
-import { useGlobePlan } from './webgl';
+import { isWebGLAvailable } from './webgl';
 import type { GlobeTrip } from './types';
 
 const MapGlobe = lazy(() => import('./MapGlobe'));
@@ -15,16 +16,8 @@ const MapGlobe = lazy(() => import('./MapGlobe'));
 const TripCardLayer = lazy(() => import('./TripCardLayer'));
 const APP_STORE_URL = 'https://apps.apple.com/us/app/triptrack-road-journal/id6760650361';
 
-/**
- * Who gets the real map, and when.
- *
- * MapLibre plus its tiles measured 4.2 MB and ~2.1 s of blocked main thread on
- * a throttled phone — more than the rest of the site put together, spent on
- * the first thing a visitor sees. So the phone is shown the poster and a
- * button, and the map is downloaded when somebody asks for it (`useGlobePlan`
- * decides which browser is which). A desktop still gets it unprompted, but
- * only once the browser is idle: the heading has to paint first.
- */
+/** The lightweight globe is ready in HTML. Interactive tiles load only on request,
+ * on desktop as well as mobile, so browsing the page never starts WebGL work. */
 export default function GlobeHero() {
   const { t, lang } = useTranslation();
   // WebGL and a randomly-seeded starfield cannot exist in prerendered HTML:
@@ -35,14 +28,10 @@ export default function GlobeHero() {
   const state = useGlobeData();
   const [selected, setSelected] = useState<GlobeTrip | null>(null);
   const [interacting, setInteracting] = useState(false);
-  // Whether the browser can show a map at all is a LAYOUT fact, settled before
-  // anything is drawn — not a late failure painted over the hero copy, which
-  // is the bug this split exists to make impossible.
-  const plan = useGlobePlan();
   const [asked, setAsked] = useState(false);
   const [broke, setBroke] = useState(false);
   const [mapPainted, setMapPainted] = useState(false);
-  const globe: 'poster' | 'live' | 'off' = plan === 'off' || broke ? 'off' : asked ? 'live' : 'poster';
+  const globe: 'poster' | 'live' | 'off' = broke ? 'off' : asked ? 'live' : 'poster';
   const sectionRef = useRef<HTMLElement>(null);
 
   // Latched, never cleared: the layer stays mounted after the first open so
@@ -60,19 +49,6 @@ export default function GlobeHero() {
 
   const statWord = (base: string, n: number) => t(`home.globe.${base}_${new Intl.PluralRules(lang).select(n)}`);
 
-  // A desktop promotes itself to the live map once the browser goes idle, so
-  // the 1 MB chunk never competes with the first paint.
-  useEffect(() => {
-    if (plan !== 'auto') return;
-    const idle = window.requestIdleCallback
-      ? window.requestIdleCallback(() => setAsked(true), { timeout: 2500 })
-      : window.setTimeout(() => setAsked(true), 1200);
-    return () => {
-      if (window.cancelIdleCallback) window.cancelIdleCallback(idle as number);
-      else window.clearTimeout(idle as number);
-    };
-  }, [plan]);
-
   const showMap = mounted && globe === 'live';
   // With no map on screen the copy and the globe get a row each instead of
   // sharing the screen — on a phone that is the difference between a hero and
@@ -81,6 +57,10 @@ export default function GlobeHero() {
 
   const spin = useCallback(() => {
     trackEvent('globe-spin');
+    if (!isWebGLAvailable()) {
+      setBroke(true);
+      return;
+    }
     setAsked(true);
   }, []);
 
@@ -107,7 +87,7 @@ export default function GlobeHero() {
 
   const poster = (
     <div className="pointer-events-none absolute inset-0 grid place-items-center overflow-hidden">
-      <GlobePoster trips={trips} className="h-full w-full max-h-[min(100%,560px)] max-w-[min(100%,560px)]" />
+      <GlobePoster trips={trips} label={lang === 'ru' ? 'Глобус с маршрутами поездок' : 'Globe with recorded road trips'} className="h-full w-full max-h-[min(100%,560px)] max-w-[min(100%,560px)]" />
     </div>
   );
 
@@ -139,16 +119,18 @@ export default function GlobeHero() {
       {showMap && !mapPainted && <div className="absolute inset-0">{poster}</div>}
       {showMap && (
         <div className="absolute inset-0">
-          <Suspense fallback={poster}>
-            <MapGlobe
-              trips={trips}
-              onSelect={handleSelect}
-              onInteracting={setInteracting}
-              paused={selected !== null}
-              onFailed={() => setBroke(true)}
-              onReady={() => setMapPainted(true)}
-            />
-          </Suspense>
+          <GlobeBoundary onFailed={() => setBroke(true)}>
+            <Suspense fallback={null}>
+              <MapGlobe
+                trips={trips}
+                onSelect={handleSelect}
+                onInteracting={setInteracting}
+                paused={selected !== null}
+                onFailed={() => setBroke(true)}
+                onReady={() => setMapPainted(true)}
+              />
+            </Suspense>
+          </GlobeBoundary>
         </div>
       )}
 
@@ -181,7 +163,7 @@ export default function GlobeHero() {
             >
               {t('home.globe.cta')}
             </a>
-            {/* The one way the 1 MB map gets downloaded on a phone. */}
+            {/* Opt in to map downloads and animation on every device. */}
             {globe === 'poster' && (
               <button
                 type="button"
@@ -209,7 +191,12 @@ export default function GlobeHero() {
           {/* «Drag · zoom · tap a trip» describes the live map. With the poster
               on screen there is nothing to drag, and the line used to sit over
               the hero telling people to do something impossible. */}
-          {showMap && (
+          {showMap && !mapPainted && (
+            <p role="status" className="mt-6 text-sm text-white/80">
+              {lang === 'ru' ? 'Загружаем интерактивный глобус…' : 'Loading the interactive globe…'}
+            </p>
+          )}
+          {showMap && mapPainted && (
             <p className="globe-hint mt-8 text-[12px] uppercase tracking-[0.15em] text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
               {t('home.globe.hint')}
             </p>
