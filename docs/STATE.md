@@ -38,16 +38,27 @@ LCP 1,06 с desktop / 0,93 с mobile, блокировки 23 мс / 0 мс за
 Образ отката:
 `triptrack-web:rollback-before-63cf99b8f55a33cdafaba6af8fcf00824c80709b`.
 
-Остаточное ограничение: в 11:40 UTC Cloudflare ещё отдавал закешированную
-404 для `/assets/Home-jHH0rTI7.js` (`CF-Cache-Status: HIT`, age 1148).
-Тот же файл с новым query string отвечает 200 JavaScript, а серверный
-smoke подтвердил восстановленные байты. Для немедленного восстановления
-старых вкладок нужна очистка кеша `trip-track.app/assets/` в Cloudflare;
-доступа к его API/панели у агента нет. Новый отсутствующий asset через
-публичный URL также получает другие cache headers, чем напрямую в nginx:
-настройки CDN/внешнего прокси требуют отдельной проверки. Очистка кеша
-не объявляется выполненной. Полный браузерный просмотр production
-недоступен из-за Cloudflare challenge и отсутствия T3 automation host.
+После входа владельца в Cloudflare остаточный кеш исправлен в 12:13 UTC.
+Сначала очищен prefix `trip-track.app/assets/`: все четыре старых chunks
+стали отвечать 200. Затем живой браузер выявил и старый HTML af2a742:
+`index-Czb6EWIn.js`, Last-Modified 10:25:45, CF HIT, max-age=14400.
+Причина найдена в Cloudflare Cache Rule «Cache Everything»: all incoming,
+игнорировать origin и кешировать 1 день на edge / 4 часа в браузере.
+Правило сохранено как «Respect origin cache policy»: Edge TTL использует
+origin Cache-Control (без него bypass), Browser TTL — Respect origin TTL.
+Область совпадения не менялась. Save и последующий purge hostname
+`trip-track.app` подтверждены ответами 200/success=true.
+
+Проверено на публичном production в отдельном Chrome после авторизации:
+главная 200, новый `index-CetmqkZr.js`, Last-Modified 11:32:49,
+`Cache-Control: no-cache, must-revalidate`, CF MISS. Материки видны в
+первом SVG, ошибок JS нет; переходы Home → Roadmap → Home работают.
+Четыре старых chunks и текущий entry отвечают 200 JavaScript/immutable.
+Отсутствующий asset дважды отвечает 404 text/plain/no-store/CF BYPASS:
+отрицательные ответы больше не кешируются. T3 host остаётся недоступен,
+поэтому проверка выполнена через отдельное управляемое окно Chrome.
+Уже сохранённый браузером старый HTML может требовать однократного
+обновления без кеша; очистка CDN не удаляет локальный браузерный кеш.
 
 ## Проверка публичного сайта — 2 октября 2026
 

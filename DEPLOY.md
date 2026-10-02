@@ -35,6 +35,16 @@ Purge Cache → Custom Purge → Prefix очистите `trip-track.app/assets/
 `no-store`. Инструкция Cloudflare:
 https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/
 
+Действующая Cache Rule с 2 октября: «Respect origin cache policy», все
+входящие запросы, eligible for cache; Edge TTL — use cache-control if
+present, bypass if not; Browser TTL — respect origin. Не возвращать
+принудительные 1 day / 4 hours: они держали старый HTML и отрицательные
+ответы независимо от nginx. При исправлении исторической конфигурации
+один раз очищен hostname `trip-track.app`. После обычного деплоя HTML
+должен перепроверяться по origin policy; добавлять полный purge к каждому
+деплою вместо правильных заголовков не требуется. Уже сохранённый по
+старому TTL локальный HTML может потребовать обновления браузера без кеша.
+
 Создание поездок закрыто `WEB_MANUAL_TRIPS_ENABLED=false` до исправленного
 iOS. Порядок совместного выпуска — [docs/STATE.md](docs/STATE.md).
 Backend использует свой GitLab pipeline, не этот workflow.
