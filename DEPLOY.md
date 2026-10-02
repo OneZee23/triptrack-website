@@ -23,6 +23,18 @@ JavaScript текущей сборки, сохранённый asset и неке
 личную карту и отсутствие редактора при закрытом серверном флаге.
 Сборка CI не является проверкой Apple-входа.
 
+После восстановления ранее отсутствовавших assets проверьте их публичные
+URL отдельно: CDN может продолжать отдавать закешированную 404 даже при
+успешном HTTP smoke контейнера. 2 октября такое поведение подтверждено
+для старого Home chunk. В Cloudflare → Caching → Configuration →
+Purge Cache → Custom Purge → Prefix очистите `trip-track.app/assets/`,
+затем убедитесь, что исходный URL отвечает 200 JavaScript без query string.
+Это целевая очистка публичных файлов, не сброс пользовательских сессий.
+При отличии cache headers публичного ответа от контейнера отдельно
+проверьте правила CDN/внешнего reverse proxy: 404 assets должен оставаться
+`no-store`. Инструкция Cloudflare:
+https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/
+
 Создание поездок закрыто `WEB_MANUAL_TRIPS_ENABLED=false` до исправленного
 iOS. Порядок совместного выпуска — [docs/STATE.md](docs/STATE.md).
 Backend использует свой GitLab pipeline, не этот workflow.
