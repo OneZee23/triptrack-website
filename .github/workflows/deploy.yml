@@ -56,6 +56,8 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       # The VPS cannot fetch layers from ghcr.io. Three deploys in a row died
       # here (17 Aug, 22 Aug, 3 Sep) with `exit 124` after ~15 minutes of every
       # layer sitting at «Pulling fs layer 0B» — zero bytes, not slow bytes.
@@ -135,6 +137,9 @@ jobs:
             fi
           fi
           REMOTE
+          # Keep lazy chunks referenced by already-open tabs before loading
+          # :latest or restarting. This archive contains no HTML or user data.
+          $SSH "$VPS_USER@$VPS_HOST" 'set -e; cd /opt/triptrack-website; current_container=$(timeout 30 docker compose ps -q triptrack-web); bash -s -- /opt/triptrack-website/asset-history "$current_container"' < scripts/retain-web-assets.sh
           for attempt in 1 2 3; do
             echo "--- попытка $attempt: заливаю образ в docker load ---"
             if $SSH "$VPS_USER@$VPS_HOST" 'gunzip -c | docker load' < image.tar.gz; then
@@ -237,4 +242,6 @@ jobs:
               echo "Container is still on $running, expected $latest"
               exit 1
             fi
+            step "verify HTTP pages and retained assets"
+            timeout 60 bash scripts/check-deployed-assets.sh "$(docker compose ps -q triptrack-web)" "$PWD/asset-history"
             echo "Deployed at $(date)"

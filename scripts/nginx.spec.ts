@@ -31,6 +31,7 @@ const headers = readFileSync(join(ROOT, 'nginx-headers.conf'), 'utf8');
 const csp = readFileSync(join(ROOT, 'nginx-csp.conf'), 'utf8');
 const dockerfile = readFileSync(join(ROOT, 'Dockerfile'), 'utf8');
 const indexHtml = readFileSync(join(ROOT, 'index.html'), 'utf8');
+const compose = readFileSync(join(ROOT, 'docker-compose.yml'), 'utf8');
 
 /** Блоки `location … { … }` верхнего уровня, вместе с телом БЕЗ
  *  комментариев: у `/404.html` слово `add_header` стоит ровно в
@@ -88,6 +89,30 @@ describe('nginx security headers', () => {
       expect(l.body).not.toContain('snippets/csp.conf');
       expect(l.body).toContain('snippets/headers.conf');
     }
+  });
+});
+
+describe('assets across deployments', () => {
+  it('uses the read-only history only after the current hashed asset is missing', () => {
+    const current = locations(nginx).find((l) => l.head === 'location ^~ /assets/')?.body;
+    const history = locations(nginx).find((l) => l.head === 'location @previous_assets')?.body;
+    expect(current).toContain('try_files $uri @previous_assets;');
+    expect(history).toContain('root /var/lib/triptrack-asset-history;');
+    expect(history).toContain('try_files $uri =404;');
+    expect(compose).toContain('./asset-history:/var/lib/triptrack-asset-history:ro');
+    expect(locations(nginx).find((l) => l.head === 'location /')?.body).not.toContain('previous_assets');
+  });
+
+  it('never makes an asset 404 immutable or substitutes the marketing HTML', () => {
+    for (const head of ['location ^~ /assets/', 'location @previous_assets']) {
+      const body = locations(nginx).find((l) => l.head === head)?.body;
+      expect(body).toContain('error_page 404 = @asset_not_found;');
+      expect(body).not.toMatch(/immutable" always/);
+    }
+    const missing = locations(nginx).find((l) => l.head === 'location @asset_not_found')?.body;
+    expect(missing).toContain('default_type text/plain;');
+    expect(missing).toContain('Cache-Control "no-store" always;');
+    expect(missing).toContain('return 404');
   });
 });
 

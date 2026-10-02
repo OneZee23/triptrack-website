@@ -12,3 +12,4 @@ dist-server
 !.env.example
 .worktrees
 .superpowers
+asset-history

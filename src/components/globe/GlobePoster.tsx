@@ -1,37 +1,14 @@
-import { useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import type { GlobeTrip } from './types';
+import { landPath } from './land';
+import { project, RAD, type ProjectedPoint as Vec } from './projection';
 
 /**
- * The globe, drawn as SVG from the trip data the page already has.
- *
- * MapLibre is 1 MB of JavaScript and roughly 4 MB of tiles, and on a phone it
- * is the whole cost of the page: the measured mobile load was 4.7 MB and
- * ~2.1 s of blocked main thread, essentially all of it here. So the phone gets
- * this instead, and the map arrives only if it is asked for.
- *
- * What it draws is not a placeholder pattern — it is the same routes, in an
- * orthographic projection, over a shaded sphere. No request is made for it:
- * `/api/globe` was already fetched for the map, the geometry is the trips'
- * own coordinates, and there is no basemap (hence no tiles, and no map
- * attribution to carry). Empty data still gives a globe, just an empty one.
+ * An immediately complete globe, including real coastlines and public routes,
+ * rendered in the initial HTML. The compact Natural Earth land data is bundled
+ * locally: no map library, tiles, WebGL or network are needed for geography.
+ * The interactive map is a separate enhancement loaded by an explicit click.
  */
-
-type Vec = { x: number; y: number; visible: boolean };
-
-const RAD = Math.PI / 180;
-
-/** Orthographic projection onto a unit circle centred at (0, 0), y down. */
-function project(lat: number, lng: number, lat0: number, lon0: number): Vec {
-  const phi = lat * RAD;
-  const lam = (lng - lon0) * RAD;
-  const p0 = lat0 * RAD;
-  const cosc = Math.sin(p0) * Math.sin(phi) + Math.cos(p0) * Math.cos(phi) * Math.cos(lam);
-  return {
-    x: Math.cos(phi) * Math.sin(lam),
-    y: -(Math.cos(p0) * Math.sin(phi) - Math.sin(p0) * Math.cos(phi) * Math.cos(lam)),
-    visible: cosc >= 0,
-  };
-}
 
 /** Where to point the camera: the middle of the trips, or Europe if there are none. */
 function centreOf(trips: GlobeTrip[]): { lat0: number; lon0: number } {
@@ -109,15 +86,13 @@ const R = SIZE / 2;
 const SCALE = 0.86;
 
 export function GlobePoster({ trips, label = 'Globe with recorded road trips', className = '' }: { trips: GlobeTrip[]; label?: string; className?: string }) {
-  const { grid, routes, dots, radius } = useMemo(() => {
+  const id = useId();
+  const { land, grid, routes, dots, radius } = useMemo(() => {
     const { lat0, lon0 } = centreOf(trips);
     // A cap, not a budget: the globe endpoint returns a few dozen trips, and
     // 80 paths of a hundred points each is still a frame's worth of work.
     const shown = trips.filter((trip) => trip.coords.length >= 2).slice(0, 80);
-    // The whole planet, always. Zooming to frame the routes was tried and
-    // thrown away: it crops the limb, and the silhouette of a planet is the
-    // one thing this drawing has going for it. `centreOf` already turns the
-    // globe so the routes are in the middle, which is where the eye lands.
+    // Keep the full silhouette; point its centre towards the real routes.
     const f: Frame = { lat0, lon0, radius: R * SCALE };
     const drawn = shown.map((trip) => pathFrom(trip.coords, f)).filter(Boolean);
     const ends: { x: number; y: number; end: boolean }[] = [];
@@ -132,7 +107,7 @@ export function GlobePoster({ trips, label = 'Globe with recorded road trips', c
         ends.push({ x: R + p.x * f.radius, y: R + p.y * f.radius, end });
       }
     }
-    return { grid: graticule(f, 30), routes: drawn, dots: ends, radius: f.radius };
+    return { land: landPath(lat0, lon0, f.radius, R), grid: graticule(f, 30), routes: drawn, dots: ends, radius: f.radius };
   }, [trips]);
 
   return (
@@ -146,34 +121,39 @@ export function GlobePoster({ trips, label = 'Globe with recorded road trips', c
       <defs>
         {/* Lit from the upper left, falling into night at the lower right —
             the shading is what stops a circle from reading as a disc. */}
-        <radialGradient id="gp-sphere" cx="34%" cy="28%" r="82%">
+        <radialGradient id={`${id}-sphere`} cx="34%" cy="28%" r="82%">
           <stop offset="0%" stopColor="#38618f" />
           <stop offset="34%" stopColor="#1d3a63" />
           <stop offset="68%" stopColor="#0f2143" />
           <stop offset="100%" stopColor="#050a18" />
         </radialGradient>
-        <radialGradient id="gp-sheen" cx="32%" cy="24%" r="46%">
+        <radialGradient id={`${id}-land`} cx="34%" cy="28%" r="82%">
+          <stop offset="0%" stopColor="#83b7a6" />
+          <stop offset="40%" stopColor="#548f83" />
+          <stop offset="75%" stopColor="#254c52" />
+          <stop offset="100%" stopColor="#102330" />
+        </radialGradient>
+        <radialGradient id={`${id}-sheen`} cx="32%" cy="24%" r="46%">
           <stop offset="0%" stopColor="rgba(190,220,255,0.20)" />
           <stop offset="100%" stopColor="rgba(190,220,255,0)" />
         </radialGradient>
-        <radialGradient id="gp-air" cx="50%" cy="50%" r="50%">
+        <radialGradient id={`${id}-air`} cx="50%" cy="50%" r="50%">
           <stop offset="72%" stopColor="rgba(96,160,245,0)" />
           <stop offset="89%" stopColor="rgba(96,160,245,0.26)" />
           <stop offset="100%" stopColor="rgba(96,160,245,0)" />
         </radialGradient>
-        <clipPath id="gp-clip">
+        <clipPath id={`${id}-clip`}>
           <circle cx={R} cy={R} r={radius} />
         </clipPath>
       </defs>
 
-      {/* The atmosphere only exists where the limb is: zoomed in, the sphere
-          fills the frame and there is no edge for it to sit on. */}
-      {radius <= R && <circle cx={R} cy={R} r={radius / SCALE} fill="url(#gp-air)" />}
-      <circle cx={R} cy={R} r={radius} fill="url(#gp-sphere)" />
-      <circle cx={R} cy={R} r={radius} fill="url(#gp-sheen)" />
+      <circle cx={R} cy={R} r={radius / SCALE} fill={`url(#${id}-air)`} />
+      <circle cx={R} cy={R} r={radius} fill={`url(#${id}-sphere)`} />
 
-      <g clipPath="url(#gp-clip)">
-        <g fill="none" stroke="#9fc0ee" strokeOpacity="0.15" strokeWidth="1">
+      <g clipPath={`url(#${id}-clip)`}>
+        <path data-globe-land d={land} fill={`url(#${id}-land)`} fillRule="evenodd" />
+        <circle cx={R} cy={R} r={radius} fill={`url(#${id}-sheen)`} />
+        <g fill="none" stroke="#c8ddf4" strokeOpacity="0.12" strokeWidth="1">
           {grid.map((d, i) => (
             <path key={`g${i}`} d={d} />
           ))}

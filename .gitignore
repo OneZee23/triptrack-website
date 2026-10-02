@@ -33,3 +33,6 @@ public/api/
 
 # git worktrees
 .worktrees/
+
+# VPS-only public asset archive for already-open tabs.
+asset-history/

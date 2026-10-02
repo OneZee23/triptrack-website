@@ -13,6 +13,10 @@ services:
     # serving the previous build.
     ports:
       - "127.0.0.1:3080:8080"
+    volumes:
+      # Deploy retains hashed assets before replacing the running image.
+      # nginx can serve old lazy imports without reloading a user's tab.
+      - ./asset-history:/var/lib/triptrack-asset-history:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ || exit 1"]
