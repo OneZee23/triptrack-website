@@ -15,7 +15,7 @@ export default function Roadmap() {
       <header className="roadmap-intro">
         <div className="roadmap-dateline">
           <span>{copy.eyebrow}</span>
-          <span>{copy.updated} <time dateTime="2026-10-02">{copy.date}</time></span>
+          <span>{copy.updated} <time dateTime="2026-10-06">{copy.date}</time></span>
         </div>
         <h1>{copy.title}</h1>
         <p className="roadmap-lead">{copy.lead}</p>

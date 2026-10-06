@@ -1,5 +1,5 @@
 // Public availability, not a catalogue of code in the repository.
-// Sources: website docs/STATE.md; iOS docs/releases/0.8.4/checklist.md.
+// Sources: website docs/STATE.md; iOS docs/releases/0.8.4/ship-steps.md.
 // Recheck the review status and the web editor gate when releasing either.
 import type { Lang } from '../lib/site';
 
@@ -41,7 +41,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
   en: {
     eyebrow: 'TripTrack roadmap',
     updated: 'Updated',
-    date: '2 October 2026',
+    date: '6 October 2026',
     title: 'The road ahead.',
     lead: 'What you can use today, what we’re preparing, and the ideas we’re exploring next.',
     navigation: 'Roadmap sections',
@@ -80,7 +80,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     inProgress: [
       {
         platform: 'iPhone · 0.8.4',
-        status: 'Awaiting Apple review',
+        status: 'Approved by Apple',
         title: 'TripTrack PRO',
         description: 'Optional extras for making your road diary feel more like you.',
         features: [
@@ -88,7 +88,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
           'Manually add a drive you didn’t record.',
           'Keep your chosen PRO appearance so it can return when you renew.',
         ],
-        note: 'Version 0.8.4 has been submitted to Apple. The public release will follow approval; there is no confirmed date yet.',
+        note: 'Apple has approved version 0.8.4. The public release is being prepared; it is not available on the App Store yet.',
       },
       {
         platform: 'Web · PRO',
@@ -100,7 +100,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
           'Add a date, duration and car before saving.',
           'Find the trip in the same library on your iPhone.',
         ],
-        note: 'The editor is being tested and is not open yet. It will become available after the matching iPhone sync update is released.',
+        note: 'The editor is not open yet. It needs the matching iPhone update to be released and the full web-to-iPhone sync flow to be checked.',
       },
     ],
     laterLead: 'Directions we’re considering. The scope and order can change; no release dates are promised.',
@@ -108,7 +108,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     later: [
       { title: 'Android', description: 'Bring the road diary to more phones. An Android app is not available yet, and there is no announced release date.' },
       { title: 'Clubs', description: 'A place for groups of drivers and their shared stories. The iPhone app currently has a preview and a waiting list.' },
-      { title: 'Apple Watch & CarPlay', description: 'More convenient trip controls on the wrist and in the car. A dedicated watch app and CarPlay support are not part of the current release.' },
+      { title: 'Apple Watch & CarPlay', description: 'Explore dedicated experiences for the wrist and the car. There is no standalone Watch or CarPlay app yet; the system may already show the recording Live Activity.' },
     ],
     feedbackTitle: 'Where should we go next?',
     feedbackDescription: 'Tell us what would make TripTrack more useful on your everyday drives. Follow development and share your ideas in Telegram.',
@@ -117,7 +117,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
   ru: {
     eyebrow: 'Планы TripTrack',
     updated: 'Обновлено',
-    date: '2 октября 2026',
+    date: '6 октября 2026',
     title: 'Куда едем дальше.',
     lead: 'Что уже работает, какие обновления готовим и что хотим попробовать в будущем.',
     navigation: 'Разделы плана развития',
@@ -156,7 +156,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     inProgress: [
       {
         platform: 'iPhone · 0.8.4',
-        status: 'Ожидает проверки Apple',
+        status: 'Одобрено Apple',
         title: 'TripTrack PRO',
         description: 'Дополнительные возможности, чтобы сделать дневник дорог своим.',
         features: [
@@ -164,7 +164,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
           'Добавление вручную поездки, которую не записал.',
           'Сохранение выбранного PRO-оформления для возвращения после продления.',
         ],
-        note: 'Версия 0.8.4 отправлена в Apple. Публичный выпуск будет после одобрения; точной даты пока нет.',
+        note: 'Apple одобрила версию 0.8.4. Готовим публичный выпуск; в App Store обновление пока недоступно.',
       },
       {
         platform: 'Сайт · PRO',
@@ -176,7 +176,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
           'Выбор даты, длительности и машины перед сохранением.',
           'Поездка в общей библиотеке с iPhone.',
         ],
-        note: 'Редактор проходит проверку и пока закрыт. Откроем его после выпуска обновления синхронизации на iPhone.',
+        note: 'Редактор пока закрыт. Для открытия нужны выпуск совместимого обновления iPhone и проверка всей цепочки синхронизации с сайта на телефон.',
       },
     ],
     laterLead: 'Направления, которые рассматриваем. Состав и порядок могут измениться, сроков пока не обещаем.',
@@ -184,7 +184,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     later: [
       { title: 'Android', description: 'Дневник дорог для большего числа телефонов. Приложения для Android пока нет, дата выпуска не объявлена.' },
       { title: 'Клубы', description: 'Место для компаний водителей и общих историй. Сейчас в приложении есть превью и список ожидания.' },
-      { title: 'Apple Watch и CarPlay', description: 'Удобное управление поездкой с часов и экрана автомобиля. Отдельное приложение для часов и поддержка CarPlay пока не входят в публичный выпуск.' },
+      { title: 'Apple Watch и CarPlay', description: 'Рассматриваем отдельные приложения для часов и автомобиля. Их пока нет; при этом система уже может показывать карточку текущей записи Live Activity.' },
     ],
     feedbackTitle: 'Куда повернуть дальше?',
     feedbackDescription: 'Расскажи, чего тебе не хватает в ежедневных поездках. В Telegram делимся ходом разработки и обсуждаем идеи.',

@@ -1,6 +1,6 @@
 # Deploy TripTrack Website — trip-track.app
 
-## Текущий production-процесс (2 октября 2026)
+## Текущий production-процесс (сверено по workflow 6 октября 2026)
 
 Рабочая ветка — `master`. Push запускает `.github/workflows/deploy.yml`:
 GitHub runner собирает образ, сохраняет предыдущий running image под
@@ -45,8 +45,10 @@ present, bypass if not; Browser TTL — respect origin. Не возвращат�
 деплою вместо правильных заголовков не требуется. Уже сохранённый по
 старому TTL локальный HTML может потребовать обновления браузера без кеша.
 
-Создание поездок закрыто `WEB_MANUAL_TRIPS_ENABLED=false` до исправленного
-iOS. Порядок совместного выпуска — [docs/STATE.md](docs/STATE.md).
+Создание поездок закрыто `WEB_MANUAL_TRIPS_ENABLED=false` до публичного
+совместимого iOS и проверки синхронизации. На 6 октября 0.8.4 (73) одобрена
+и ожидает ручного выпуска, но патч web-sync в неё не вошёл; это не повод
+включать создание на API. Порядок выпуска — [docs/STATE.md](docs/STATE.md).
 Backend использует свой GitLab pipeline, не этот workflow.
 
 Для отката на VPS используйте сохранённый rollback image с временным
@@ -74,29 +76,29 @@ SSH in:
 ssh root@YOUR_IP
 ```
 
-### Create user `onezee` with sudo:
+### Create user `deploy-user` with sudo:
 
 ```bash
-adduser --disabled-password --gecos "" onezee
-usermod -aG sudo onezee
-echo "onezee ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/onezee
-chmod 440 /etc/sudoers.d/onezee
+adduser --disabled-password --gecos "" deploy-user
+usermod -aG sudo deploy-user
+echo "deploy-user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/deploy-user
+chmod 440 /etc/sudoers.d/deploy-user
 ```
 
-### Copy SSH key from root to onezee:
+### Copy SSH key from root to deploy-user:
 
 ```bash
-mkdir -p /home/onezee/.ssh
-cp /root/.ssh/authorized_keys /home/onezee/.ssh/authorized_keys
-chown -R onezee:onezee /home/onezee/.ssh
-chmod 700 /home/onezee/.ssh
-chmod 600 /home/onezee/.ssh/authorized_keys
+mkdir -p /home/deploy-user/.ssh
+cp /root/.ssh/authorized_keys /home/deploy-user/.ssh/authorized_keys
+chown -R deploy-user:deploy-user /home/deploy-user/.ssh
+chmod 700 /home/deploy-user/.ssh
+chmod 600 /home/deploy-user/.ssh/authorized_keys
 ```
 
 ### ⚠️ Test before locking out! Open a NEW terminal:
 
 ```bash
-ssh onezee@YOUR_IP
+ssh deploy-user@YOUR_IP
 ```
 
 If that works, continue. If not — fix before proceeding.
@@ -122,22 +124,22 @@ ufw --force enable
 ufw status
 ```
 
-## 3. Install Docker & Nginx (as onezee)
+## 3. Install Docker & Nginx (as deploy-user)
 
 ```bash
-ssh onezee@YOUR_IP
+ssh deploy-user@YOUR_IP
 ```
 
 ```bash
 curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker onezee
+sudo usermod -aG docker deploy-user
 ```
 
 Log out and back in for docker group to take effect:
 
 ```bash
 exit
-ssh onezee@YOUR_IP
+ssh deploy-user@YOUR_IP
 docker ps   # should work without sudo
 ```
 
@@ -152,7 +154,7 @@ sudo apt install -y nginx certbot python3-certbot-nginx
 
 ```bash
 sudo git clone https://github.com/YOUR_USERNAME/triptrack-website.git /opt/triptrack-website
-sudo chown -R onezee:onezee /opt/triptrack-website
+sudo chown -R deploy-user:deploy-user /opt/triptrack-website
 cd /opt/triptrack-website
 ```
 
@@ -251,7 +253,7 @@ In your GitHub repo → Settings → Secrets and variables → Actions, add:
 | Secret | Value |
 |--------|-------|
 | `VPS_HOST` | Droplet IP address |
-| `VPS_USER` | `onezee` |
+| `VPS_USER` | `deploy-user` |
 | `VPS_SSH_KEY` | Contents of `~/.ssh/id_ed25519` (private key) from your Mac |
 
 Now every push to `master` auto-deploys.
@@ -260,7 +262,7 @@ Now every push to `master` auto-deploys.
 
 ```bash
 # SSH in
-ssh onezee@YOUR_IP
+ssh deploy-user@YOUR_IP
 
 # View logs
 cd /opt/triptrack-website

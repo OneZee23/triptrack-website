@@ -125,12 +125,12 @@ export const PAGE_META: Record<MetaKey, Record<Lang, PageMeta>> = {
     en: {
       title: 'Roadmap — what ships next in TripTrack',
       description:
-        'What is available in TripTrack today, what is in Apple review and what is planned next. Follow the web viewer, optional PRO and future trip diary updates.',
+        'What is available in TripTrack today, what is being prepared for release and what is planned next. Follow the web viewer, optional PRO and future trip diary updates.',
     },
     ru: {
       title: 'Роудмап — что дальше в TripTrack',
       description:
-        'Что уже доступно в TripTrack, что проходит проверку Apple и что запланировано: просмотр поездок в браузере, необязательная PRO и будущие обновления дневника.',
+        'Что уже доступно в TripTrack, что готовится к выпуску и что запланировано: просмотр поездок в браузере, необязательная PRO и будущие обновления дневника.',
     },
   },
   '/privacy': {
