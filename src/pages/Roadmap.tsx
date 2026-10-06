@@ -70,6 +70,21 @@ export default function Roadmap() {
               </a>
             </div>
           </article>
+          <article className="roadmap-card roadmap-phone-card">
+            <div className="roadmap-card-topline">
+              <span className="roadmap-platform"><Smartphone size={17} aria-hidden="true" />{copy.pro.platform}</span>
+              <span className="roadmap-status"><Check size={13} aria-hidden="true" />{copy.pro.status}</span>
+            </div>
+            <h3>{copy.pro.title}</h3>
+            <p>{copy.pro.description}</p>
+            <ul className="roadmap-checklist">
+              {copy.pro.features.map(feature => <li key={feature}><Check size={16} aria-hidden="true" />{feature}</li>)}
+            </ul>
+            <p className="roadmap-release-note">{copy.pro.note}</p>
+            <a href="https://apps.apple.com/app/id6760650361" target="_blank" rel="noopener noreferrer" className="roadmap-link">
+              {copy.pro.action}<ArrowRight size={18} aria-hidden="true" />
+            </a>
+          </article>
         </div>
       </section>
 

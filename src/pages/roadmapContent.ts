@@ -14,6 +14,7 @@ interface RoadmapCopy {
   availableLead: string;
   web: AvailableItem;
   phone: AvailableItem;
+  pro: AvailableItem & { note: string };
   releaseHistory: string;
   progressLead: string;
   inProgress: {
@@ -75,21 +76,22 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
       ],
       action: 'Explore the features',
     },
+    pro: {
+      platform: 'iPhone · 0.8.4',
+      status: 'Released',
+      title: 'TripTrack PRO',
+      description: 'Optional extras for making your road diary feel more like you.',
+      features: [
+        'Profile backgrounds, avatar frames, car card styles and route colours.',
+        'Manually add a drive you didn’t record.',
+        'Keep your chosen PRO appearance so it can return when you renew.',
+      ],
+      note: 'Released on 6 October; the update may take time to appear in your App Store. PRO purchases depend on your App Store region and are not offered in the Russian storefront. An existing active subscription continues to work.',
+      action: 'Open in the App Store',
+    },
     releaseHistory: 'Release history on the App Store',
     progressLead: 'These updates are being prepared. They are not publicly available yet.',
     inProgress: [
-      {
-        platform: 'iPhone · 0.8.4',
-        status: 'Approved by Apple',
-        title: 'TripTrack PRO',
-        description: 'Optional extras for making your road diary feel more like you.',
-        features: [
-          'Profile backgrounds, avatar frames, car card styles and route colours.',
-          'Manually add a drive you didn’t record.',
-          'Keep your chosen PRO appearance so it can return when you renew.',
-        ],
-        note: 'Apple has approved version 0.8.4. The public release is being prepared; it is not available on the App Store yet.',
-      },
       {
         platform: 'Web · PRO',
         status: 'In preparation',
@@ -151,21 +153,22 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
       ],
       action: 'Посмотреть возможности',
     },
+    pro: {
+      platform: 'iPhone · 0.8.4',
+      status: 'Выпущено',
+      title: 'TripTrack PRO',
+      description: 'Дополнительные возможности, чтобы сделать дневник дорог своим.',
+      features: [
+        'Фоны профиля, рамки аватара, стили карточки машины и цвета маршрута.',
+        'Добавление вручную поездки, которую не записал.',
+        'Сохранение выбранного PRO-оформления для возвращения после продления.',
+      ],
+      note: 'Версия выпущена 6 октября; обновление может появиться в App Store не сразу. Покупка PRO зависит от региона App Store: на российской витрине она недоступна. Уже активная подписка продолжает работать.',
+      action: 'Открыть в App Store',
+    },
     releaseHistory: 'История версий в App Store',
     progressLead: 'Готовим эти обновления к выпуску. Для всех пользователей они пока недоступны.',
     inProgress: [
-      {
-        platform: 'iPhone · 0.8.4',
-        status: 'Одобрено Apple',
-        title: 'TripTrack PRO',
-        description: 'Дополнительные возможности, чтобы сделать дневник дорог своим.',
-        features: [
-          'Фоны профиля, рамки аватара, стили карточки машины и цвета маршрута.',
-          'Добавление вручную поездки, которую не записал.',
-          'Сохранение выбранного PRO-оформления для возвращения после продления.',
-        ],
-        note: 'Apple одобрила версию 0.8.4. Готовим публичный выпуск; в App Store обновление пока недоступно.',
-      },
       {
         platform: 'Сайт · PRO',
         status: 'Готовим',
