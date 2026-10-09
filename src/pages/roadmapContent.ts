@@ -93,6 +93,14 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     progressLead: 'These updates are being prepared. They are not publicly available yet.',
     inProgress: [
       {
+        platform: 'iPhone · 0.8.7',
+        status: 'In preparation',
+        title: 'Help us improve recording.',
+        description: 'Optional usage counters, including trips saved only on your phone.',
+        features: ['Off by default; enable in Privacy settings.', 'No routes, coordinates, photos or account link.', 'Turning it off requests deletion of the counters.'],
+        note: 'The update is being checked before App Review. Version 0.8.6 remains the public release.',
+      },
+      {
         platform: 'Web · PRO',
         status: 'In preparation',
         title: 'Add a missing trip from your computer.',
@@ -169,6 +177,14 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     releaseHistory: 'История версий в App Store',
     progressLead: 'Готовим эти обновления к выпуску. Для всех пользователей они пока недоступны.',
     inProgress: [
+      {
+        platform: 'iPhone · 0.8.7',
+        status: 'Готовим',
+        title: 'Помочь улучшить запись поездок.',
+        description: 'Добровольные счётчики использования, включая поездки, сохранённые только на телефоне.',
+        features: ['По умолчанию выключены; включаются в настройках приватности.', 'Без маршрутов, координат, фото и привязки к аккаунту.', 'Отключение запрашивает удаление счётчиков.'],
+        note: 'Проверяем обновление перед App Review. В App Store пока доступна 0.8.6.',
+      },
       {
         platform: 'Сайт · PRO',
         status: 'Готовим',

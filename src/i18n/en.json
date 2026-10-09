@@ -314,7 +314,7 @@
   "privacy": {
     "h1": "Privacy",
     "lead": "TripTrack records where you drive. That is about as personal as data gets, so this page says plainly what is kept, where it is kept, and what it takes to make all of it go away.",
-    "updated": "Updated October 2, 2026",
+    "updated": "Updated October 9, 2026",
     "summary_title": "The short version",
     "summary_1": "Trips, photos and statistics live on your iPhone. The app works with no account at all.",
     "summary_2": "With sync enabled, your library is stored on our server and can be viewed on this website after Apple sign-in. Web trip creation is not yet available.",
@@ -339,7 +339,10 @@
     "rights_p2": "If you would rather ask a person — about what is stored, about a copy of your data, or about deleting it — write to the address below. The answer comes from the developer, because there is only one.",
     "contact_title": "Contact",
     "contact_p1": "TripTrack is made by OneZee, an independent developer. Questions about this page, or about anything stored:",
-    "web_trips": "You can currently view synced trips on this website. Manual creation for PRO is prepared but remains unavailable until a compatible iPhone update. When it opens, new trips will be private in your account. Drafts will stay only in the tab’s memory, so closing or reloading will discard them. Address search and road routing, when configured, send your entered address or waypoints through our server to Geoapify, without your name, email, account token or other trip history. Drawing points does not request road routing. The iPhone home privacy zone is not applied in the web editor; check route endpoints before saving."
+    "web_trips": "You can currently view synced trips on this website. Manual creation for PRO is prepared but remains unavailable until a compatible iPhone update. When it opens, new trips will be private in your account. Drafts will stay only in the tab’s memory, so closing or reloading will discard them. Address search and road routing, when configured, send your entered address or waypoints through our server to Geoapify, without your name, email, account token or other trip history. Drawing points does not request road routing. The iPhone home privacy zone is not applied in the web editor; check route endpoints before saving.",
+    "usage_title": "Optional usage counters",
+    "usage_p1": "From 0.8.7, Settings → Privacy → Help improve TripTrack lets you opt in to counts of recording starts, local saves and failures, Atlas opens, and save-speed buckets. UTC days of consent, delivery and the first two saved recordings, plus whether your library already had trips, help us understand first and repeat use. This is off by default, works without an account or Cloud Sync, and does not upload your trip history.",
+    "usage_p2": "A fresh random code groups the counters; we store its hash without linking it to your account. No routes, coordinates, photos, notes, distance or vehicle details are included. Turning this off clears local counters and deletes server counters at the next connection. Deletion markers block delayed uploads. Inactive records and markers expire after 90 days. Re-enabling starts fresh. Uninstalling alone does not send a deletion request. This is consent-based first-party analytics, not advertising tracking; the connecting IP is still visible to server infrastructure."
   },
   "app": {
     "nav": {

@@ -54,6 +54,11 @@ export default function Privacy() {
         <p>{t('privacy.crash_p1')}</p>
       </Block>
 
+      <Block icon={<ShieldCheck className="w-5 h-5 text-[#2EAE50]" />} title={t('privacy.usage_title')}>
+        <p>{t('privacy.usage_p1')}</p>
+        <p>{t('privacy.usage_p2')}</p>
+      </Block>
+
       <Block id="cookies" icon={<Cookie className="w-5 h-5 text-[#F5A623]" />} title={t('privacy.cookies_title')}>
         <p>{t('privacy.cookies_p1')}</p>
         <p>{t('privacy.cookies_p2')}</p>
