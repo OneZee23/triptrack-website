@@ -101,6 +101,14 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
         note: 'Build 76 was submitted to Apple on 9 October. Version 0.8.6 remains the public release.',
       },
       {
+        platform: 'iPhone · 0.8.8',
+        status: 'In development',
+        title: 'A clearer home for your road diary.',
+        description: 'Refining Me, the profile editor and the PRO storefront.',
+        features: ['Readable trip totals and grouped profile settings.', 'A personal preview and clearer plan selection in PRO.', 'Better handling of large text and reduced motion.'],
+        note: 'Design and interaction checks are in progress. This version has not been submitted to Apple yet.',
+      },
+      {
         platform: 'Web · PRO',
         status: 'In preparation',
         title: 'Add a missing trip from your computer.',
@@ -184,6 +192,14 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
         description: 'Добровольные счётчики использования, включая поездки, сохранённые только на телефоне.',
         features: ['По умолчанию выключены; включаются в настройках приватности.', 'Без маршрутов, координат, фото и привязки к аккаунту.', 'Отключение запрашивает удаление счётчиков.'],
         note: 'Сборка 76 отправлена Apple 9 октября. В App Store пока доступна 0.8.6.',
+      },
+      {
+        platform: 'iPhone · 0.8.8',
+        status: 'В разработке',
+        title: 'Более понятный дневник дорог.',
+        description: 'Обновляем экран «Я», редактор профиля и витрину PRO.',
+        features: ['Читаемая статистика и группы настроек профиля.', 'Личное превью и более ясный выбор тарифа PRO.', 'Улучшения для крупного текста и уменьшения движения.'],
+        note: 'Проверяем оформление и переходы. Версия ещё не отправлена Apple.',
       },
       {
         platform: 'Сайт · PRO',
