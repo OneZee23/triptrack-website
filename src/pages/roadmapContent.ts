@@ -42,7 +42,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
   en: {
     eyebrow: 'TripTrack roadmap',
     updated: 'Updated',
-    date: '6 October 2026',
+    date: '9 October 2026',
     title: 'The road ahead.',
     lead: 'What you can use today, what we’re preparing, and the ideas we’re exploring next.',
     navigation: 'Roadmap sections',
@@ -65,7 +65,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
       action: 'Open my trips',
     },
     phone: {
-      platform: 'iPhone',
+      platform: 'iPhone · 0.8.6',
       status: 'Available',
       title: 'A diary of the roads you take.',
       description: 'Record a drive, keep its moments, and watch your personal map grow.',
@@ -119,7 +119,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
   ru: {
     eyebrow: 'Планы TripTrack',
     updated: 'Обновлено',
-    date: '6 октября 2026',
+    date: '9 октября 2026',
     title: 'Куда едем дальше.',
     lead: 'Что уже работает, какие обновления готовим и что хотим попробовать в будущем.',
     navigation: 'Разделы плана развития',
@@ -142,7 +142,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
       action: 'Открыть мои поездки',
     },
     phone: {
-      platform: 'iPhone',
+      platform: 'iPhone · 0.8.6',
       status: 'Доступно',
       title: 'Дневник твоих дорог.',
       description: 'Записывай поездки, сохраняй моменты и наблюдай, как растёт твоя карта.',
