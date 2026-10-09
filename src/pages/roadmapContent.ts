@@ -93,20 +93,12 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     progressLead: 'These updates are being prepared. They are not publicly available yet.',
     inProgress: [
       {
-        platform: 'iPhone · 0.8.7',
-        status: 'Awaiting App Review',
-        title: 'Help us improve recording.',
-        description: 'Optional usage counters, including trips saved only on your phone.',
-        features: ['Off by default; enable in Privacy settings.', 'No routes, coordinates, photos or account link.', 'Turning it off requests deletion of the counters.'],
-        note: 'Build 76 was submitted to Apple on 9 October. Version 0.8.6 remains the public release.',
-      },
-      {
         platform: 'iPhone · 0.8.8',
-        status: 'In development',
+        status: 'Awaiting App Review',
         title: 'A clearer home for your road diary.',
         description: 'Refining Me, the profile editor and the PRO storefront.',
-        features: ['Readable trip totals and grouped profile settings.', 'A personal preview and clearer plan selection in PRO.', 'Better handling of large text and reduced motion.'],
-        note: 'Design and interaction checks are in progress. This version has not been submitted to Apple yet.',
+        features: ['Readable trip totals and grouped profile settings.', 'A personal preview and clearer plan selection in PRO.', 'Better handling of large text and reduced motion.', 'Optional usage counters, off by default in Privacy settings.'],
+        note: 'Build 77 was submitted to Apple on 9 October and includes the changes planned for 0.8.7. Version 0.8.6 remains the public release.',
       },
       {
         platform: 'Web · PRO',
@@ -186,20 +178,12 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     progressLead: 'Готовим эти обновления к выпуску. Для всех пользователей они пока недоступны.',
     inProgress: [
       {
-        platform: 'iPhone · 0.8.7',
-        status: 'Ожидает проверки Apple',
-        title: 'Помочь улучшить запись поездок.',
-        description: 'Добровольные счётчики использования, включая поездки, сохранённые только на телефоне.',
-        features: ['По умолчанию выключены; включаются в настройках приватности.', 'Без маршрутов, координат, фото и привязки к аккаунту.', 'Отключение запрашивает удаление счётчиков.'],
-        note: 'Сборка 76 отправлена Apple 9 октября. В App Store пока доступна 0.8.6.',
-      },
-      {
         platform: 'iPhone · 0.8.8',
-        status: 'В разработке',
+        status: 'Ожидает проверки Apple',
         title: 'Более понятный дневник дорог.',
         description: 'Обновляем экран «Я», редактор профиля и витрину PRO.',
-        features: ['Читаемая статистика и группы настроек профиля.', 'Личное превью и более ясный выбор тарифа PRO.', 'Улучшения для крупного текста и уменьшения движения.'],
-        note: 'Проверяем оформление и переходы. Версия ещё не отправлена Apple.',
+        features: ['Читаемая статистика и группы настроек профиля.', 'Личное превью и более ясный выбор тарифа PRO.', 'Улучшения для крупного текста и уменьшения движения.', 'Добровольные счётчики использования: по умолчанию выключены в настройках приватности.'],
+        note: 'Сборка 77 отправлена Apple 9 октября и включает изменения, готовившиеся для 0.8.7. В App Store пока доступна 0.8.6.',
       },
       {
         platform: 'Сайт · PRO',
