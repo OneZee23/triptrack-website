@@ -47,6 +47,17 @@
   Docker упёрся в «No space left on device» (диск Mac заполнен на 97%) —
   проверка шла с `/tmp` и `/var/cache/nginx` в tmpfs; чужие образы и тома
   не удалялись.
+- Выкачено `cb06d6a` (GitHub Actions 38226905686, обе jobs success,
+  09:00 UTC; серверный `check-deployed-assets.sh` прошёл). Живой Chrome:
+  `www…/ru/roadmap?utm=x` → `trip-track.app/ru/roadmap?utm=x`, выдуманные
+  пути 404 «Page not found» без canonical, страницы 200, `/ru/app/login`
+  рисует вход Apple с `noindex, nofollow`, подвал со ссылками.
+- После выкатки: IndexNow повторно — Bing 200, `api.indexnow.org` 200 (ключ
+  подтверждён). Search Console «Запросить индексирование» — в приоритетной
+  очереди 8 адресов: `/fog-of-war-map`, `/google-timeline-alternative`,
+  `/ru/fog-of-war-map`, `/ru/google-timeline-alternative`, `/ru/`,
+  `/ru/features`, `/roadmap`, `/about`. Повторно не отправлять: Google
+  прямо пишет, что это не ускоряет очередь.
 - Подвал: ссылки на оба лендинга и «Скачать» на каждой странице (до этого на
   Timeline-лендинг не вело ничего, кроме «Возможностей» и лендинга-соседа);
   два ряда внутри `max-w-6xl` вместо одного, который на 1280 px переносился.
