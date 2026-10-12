@@ -21,12 +21,15 @@
   `check:seo`, глазами RU-главная (PRO) и роадмап EN (1280) / RU (390).
 - Индексация (12 октября, браузер): Google знает 6 страниц (`/`, `/ru/`,
   `/features`, `/about`, `/download`, `/ru/download`), но не лендинги
-  `/fog-of-war-map` и `/google-timeline-alternative`; Bing на
-  `site:trip-track.app` — «нет результатов»; Яндекс показал капчу, не
+  `/fog-of-war-map` и `/google-timeline-alternative`. Живой тест Google
+  Rich Results в 10:03 МСК просканировал главную: SoftwareApplication без
+  ошибок, единственное замечание — нет `aggregateRating` (намеренно, см.
+  `head.ts`). Bing показывает главную вторым результатом по «TripTrack Road
+  Journal iPhone», но `site:trip-track.app` отвечает «нет результатов»;
+  внутренних страниц в выдаче Bing не найдено. Яндекс показал капчу — не
   проверен. Не-браузерные запросы с Mac получают Cloudflare challenge (403)
-  для любого User-Agent, включая bingbot/OAI-SearchBot; пропускает ли
-  Cloudflare настоящих краулеров по проверенному IP, отсюда не видно —
-  проверить в Cloudflare (Security → Events) и Bing Webmaster Tools.
+  для любого User-Agent; настоящих проверенных краулеров Cloudflare обычно
+  пропускает по IP — отсюда это не видно, смотреть Security → Events.
 
 ## 0.8.7 — 9 октября 2026, 14:03 МСК
 
