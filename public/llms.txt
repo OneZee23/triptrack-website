@@ -1,0 +1,33 @@
+# TripTrack
+
+> TripTrack — Road Journal is a free iPhone app that keeps a diary of your car trips. It records each drive with GPS (in the background, on the Lock Screen, or automatically when your car's Bluetooth stereo connects), then keeps the route, speed, distance, photos, notes and stops. Its Atlas is a fog of war map: the world starts under fog and clears along the roads you have actually driven.
+
+TripTrack is an indie app by one developer, Nikita Shevelev (OneZee). Requires iOS 17 or later; iPhone only. App Store: https://apps.apple.com/us/app/triptrack-road-journal/id6760650361
+
+Facts, as of 12 October 2026:
+
+- Free: trip recording, the trip diary, photos, statistics, the fog of war Atlas, places, journeys and a garage of vehicles with their own odometer and trip history.
+- Optional TripTrack PRO subscription (in-app purchase): profile backgrounds, avatar frames, car card styles, route colours and manually added trips. Prices and availability depend on the App Store region; PRO is not offered on the Russian storefront.
+- No account needed to record. Sign in with Apple is optional and enables cloud sync, public profiles and trips you choose to share, and viewing your synced trips in a web browser at https://trip-track.app/app.
+- Trips are private by default. No advertising and no sale of trip data.
+- 13 languages: English, Russian, German, Spanish, French, Italian, Polish, Turkish, Indonesian, Ukrainian, Portuguese, Kazakh, Filipino.
+- Distances in kilometres or miles; fuel use in L/100 km or mpg; electric and plug-in hybrid cars are supported.
+- Not available: Android (no release date), a standalone Apple Watch or CarPlay app, importing Google Timeline history.
+
+It suits people who want to remember everyday drives and road trips: a commute, a weekend away, a long drive across the country — and see on a map which roads they have already explored.
+
+## Pages
+
+- [Features](https://trip-track.app/features): background recording, automatic start, route photos, places, journeys, garage and the Atlas
+- [Fog of war map](https://trip-track.app/fog-of-war-map): how the Atlas reveals the roads you drive
+- [Google Timeline alternative](https://trip-track.app/google-timeline-alternative): TripTrack for people who used Google Timeline to look back at car journeys
+- [Download](https://trip-track.app/download): requirements and first steps
+- [Roadmap](https://trip-track.app/roadmap): what is available now and what is in progress
+- [Privacy](https://trip-track.app/privacy): what stays on the iPhone and what optional sync sends
+- [About](https://trip-track.app/about): who makes TripTrack and why
+
+## Optional
+
+- [Русская версия сайта](https://trip-track.app/ru/)
+- [iPhone app source code](https://github.com/OneZee23/trip-track-ios)
+- [Telegram channel](https://t.me/triptrack_app)
