@@ -213,6 +213,7 @@
     "pro_note": "Optional TripTrack PRO adds personalisation and manual trips; core recording remains free. PRO purchases depend on your App Store region."
   },
   "footer": {
+    "nav_label": "More pages",
     "github": "GitHub",
     "telegram": "Telegram",
     "youtube": "YouTube",

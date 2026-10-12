@@ -157,22 +157,38 @@ function Shell() {
           </Suspense>
         </main>
 
-        {/* Footer — warm light */}
-        {!inApp && <footer className="w-full border-t border-black/5 bg-[#f4f2ee] py-12 px-5 sm:px-6 flex flex-col md:flex-row items-center justify-between text-[#1e1e23]/65 text-[15px] gap-6">
-          <div className="flex items-center gap-2">
-            <img src={logo} alt="" width={32} height={32} loading="lazy" decoding="async" className="w-8 h-8 rounded-lg" />
-            <span className="font-bold text-[#1e1e23]/70">TripTrack</span>
-            <span className="ml-2">&copy; 2026 OneZee</span>
+        {/* Footer — warm light. Two rows from tablet up: the brand and the
+            site's own pages, then the outside links and the sign-off. In one
+            row the four groups wrapped into each other at 1280 px. */}
+        {!inApp && <footer className="w-full border-t border-black/5 bg-[#f4f2ee] py-12 px-5 sm:px-6 text-[#1e1e23]/65 text-[15px]">
+          <div className="max-w-6xl mx-auto flex flex-col gap-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-2 shrink-0">
+                <img src={logo} alt="" width={32} height={32} loading="lazy" decoding="async" className="w-8 h-8 rounded-lg" />
+                <span className="font-bold text-[#1e1e23]/70">TripTrack</span>
+                <span className="ml-2 whitespace-nowrap">&copy; 2026 OneZee</span>
+              </div>
+              {/* The two search landings had one link between them in the whole
+                  site, and Google had indexed neither (Search Console, 12 Oct
+                  2026). A footer link is on every page in both languages. */}
+              <nav aria-label={t('footer.nav_label')} className="flex flex-wrap justify-center items-center gap-x-7 gap-y-1 font-medium">
+                <Link to={href('/fog-of-war-map')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('page.fog_of_war')}</Link>
+                <Link to={href('/google-timeline-alternative')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('page.google_timeline')}</Link>
+                <Link to={href('/download')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('page.download')}</Link>
+              </nav>
+            </div>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-t border-black/5 pt-6">
+              <div className="flex flex-wrap justify-center items-center gap-x-7 gap-y-1 font-medium">
+                <Link to={href('/privacy')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.privacy')}</Link>
+                <Link to={`${href('/privacy')}#cookies`} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.cookies')}</Link>
+                <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.github')}</a>
+                <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.telegram')}</a>
+                <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.youtube')}</a>
+                <MailLink email="nikitona123@gmail.com" label={t('footer.email')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors" />
+              </div>
+              <div className="font-medium text-center">{t('footer.made_with')}</div>
+            </div>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-x-7 gap-y-1 font-medium">
-            <Link to={href('/privacy')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.privacy')}</Link>
-            <Link to={`${href('/privacy')}#cookies`} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.cookies')}</Link>
-            <a href="https://github.com/OneZee23/trip-track-ios" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.github')}</a>
-            <a href="https://t.me/triptrack_app" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.telegram')}</a>
-            <a href="https://www.youtube.com/@onezee_dev" target="_blank" rel="noopener noreferrer" className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors">{t('footer.youtube')}</a>
-            <MailLink email="nikitona123@gmail.com" label={t('footer.email')} className="flex min-h-[44px] min-w-[44px] items-center justify-center hover:text-[#1e1e23] transition-colors" />
-          </div>
-          <div className="font-medium text-center">{t('footer.made_with')}</div>
         </footer>}
 
       </div>
