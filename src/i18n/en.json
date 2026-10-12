@@ -92,14 +92,14 @@
       "link": "Read the privacy page"
     },
     "plus": {
-      "title": "TripTrack PRO — coming with 0.8.4",
-      "p1": "The next iPhone release adds an optional subscription for profile backgrounds, avatar frames and manually added trips. Version 0.8.4 is in Apple review. Recording, your diary, photos, statistics and the atlas stay free."
+      "title": "Optional TripTrack PRO",
+      "p1": "An optional subscription in the iPhone app: profile backgrounds, avatar frames, car card styles, route colours and manually added trips. Recording, your diary, photos, statistics and the atlas stay free. PRO purchases depend on your App Store region and are not offered in the Russian storefront."
     },
     "faq_title": "Questions people actually ask",
     "faq": {
       "free": {
         "q": "Is TripTrack free?",
-        "a": "Recording, the diary, photos, statistics and the atlas are free. Version 0.8.4, currently in Apple review, adds optional TripTrack PRO for personalisation and manual trips."
+        "a": "Recording, the diary, photos, statistics and the atlas are free. Optional TripTrack PRO adds personalisation and manually added trips; it is bought in the iPhone app and is not offered in the Russian App Store."
       },
       "auto": {
         "q": "Does it record on its own?",
@@ -177,8 +177,8 @@
     "web_desc": "Sign in with Apple to browse your synced library, search by name or region, filter dates and view a full route on a larger map.",
     "web_link": "Open my trips",
     "web_note": "Web viewing is available now. Manual trip creation on the website will open after a compatible iPhone update.",
-    "pro_title": "Next: optional TripTrack PRO",
-    "pro_desc": "Version 0.8.4 is in Apple review. It adds profile and vehicle-card backgrounds, avatar frames, route colours and manual trips on iPhone. The core diary stays free.",
+    "pro_title": "Optional TripTrack PRO",
+    "pro_desc": "PRO adds profile and vehicle-card backgrounds, avatar frames, route colours and manual trips on iPhone. The core diary stays free. PRO purchases depend on your App Store region.",
     "roadmap_link": "See release status"
   },
   "about": {
@@ -210,7 +210,7 @@
     "link_privacy": "What happens to the data",
     "screenshot_alt": "The TripTrack driver profile: level, badges and totals",
     "h1": "Download TripTrack for iPhone",
-    "pro_note": "Optional TripTrack PRO is coming in version 0.8.4, currently in Apple review. It adds personalisation and manual trips; core recording remains free."
+    "pro_note": "Optional TripTrack PRO adds personalisation and manual trips; core recording remains free. PRO purchases depend on your App Store region."
   },
   "footer": {
     "github": "GitHub",
@@ -256,7 +256,7 @@
     "private_title": "Private by default",
     "private_desc": "Local recording, with optional cloud sync and sharing",
     "free_title": "Free core diary",
-    "free_desc": "Recording, maps and photos are free. Optional PRO is planned for version 0.8.4.",
+    "free_desc": "Recording, maps and photos are free. PRO for personalisation is optional.",
     "import_title": "Can I bring my old Timeline data across?",
     "import_p1": "TripTrack does not import Google Timeline history. For an existing archive, follow Google’s export and backup instructions for your device; keep that copy separately.",
     "import_p2": "TripTrack starts with the journeys you record in the app. Sync makes those journeys available in the web viewer too.",
@@ -314,7 +314,7 @@
   "privacy": {
     "h1": "Privacy",
     "lead": "TripTrack records where you drive. That is about as personal as data gets, so this page says plainly what is kept, where it is kept, and what it takes to make all of it go away.",
-    "updated": "Updated October 9, 2026",
+    "updated": "Updated October 12, 2026",
     "summary_title": "The short version",
     "summary_1": "Trips, photos and statistics live on your iPhone. The app works with no account at all.",
     "summary_2": "With sync enabled, your library is stored on our server and can be viewed on this website after Apple sign-in. Web trip creation is not yet available.",
@@ -341,7 +341,7 @@
     "contact_p1": "TripTrack is made by OneZee, an independent developer. Questions about this page, or about anything stored:",
     "web_trips": "You can currently view synced trips on this website. Manual creation for PRO is prepared but remains unavailable until a compatible iPhone update. When it opens, new trips will be private in your account. Drafts will stay only in the tab’s memory, so closing or reloading will discard them. Address search and road routing, when configured, send your entered address or waypoints through our server to Geoapify, without your name, email, account token or other trip history. Drawing points does not request road routing. The iPhone home privacy zone is not applied in the web editor; check route endpoints before saving.",
     "usage_title": "Optional usage counters",
-    "usage_p1": "From 0.8.7, Settings → Privacy → Help improve TripTrack lets you opt in to counts of recording starts, local saves and failures, Atlas opens, and save-speed buckets. UTC days of consent, delivery and the first two saved recordings, plus whether your library already had trips, help us understand first and repeat use. This is off by default, works without an account or Cloud Sync, and does not upload your trip history.",
+    "usage_p1": "From 0.8.9, Settings → Privacy → Help improve TripTrack lets you opt in to counts of recording starts, local saves and failures, Atlas opens, and save-speed buckets. UTC days of consent, delivery and the first two saved recordings, plus whether your library already had trips, help us understand first and repeat use. This is off by default, works without an account or Cloud Sync, and does not upload your trip history.",
     "usage_p2": "A fresh random code groups the counters; we store its hash without linking it to your account. No routes, coordinates, photos, notes, distance or vehicle details are included. Turning this off clears local counters and deletes server counters at the next connection. Deletion markers block delayed uploads. Inactive records and markers expire after 90 days. Re-enabling starts fresh. Uninstalling alone does not send a deletion request. This is consent-based first-party analytics, not advertising tracking; the connecting IP is still visible to server infrastructure."
   },
   "app": {

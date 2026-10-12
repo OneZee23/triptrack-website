@@ -42,7 +42,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
   en: {
     eyebrow: 'TripTrack roadmap',
     updated: 'Updated',
-    date: '9 October 2026',
+    date: '12 October 2026',
     title: 'The road ahead.',
     lead: 'What you can use today, what we’re preparing, and the ideas we’re exploring next.',
     navigation: 'Roadmap sections',
@@ -93,12 +93,12 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     progressLead: 'These updates are being prepared. They are not publicly available yet.',
     inProgress: [
       {
-        platform: 'iPhone · 0.8.8',
+        platform: 'iPhone · 0.8.9',
         status: 'Awaiting App Review',
-        title: 'A clearer home for your road diary.',
-        description: 'Refining Me, the profile editor and the PRO storefront.',
-        features: ['Readable trip totals and grouped profile settings.', 'A personal preview and clearer plan selection in PRO.', 'Better handling of large text and reduced motion.', 'Optional usage counters, off by default in Privacy settings.'],
-        note: 'Build 77 was submitted to Apple on 9 October and includes the changes planned for 0.8.7. Version 0.8.6 remains the public release.',
+        title: 'Faster long trips and a clearer road diary.',
+        description: 'Long recordings save without freezing, and Me, the profile editor and PRO are easier to use.',
+        features: ['Saving and uploading recordings of many hours no longer stalls the screen.', 'Readable trip totals, grouped profile settings and a personal preview in PRO.', 'Your PRO subscription details and App Store management on one screen.', 'Optional usage counters, off by default in Privacy settings.'],
+        note: 'Build 78 was submitted to Apple on 11 October and replaces the earlier 0.8.8 submission, including all of its changes. Version 0.8.6 remains the public release.',
       },
       {
         platform: 'Web · PRO',
@@ -127,7 +127,7 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
   ru: {
     eyebrow: 'Планы TripTrack',
     updated: 'Обновлено',
-    date: '9 октября 2026',
+    date: '12 октября 2026',
     title: 'Куда едем дальше.',
     lead: 'Что уже работает, какие обновления готовим и что хотим попробовать в будущем.',
     navigation: 'Разделы плана развития',
@@ -178,12 +178,12 @@ export const roadmapContent: Record<Lang, RoadmapCopy> = {
     progressLead: 'Готовим эти обновления к выпуску. Для всех пользователей они пока недоступны.',
     inProgress: [
       {
-        platform: 'iPhone · 0.8.8',
+        platform: 'iPhone · 0.8.9',
         status: 'Ожидает проверки Apple',
-        title: 'Более понятный дневник дорог.',
-        description: 'Обновляем экран «Я», редактор профиля и витрину PRO.',
-        features: ['Читаемая статистика и группы настроек профиля.', 'Личное превью и более ясный выбор тарифа PRO.', 'Улучшения для крупного текста и уменьшения движения.', 'Добровольные счётчики использования: по умолчанию выключены в настройках приватности.'],
-        note: 'Сборка 77 отправлена Apple 9 октября и включает изменения, готовившиеся для 0.8.7. В App Store пока доступна 0.8.6.',
+        title: 'Быстрые длинные поездки и понятный дневник.',
+        description: 'Длинные записи сохраняются без зависаний, а экран «Я», редактор профиля и PRO стали понятнее.',
+        features: ['Сохранение и отправка многочасовых записей больше не подвешивают экран.', 'Читаемая статистика, группы настроек профиля и личное превью в PRO.', 'Сведения о подписке PRO и управление ею в App Store на одном экране.', 'Добровольные счётчики использования: по умолчанию выключены в настройках приватности.'],
+        note: 'Сборка 78 отправлена Apple 11 октября и заменяет прежнюю заявку 0.8.8 вместе со всеми её изменениями. В App Store пока доступна 0.8.6.',
       },
       {
         platform: 'Сайт · PRO',
