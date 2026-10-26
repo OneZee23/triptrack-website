@@ -85,10 +85,26 @@ describe('nginx security headers', () => {
   it('does not double-declare a CSP on the locations proxied to the backend', () => {
     // `/s/`, `/u/`, `/j/` рисует бэкенд и ставит на них свою, более строгую
     // политику. Вторая CSP здесь только пересекалась бы с ней.
-    for (const l of locations(nginx).filter((x) => /location \/[suj]\//.test(x.head))) {
+    for (const l of locations(nginx).filter((x) => /location (\^~ )?\/[suj]\//.test(x.head))) {
       expect(l.body).not.toContain('snippets/csp.conf');
       expect(l.body).toContain('snippets/headers.conf');
     }
+  });
+});
+
+describe('backend profile page', () => {
+  it('keeps /u/ ahead of the static-file regex, so its .js reaches the backend', () => {
+    // Без `^~` локация `\.(js|css|…)$` выигрывает у префикса `/u/`, и
+    // `/u/assets/*.js` фона «Атлас» уходил в 404 страницы сайта.
+    const heads = locations(nginx).map((l) => l.head);
+    expect(heads).toContain('location ^~ /u/');
+    expect(heads).toContain('location ^~ /u/assets/');
+  });
+
+  it('lets the backend set the long cache on the versioned atlas assets', () => {
+    const assets = locations(nginx).find((l) => l.head === 'location ^~ /u/assets/');
+    expect(assets?.body).toContain('proxy_pass https://api.trip-track.app/u/assets/;');
+    expect(assets?.body).not.toContain('Cache-Control');
   });
 });
 
