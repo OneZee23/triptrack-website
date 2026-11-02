@@ -5,6 +5,9 @@ import { useTranslation } from '../i18n/useTranslation';
 import { usePageMeta } from '../components/PageMeta';
 
 const CONTACT = 'nikitona123@gmail.com';
+// Google Play links the full policy on GitHub Pages; its section 14 is the Android one.
+const ANDROID_POLICY_EN = 'https://onezee23.github.io/trip-track-ios/privacy-policy.html#android';
+const ANDROID_POLICY_RU = 'https://onezee23.github.io/trip-track-ios/privacy-policy-ru.html#android';
 
 /**
  * The privacy policy. It is a page of the site rather than a file on GitHub
@@ -16,7 +19,7 @@ const CONTACT = 'nikitona123@gmail.com';
  * from, because "we respect your privacy" is not a statement about anything.
  */
 export default function Privacy() {
-  const { t, href } = useTranslation();
+  const { t, href, lang } = useTranslation();
   usePageMeta('/privacy');
 
   return (
@@ -62,6 +65,18 @@ export default function Privacy() {
       <Block icon={<ShieldCheck className="w-5 h-5 text-[#EB571E]" />} title={t('privacy.pro_title')}>
         <p>{t('privacy.pro_p1')}</p>
         <p>{t('privacy.pro_p2')}</p>
+      </Block>
+
+      <Block id="android" icon={<Smartphone className="w-5 h-5 text-[#2EAE50]" />} title={t('privacy.android_title')}>
+        <p>{t('privacy.android_p1')}</p>
+        <p>{t('privacy.android_p2')}</p>
+        <p>{t('privacy.android_p3')}</p>
+        <p>
+          {t('privacy.android_p4')}{' '}
+          <a href={lang === 'ru' ? ANDROID_POLICY_RU : ANDROID_POLICY_EN} className="text-[#EB571E] font-medium hover:underline">
+            {t('privacy.android_full')}
+          </a>
+        </p>
       </Block>
 
       <Block id="cookies" icon={<Cookie className="w-5 h-5 text-[#F5A623]" />} title={t('privacy.cookies_title')}>

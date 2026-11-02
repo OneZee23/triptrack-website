@@ -315,9 +315,9 @@
   "privacy": {
     "h1": "Privacy",
     "lead": "TripTrack records where you drive. That is about as personal as data gets, so this page says plainly what is kept, where it is kept, and what it takes to make all of it go away.",
-    "updated": "Updated October 14, 2026",
+    "updated": "Updated November 2, 2026",
     "summary_title": "The short version",
-    "summary_1": "Trips, photos and statistics live on your iPhone. The app works with no account at all.",
+    "summary_1": "Trips, photos and statistics live on your phone. The app works with no account at all.",
     "summary_2": "With sync enabled, your library is stored on our server and can be viewed on this website after Apple sign-in. Web trip creation is not yet available.",
     "summary_3": "We don’t sell your data or use it for advertising. The services supporting sign-in, maps and the app are listed below.",
     "phone_title": "What stays on the phone",
@@ -346,7 +346,13 @@
     "usage_p2": "A fresh random code groups the counters; we store its hash without linking it to your account. No routes, coordinates, photos, notes, distance or vehicle details are included. Turning this off clears local counters and deletes server counters at the next connection. Deletion markers block delayed uploads. Inactive records and markers expire after 90 days. Re-enabling starts fresh. Uninstalling alone does not send a deletion request. This is consent-based first-party analytics, not advertising tracking; the connecting IP is still visible to server infrastructure.",
     "pro_title": "PRO subscription",
     "pro_p1": "PRO is bought through the App Store: only Apple sees the payment, the card and the receipt. Apple notifies us of purchases, renewals, cancellations and refunds. If you are signed in, the app also sends us the confirmation signed by Apple and the purchase is linked to your account; without signing in it stays anonymous. We keep the plan, whether it is a trial, the end date, whether auto-renew is on and the transaction number — so others can see your paid look and PRO works on a second phone.",
-    "pro_p2": "The developer sees these records in an internal section of the app available only to him: how many people are on a trial or paid, when a period ends, whether auto-renew is on. There are no names or e-mails there — only the last digits of the transaction number, the language, the account creation date and the number of trips. Each subscription event sends the developer a notification with the plan, the price and the store country, without a name or e-mail. This is not advertising and is not shared with third parties. When you delete your account, the subscription record is unlinked from it at once and kept without a name or e-mail, so we can answer Apple and you about a payment; the log of Apple notifications is deleted after 180 days."
+    "pro_p2": "The developer sees these records in an internal section of the app available only to him: how many people are on a trial or paid, when a period ends, whether auto-renew is on. There are no names or e-mails there — only the last digits of the transaction number, the language, the account creation date and the number of trips. Each subscription event sends the developer a notification with the plan, the price and the store country, without a name or e-mail. This is not advertising and is not shared with third parties. When you delete your account, the subscription record is unlinked from it at once and kept without a name or e-mail, so we can answer Apple and you about a payment; the log of Apple notifications is deleted after 180 days.",
+    "android_title": "TripTrack on Android",
+    "android_p1": "Everything above also applies to the Android app, with the differences below. You can record trips there without an account too, and Cloud Sync stays off until you turn it on. On Android you sign in with Google: the app receives a Google token and, if you allow it, your name and e-mail. We never see your Google password, mail, contacts or calendar. Google accounts on Android and Apple accounts on iPhone are separate for now, and a matching e-mail does not link them.",
+    "android_p2": "Recording needs precise location, and auto-record also needs background access, so a trip is recorded while the app is closed. The Physical activity permission helps tell that you have started driving, and Nearby devices lets the app see your car stereo’s name and connection. These signals are processed on the phone and are not sent to our server. While a trip is recording, Android shows a notification with pause and finish.",
+    "android_p3": "Maps on Android are drawn by MapLibre with tiles from OpenFreeMap. Loading a map shows that provider the tile coordinates, the zoom level and your IP address, like any website with a map. The route itself is not sent there, but the area on screen can match a trip or your home. Place names come from Android’s system geocoder.",
+    "android_p4": "There are no purchases in the Android app yet. To delete your account, open Me → Settings → Account & Sync → Delete account. Section 14 of the full policy has every detail for Android.",
+    "android_full": "Full policy, section 14"
   },
   "app": {
     "nav": {
