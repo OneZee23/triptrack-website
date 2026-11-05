@@ -17,7 +17,7 @@ vi.mock('./manualApi', () => ({ routingCapabilities: vi.fn() }));
 vi.mock('./TripsMap', () => ({
   default: ({ routes, selectedId, selectedCoords, onSelect }: {
     routes: { id: string }[]; selectedId: string | null;
-    selectedCoords: [number, number][] | null; onSelect: (id: string) => void;
+    selectedCoords: [number, number][][] | null; onSelect: (id: string) => void;
   }) => (
     <div data-testid="map" data-selected={selectedId ?? ''} data-coordinates={JSON.stringify(selectedCoords)}>
       {routes.map((route) => <button key={route.id} onClick={() => onSelect(route.id)}>Map route {route.id}</button>)}
@@ -89,10 +89,10 @@ describe('desktop trip explorer', () => {
     expect(fetchDetail).toHaveBeenCalledWith('a');
     fireEvent.click(screen.getByRole('button', { name: /Coastal drive/ }));
     await act(async () => pendingB.resolve(detail(b, 50)));
-    await waitFor(() => expect(screen.getByTestId('map').getAttribute('data-coordinates')).toBe('[[50,38],[51,39]]'));
+    await waitFor(() => expect(screen.getByTestId('map').getAttribute('data-coordinates')).toBe('[[[50,38],[51,39]]]'));
     await act(async () => pendingA.resolve(detail(a, 40)));
     expect(screen.getByTestId('map').getAttribute('data-selected')).toBe('b');
-    expect(screen.getByTestId('map').getAttribute('data-coordinates')).toBe('[[50,38],[51,39]]');
+    expect(screen.getByTestId('map').getAttribute('data-coordinates')).toBe('[[[50,38],[51,39]]]');
     expect(screen.getByRole('link', { name: 'Trip details' }).getAttribute('href')).toBe('/app/trips/b');
   });
 

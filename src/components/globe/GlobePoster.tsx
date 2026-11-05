@@ -1,5 +1,5 @@
 import { useId, useMemo } from 'react';
-import type { GlobeTrip } from './types';
+import { tripSegments, type GlobeTrip } from './types';
 import { landPath } from './land';
 import { project, RAD, type ProjectedPoint as Vec } from './projection';
 
@@ -17,7 +17,7 @@ function centreOf(trips: GlobeTrip[]): { lat0: number; lon0: number } {
   let z = 0;
   let n = 0;
   for (const trip of trips) {
-    for (const [lat, lng] of trip.coords) {
+    for (const [lat, lng] of tripSegments(trip).flat()) {
       const phi = lat * RAD;
       const lam = lng * RAD;
       x += Math.cos(phi) * Math.cos(lam);
@@ -91,15 +91,16 @@ export function GlobePoster({ trips, label = 'Globe with recorded road trips', c
     const { lat0, lon0 } = centreOf(trips);
     // A cap, not a budget: the globe endpoint returns a few dozen trips, and
     // 80 paths of a hundred points each is still a frame's worth of work.
-    const shown = trips.filter((trip) => trip.coords.length >= 2).slice(0, 80);
+    const shown = trips.filter((trip) => tripSegments(trip).length > 0).slice(0, 80);
     // Keep the full silhouette; point its centre towards the real routes.
     const f: Frame = { lat0, lon0, radius: R * SCALE };
-    const drawn = shown.map((trip) => pathFrom(trip.coords, f)).filter(Boolean);
+    const drawn = shown.flatMap((trip) => tripSegments(trip).map((segment) => pathFrom(segment, f))).filter(Boolean);
     const ends: { x: number; y: number; end: boolean }[] = [];
     for (const trip of shown) {
+      const segments = tripSegments(trip);
       const pair: [[number, number], boolean][] = [
-        [trip.coords[0], false],
-        [trip.coords[trip.coords.length - 1], true],
+        [segments[0][0], false],
+        [segments[segments.length - 1].at(-1)!, true],
       ];
       for (const [point, end] of pair) {
         const p = project(point[0], point[1], lat0, lon0);

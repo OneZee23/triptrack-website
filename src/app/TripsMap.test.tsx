@@ -57,8 +57,8 @@ vi.mock('maplibre-gl', () => ({ default: {
 } }));
 
 const routes = [
-  { id: 'first', coords: [[55, 37], [56, 38]] as [number, number][] },
-  { id: 'second', coords: [[44, 39], [45, 40]] as [number, number][] },
+  { id: 'first', coords: [[[55, 37], [56, 38]] as [number, number][]] },
+  { id: 'second', coords: [[[44, 39], [45, 40]] as [number, number][]] },
 ];
 const initialProps = {
   routes, selectedId: null, selectedCoords: null, checkpoints: [], focusedCheckpointId: null,
@@ -82,7 +82,7 @@ describe('the private trips map', () => {
     expect(map.fitBounds).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({
       padding: { top: 80, left: 45, right: 55, bottom: 100 },
     }));
-    const selected = { ...initialProps, selectedId: 'first', selectedCoords: [[55, 37], [57, 39]] as [number, number][] };
+    const selected = { ...initialProps, selectedId: 'first', selectedCoords: [[[55, 37], [57, 39]]] as [number, number][][] };
     view.rerender(<TripsMap {...selected} />);
     expect(mock.state.maps).toHaveLength(1);
     expect(map.fitBounds).toHaveBeenLastCalledWith([[37, 55], [39, 57]], expect.objectContaining({
@@ -90,7 +90,7 @@ describe('the private trips map', () => {
     }));
     const data = map.sources['personal-trips'].setData.mock.lastCall?.[0];
     expect(data.features.find((feature: { properties: { id: string } }) => feature.properties.id === 'first').geometry.coordinates)
-      .toEqual([[37, 55], [39, 57]]);
+      .toEqual([[[37, 55], [39, 57]]]);
     const onSelect = vi.fn();
     view.rerender(<TripsMap {...selected} onSelect={onSelect} />);
     expect(map.fitBounds).toHaveBeenCalledTimes(2);
@@ -100,6 +100,21 @@ describe('the private trips map', () => {
     expect(map.fitBounds).toHaveBeenCalledTimes(3);
     view.unmount();
     expect(map.remove).toHaveBeenCalledTimes(1);
+  });
+
+  it('draws split route runs independently and fits all their points', () => {
+    const split = [{ id: 'split', coords: [
+      [[10, 20], [11, 21]], [[30, 40], [31, 41]],
+    ] as [number, number][][] }];
+    render(<TripsMap {...initialProps} routes={split} />);
+    const map = mock.state.maps[0];
+    act(() => map.load());
+    const data = map.sources['personal-trips'].setData.mock.lastCall?.[0];
+    expect(data.features[0].geometry.coordinates).toEqual([
+      [[20, 10], [21, 11]], [[40, 30], [41, 31]],
+    ]);
+    expect(map.fitBounds).toHaveBeenLastCalledWith([[20, 10], [41, 31]], expect.anything());
+    expect(data.features[0].geometry.coordinates).not.toContainEqual([[21, 11], [40, 30]]);
   });
 
   it('shows only valid checkpoints, preserves their numbers, and focuses a requested checkpoint', () => {

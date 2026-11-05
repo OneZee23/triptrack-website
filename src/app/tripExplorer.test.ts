@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { TripDetail, TripSummary } from './api';
-import { detailCoordinates, filterTrips, mergeTrips, previewCoordinates, validCoordinate } from './tripExplorer';
+import { detailRoutes, filterTrips, mergeTrips, previewRoutes, validCoordinate } from './tripExplorer';
 
 function preview(points: [number, number][]): string {
   const bytes = new Uint8Array(points.length * 8);
@@ -37,22 +37,29 @@ describe('route geometry', () => {
 
   it('rejects the complete invalid preview instead of joining the points around a corrupt coordinate', () => {
     for (const invalid of [NaN, Infinity, 91]) {
-      expect(previewCoordinates(trip('bad', {
+      expect(previewRoutes(trip('bad', {
         previewPolyline: preview([[45, 38], [invalid, 39], [46, 40]]),
       }))).toEqual([]);
     }
-    expect(previewCoordinates(trip('one', { previewPolyline: preview([[45, 38]]) }))).toEqual([]);
-    expect(previewCoordinates(trip('malformed', { previewPolyline: 'not base64!' }))).toEqual([]);
+    expect(previewRoutes(trip('one', { previewPolyline: preview([[45, 38]]) }))).toEqual([]);
+    expect(previewRoutes(trip('malformed', { previewPolyline: 'not base64!' }))).toEqual([]);
+  });
+
+  it('splits preview routes using unique sorted valid boundaries and drops one-point runs', () => {
+    expect(previewRoutes(trip('split', {
+      previewPolyline: preview([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]]),
+      previewBreaks: [3, 2, 2, 0, -1, 5, 8, 1.5],
+    }))).toEqual([[[0, 0], [1, 1]], [[3, 3], [4, 4]]]);
   });
 
   it('uses the full ordered track when it is valid', () => {
-    expect(detailCoordinates(detail({
+    expect(detailRoutes(detail({
       previewPolyline: preview([[10, 20], [11, 21]]),
       trackPoints: [
         { latitude: 45, longitude: 38, timestamp: '2026-10-02T12:00:00Z', speed: 10 },
         { latitude: 46, longitude: 39, timestamp: '2026-10-02T13:00:00Z', speed: 12 },
       ],
-    }))).toEqual([[45, 38], [46, 39]]);
+    }))).toEqual([[[45, 38], [46, 39]]]);
   });
 
   it('falls back to the preview when a full track is corrupt and returns no geometry when both are corrupt', () => {
@@ -60,10 +67,27 @@ describe('route geometry', () => {
       { latitude: 45, longitude: 38, timestamp: '2026-10-02T12:00:00Z', speed: 10 },
       { latitude: 46, longitude: Infinity, timestamp: '2026-10-02T13:00:00Z', speed: 12 },
     ];
-    expect(detailCoordinates(detail({ trackPoints: badTrack, previewPolyline: preview([[10, 20], [11, 21]]) })))
-      .toEqual([[10, 20], [11, 21]]);
-    expect(detailCoordinates(detail({ trackPoints: badTrack, previewPolyline: preview([[10, 20], [NaN, 21]]) })))
+    expect(detailRoutes(detail({ trackPoints: badTrack, previewPolyline: preview([[10, 20], [11, 21]]) })))
+      .toEqual([[[10, 20], [11, 21]]]);
+    expect(detailRoutes(detail({ trackPoints: badTrack, previewPolyline: preview([[10, 20], [NaN, 21]]) })))
       .toEqual([]);
+  });
+
+  it('splits detail tracks at hidden time ranges and ignores invalid ranges', () => {
+    expect(detailRoutes(detail({
+      trackPoints: [10, 11, 12, 13, 14].map((hour, index) => ({
+        latitude: index, longitude: index + 10, timestamp: `2026-10-02T${hour}:00:00Z`, speed: 10,
+      })),
+      hiddenRanges: [
+        { from: '2026-10-02T11:30:00Z', to: '2026-10-02T12:30:00Z' },
+        { from: 'invalid', to: '2026-10-02T14:00:00Z' },
+      ],
+    }))).toEqual([[[0, 10], [1, 11]], [[3, 13], [4, 14]]]);
+  });
+
+  it('uses the legacy preview when old responses have no break metadata', () => {
+    expect(previewRoutes(trip('legacy', { previewPolyline: preview([[10, 20], [11, 21]]) })))
+      .toEqual([[[10, 20], [11, 21]]]);
   });
 });
 

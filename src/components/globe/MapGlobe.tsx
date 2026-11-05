@@ -6,10 +6,11 @@ import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import type { Map as MapLibreMap, GeoJSONSource, MapMouseEvent, MapGeoJSONFeature } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import type { GlobeTrip } from './types';
+import { tripSegments, type GlobeTrip } from './types';
+import { buildRoutes } from './routeFeatures';
 import { GlobeHint } from './GlobeHint';
 import { prefersReducedMotion } from './webgl';
-import type { Feature, FeatureCollection, LineString, Point } from 'geojson';
+import type { Feature, FeatureCollection, Point } from 'geojson';
 
 // Keyless OpenFreeMap "Liberty" vector street style (closest no-key match to Mapbox streets-v12).
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
@@ -44,27 +45,17 @@ const DASH_SEQUENCE: number[][] = [
   [0, 3.5, 3, 0.5],
 ];
 
-type LineFeature = Feature<LineString, { id: string }>;
 type PointFeature = Feature<Point, { id: string; kind: 'start' | 'end' }>;
 
 // our coords are [lat, lng]; GeoJSON needs [lng, lat]
-function buildRoutes(trips: GlobeTrip[]): FeatureCollection<LineString, { id: string }> {
-  const features: LineFeature[] = trips
-    .filter((t) => t.coords.length >= 2)
-    .map((t) => ({
-      type: 'Feature',
-      properties: { id: t.id },
-      geometry: { type: 'LineString', coordinates: t.coords.map(([lat, lng]) => [lng, lat]) },
-    }));
-  return { type: 'FeatureCollection', features };
-}
-
 function buildEndpoints(trips: GlobeTrip[]): FeatureCollection<Point, { id: string; kind: 'start' | 'end' }> {
   const features: PointFeature[] = [];
   for (const t of trips) {
-    if (t.coords.length < 1) continue;
-    const start = t.coords[0];
-    const end = t.coords[t.coords.length - 1];
+    const segments = tripSegments(t);
+    if (!segments.length) continue;
+    const start = segments[0][0];
+    const lastSegment = segments[segments.length - 1];
+    const end = lastSegment[lastSegment.length - 1];
     features.push({ type: 'Feature', properties: { id: t.id, kind: 'start' }, geometry: { type: 'Point', coordinates: [start[1], start[0]] } });
     features.push({ type: 'Feature', properties: { id: t.id, kind: 'end' }, geometry: { type: 'Point', coordinates: [end[1], end[0]] } });
   }
@@ -135,7 +126,7 @@ export default function MapGlobe({
   // frame the camera on the trips so they're actually visible (runs once).
   function fitToTrips(map: MapLibreMap, list: GlobeTrip[]) {
     if (didFitRef.current) return;
-    const coords = list.flatMap((t) => t.coords);
+    const coords = list.flatMap((t) => tripSegments(t).flat());
     if (!coords.length) return;
     didFitRef.current = true;
     const b = new maplibregl.LngLatBounds();

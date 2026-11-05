@@ -7,7 +7,7 @@ const ignoreSelection = () => {};
 /** The standalone trip page uses the same map lifecycle, loading and error
  * handling as the explorer. It has no card over the map, so all four edges
  * keep the same padding. On a phone one finger still scrolls the page. */
-export default function TripMap({ coords }: { coords: [number, number][] }) {
+export default function TripMap({ routes: coords }: { routes: [number, number][][] }) {
   const routes = useMemo(() => [{ id: 'trip', coords }], [coords]);
   return (
     <div className="relative w-full overflow-hidden rounded-3xl border border-black/5" style={{ height: 'clamp(260px, 55svh, 480px)' }}>

@@ -279,6 +279,8 @@ export interface TripSummary {
   region: string | null;
   /** Base64 of the binary preview route; null when the trip has none. */
   previewPolyline: string | null;
+  previewBreaks?: number[] | null;
+  hiddenRanges?: { from: string; to: string }[] | null;
 }
 
 export interface TripCheckpoint {

@@ -5,7 +5,7 @@ import { useTranslation } from '../i18n/useTranslation';
 import { tripDetail, type TripDetail } from './api';
 import { codeOf, errorKey } from './errors';
 import { formatDate, formatDistance, formatDuration, formatSpeed, tripDurationSeconds, type Lang } from './format';
-import { detailCoordinates } from './tripExplorer';
+import { detailRoutes } from './tripExplorer';
 import { ErrorNote, Spinner } from './ui';
 
 // MapLibre is a megabyte; it arrives only when a trip is actually opened.
@@ -46,9 +46,9 @@ function TripContent({ id }: { id: string | undefined }) {
 
   // The recorded track when the server sent one; the preview polyline is
   // the fallback, so an older trip still draws something.
-  const coords = useMemo<[number, number][]>(() => {
+  const routes = useMemo<[number, number][][]>(() => {
     if (!trip) return [];
-    return detailCoordinates(trip);
+    return detailRoutes(trip);
   }, [trip]);
 
   const errorText = errorCode ? t(errorKey(errorCode)) : null;
@@ -91,9 +91,9 @@ function TripContent({ id }: { id: string | undefined }) {
 
       {trip.source === 'manual' && <p className="mb-6 rounded-2xl bg-[#EB571E]/6 px-5 py-4 text-sm leading-relaxed text-[#1e1e23]/70"><strong className="block text-[#1e1e23] mb-1">{t('app.trip.manual_label')}</strong>{t('app.trip.manual_note')}</p>}
 
-      {coords.length > 1 ? (
+      {routes.length > 0 ? (
         <Suspense fallback={<div className="w-full rounded-3xl bg-[#f4f2ee] border border-black/5" style={{ height: 'clamp(260px, 55svh, 480px)' }} />}>
-          <TripMap coords={coords} />
+          <TripMap routes={routes} />
         </Suspense>
       ) : (
         <div className="rounded-3xl bg-[#f4f2ee] border border-black/5 flex items-center justify-center text-[15px] text-[#1e1e23]/65 px-6 text-center" style={{ height: 220 }}>

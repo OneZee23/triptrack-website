@@ -6,7 +6,7 @@ import { AppStoreBadge } from '../components/AppStoreBadge';
 import { tripDetail, type TripDetail, type TripSummary } from './api';
 import { codeOf, errorKey } from './errors';
 import { formatDate, formatDistance, formatDuration, formatSpeed, tripDurationSeconds } from './format';
-import { detailCoordinates, filterTrips, previewCoordinates, validCoordinate } from './tripExplorer';
+import { detailRoutes, filterTrips, previewRoutes, validCoordinate } from './tripExplorer';
 import { useTripLibrary } from './useTripLibrary';
 import { ErrorNote, Spinner } from './ui';
 import './trip-explorer.css';
@@ -52,12 +52,12 @@ export default function TripsPage() {
     return () => { current = false; };
   }, [activeId, detailRetry]);
 
-  const routes = useMemo(() => visible.map((trip) => ({ id: trip.id, coords: previewCoordinates(trip) })), [visible]);
-  const selectedCoords = useMemo(() => detail ? detailCoordinates(detail) : null, [detail]);
+  const routes = useMemo(() => visible.map((trip) => ({ id: trip.id, coords: previewRoutes(trip) })), [visible]);
+  const selectedCoords = useMemo(() => detail ? detailRoutes(detail) : null, [detail]);
   const checkpoints = detail?.checkpoints ?? NO_CHECKPOINTS;
   const filtered = !!(query || from || to);
   const totalDistance = visible.reduce((sum, trip) => sum + (Number.isFinite(trip.distance) ? trip.distance : 0), 0);
-  const routeCount = routes.filter((route) => route.coords.length > 1).length;
+  const routeCount = routes.filter((route) => route.coords.length > 0).length;
 
   function selectTrip(id: string) {
     setSelectedId(id);

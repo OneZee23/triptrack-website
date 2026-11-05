@@ -2,13 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, MapPinned, RotateCw } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 import type { GeoJSONSource, Map as MapLibreMap, Marker } from 'maplibre-gl';
-import type { Feature, FeatureCollection, LineString } from 'geojson';
+import type { Feature, FeatureCollection, MultiLineString } from 'geojson';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTranslation } from '../i18n/useTranslation';
 import { ACCENT } from './ui';
 
 type Coordinate = [number, number]; // The API and its decoded polylines use latitude, longitude.
-type Route = { id: string; coords: Coordinate[] };
+type Route = { id: string; coords: Coordinate[][] };
 type Checkpoint = {
   id: string;
   name: string | null;
@@ -22,7 +22,7 @@ type Checkpoint = {
 interface Props {
   routes: Route[];
   selectedId: string | null;
-  selectedCoords: Coordinate[] | null;
+  selectedCoords: Coordinate[][] | null;
   checkpoints: Checkpoint[];
   focusedCheckpointId: string | null;
   onSelect: (id: string) => void;
@@ -54,23 +54,27 @@ function validCoordinate(value: Coordinate): boolean {
     && Math.abs(value[0]) <= 90 && Math.abs(value[1]) <= 180;
 }
 
-function line(id: string, coords: Coordinate[], selected: boolean): Feature<LineString> {
+function line(id: string, coords: Coordinate[][], selected: boolean): Feature<MultiLineString> {
   return {
     type: 'Feature', properties: { id, selected },
-    geometry: { type: 'LineString', coordinates: coords.map(([lat, lng]) => [lng, lat]) },
+    geometry: { type: 'MultiLineString', coordinates: coords.map((run) => run.map(([lat, lng]) => [lng, lat])) },
   };
 }
 
-function sceneFor(routes: Route[], selectedId: string | null, detail: Coordinate[] | null, checkpoints: Checkpoint[], padding?: number) {
-  const cleanRoutes = routes.map((route) => ({ ...route, coords: route.coords.filter(validCoordinate) }));
-  const selected = selectedId
-    ? (detail ?? cleanRoutes.find((route) => route.id === selectedId)?.coords ?? []).filter(validCoordinate) : [];
-  const features = cleanRoutes
-    .filter((route) => route.id !== selectedId && route.coords.length >= 2)
-    .map((route) => line(route.id, route.coords, false));
-  if (selectedId && selected.length >= 2) features.push(line(selectedId, selected, true));
+function cleanRuns(runs: Coordinate[][]): Coordinate[][] {
+  return runs.filter((run) => run.length >= 2 && run.every(validCoordinate));
+}
 
-  const fitCoordinates = selectedId ? selected : cleanRoutes.flatMap((route) => route.coords);
+function sceneFor(routes: Route[], selectedId: string | null, detail: Coordinate[][] | null, checkpoints: Checkpoint[], padding?: number) {
+  const cleanRoutes = routes.map((route) => ({ ...route, coords: cleanRuns(route.coords) }));
+  const selected = selectedId
+    ? cleanRuns(detail ?? cleanRoutes.find((route) => route.id === selectedId)?.coords ?? []) : [];
+  const features = cleanRoutes
+    .filter((route) => route.id !== selectedId && route.coords.length > 0)
+    .map((route) => line(route.id, route.coords, false));
+  if (selectedId && selected.length > 0) features.push(line(selectedId, selected, true));
+
+  const fitCoordinates = selectedId ? selected.flat() : cleanRoutes.flatMap((route) => route.coords.flat());
   let west = Infinity, east = -Infinity, south = Infinity, north = -Infinity;
   for (const [lat, lng] of fitCoordinates) {
     west = Math.min(west, lng); east = Math.max(east, lng);
@@ -87,10 +91,10 @@ function sceneFor(routes: Route[], selectedId: string | null, detail: Coordinate
       ? [{ ...checkpoint, coordinate: [latitude, longitude] as Coordinate, number: index + 1 }] : [];
   });
   return {
-    data: { type: 'FeatureCollection', features } as FeatureCollection<LineString>,
+    data: { type: 'FeatureCollection', features } as FeatureCollection<MultiLineString>,
     selected, hasSelection: selectedId !== null, padding,
     visibleCheckpoints: selectedId ? visibleCheckpoints : [], bounds, fitKey,
-    markerKey: JSON.stringify([selectedId, selected[0], selected.at(-1), visibleCheckpoints]),
+    markerKey: JSON.stringify([selectedId, selected[0]?.[0], selected.at(-1)?.at(-1), visibleCheckpoints]),
   };
 }
 
@@ -179,8 +183,8 @@ function updateMap(runtime: Runtime, scene: Scene, fitRequest: number, focusedId
       runtime.markers.push(marker);
     };
     if (scene.selected.length) {
-      addMarker(scene.selected[0], copy.start, 'start', true);
-      addMarker(scene.selected[scene.selected.length - 1], copy.end, 'end', true);
+      addMarker(scene.selected[0][0], copy.start, 'start', true);
+      addMarker(scene.selected.at(-1)!.at(-1)!, copy.end, 'end', true);
     }
     for (const point of scene.visibleCheckpoints) {
       addMarker(point.coordinate, `${copy.checkpoint} ${point.number}${point.name ? ` · ${point.name}` : ''}`, String(point.number), false);

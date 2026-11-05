@@ -36,18 +36,18 @@ afterEach(cleanup);
 
 describe('the standalone trip map', () => {
   it('frames the whole route with equal padding and permits page scrolling', () => {
-    const view = render(<TripMap coords={coords} />);
+    const view = render(<TripMap routes={[coords]} />);
     const map = mock.state.maps[0];
     act(() => map.load());
     expect(map.fitBounds).toHaveBeenLastCalledWith([[39, 45], [40, 46]], expect.objectContaining({ padding: 48 }));
     expect(map.options.cooperativeGestures).toBe(true);
-    view.rerender(<TripMap coords={[...coords]} />);
+    view.rerender(<TripMap routes={[[...coords]]} />);
     expect(mock.state.maps).toHaveLength(1);
     expect(map.fitBounds).toHaveBeenCalledTimes(1);
   });
 
   it('shows loading and a retry for a failed style instead of leaving a blank panel', () => {
-    render(<TripMap coords={coords} />);
+    render(<TripMap routes={[coords]} />);
     expect(screen.getByRole('status')).toBeTruthy();
     act(() => mock.state.maps[0].events.error());
     expect(screen.getByRole('alert')).toBeTruthy();
@@ -60,7 +60,7 @@ describe('the standalone trip map', () => {
 
   it('explains an unavailable WebGL map using localized application text', async () => {
     mock.state.fail = true;
-    render(<TripMap coords={coords} />);
+    render(<TripMap routes={[coords]} />);
     const alert = await screen.findByRole('alert');
     expect(alert.textContent).toContain('The map is unavailable');
     expect(alert.textContent).not.toContain('internal details');

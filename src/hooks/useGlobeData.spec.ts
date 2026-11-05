@@ -5,7 +5,7 @@ import { useGlobeData } from './useGlobeData';
 
 const sample = {
   stats: { trips: 1, cities: 1 },
-  trips: [{ id: 'a', region: 'X', coords: [[1, 2], [3, 4]] }],
+  trips: [{ id: 'a', region: 'X', coords: [[1, 2], [3, 4]], routeSegments: [[[1, 2], [2, 3]], [[3, 4], [4, 5]]] }],
 };
 
 afterEach(() => vi.restoreAllMocks());
@@ -16,6 +16,7 @@ describe('useGlobeData', () => {
     const { result } = renderHook(() => useGlobeData());
     expect(result.current.status).toBe('loading');
     await waitFor(() => expect(result.current.status).toBe('success'));
+    if (result.current.status === 'success') expect(result.current.data.trips[0].routeSegments).toEqual(sample.trips[0].routeSegments);
   });
 
   it('returns empty when no trips', async () => {

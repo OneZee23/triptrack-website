@@ -11,17 +11,47 @@ export function validCoordinate(lat: unknown, lng: unknown): boolean {
 
 // Reject a corrupt geometry as a whole: dropping a point could invent a road
 // between the two sides of the gap. The trip remains accessible in the list.
-export function previewCoordinates(trip: TripSummary): LatLng[] {
+export function previewRoutes(trip: TripSummary): LatLng[][] {
   const coords = decodePreviewPolyline(trip.previewPolyline);
-  return coords && coords.length > 1 && coords.every(([lat, lng]) => validCoordinate(lat, lng)) ? coords : [];
+  if (!coords || coords.length < 2 || !coords.every(([lat, lng]) => validCoordinate(lat, lng))) return [];
+  const boundaries = [...new Set(trip.previewBreaks ?? [])]
+    .filter((index) => Number.isInteger(index) && index > 0 && index < coords.length)
+    .sort((a, b) => a - b);
+  const routes: LatLng[][] = [];
+  let start = 0;
+  for (const end of [...boundaries, coords.length]) {
+    const route = coords.slice(start, end);
+    if (route.length >= 2) routes.push(route);
+    start = end;
+  }
+  return routes;
 }
 
-export function detailCoordinates(trip: TripDetail): LatLng[] {
+export function detailRoutes(trip: TripDetail): LatLng[][] {
   const points = trip.trackPoints;
   if (points && points.length > 1 && points.every((p) => validCoordinate(p.latitude, p.longitude))) {
-    return points.map((p) => [p.latitude, p.longitude]);
+    const ranges = (trip.hiddenRanges ?? []).flatMap(({ from, to }) => {
+      const start = Date.parse(from);
+      const end = Date.parse(to);
+      return Number.isFinite(start) && Number.isFinite(end) ? [[start, end] as const] : [];
+    });
+    const routes: LatLng[][] = [];
+    let start = 0;
+    for (let index = 1; index < points.length; index++) {
+      const previousTime = Date.parse(points[index - 1].timestamp);
+      const nextTime = Date.parse(points[index].timestamp);
+      if (Number.isFinite(previousTime) && Number.isFinite(nextTime)
+        && ranges.some(([from, to]) => from <= nextTime && to >= previousTime)) {
+        const route = points.slice(start, index).map((point) => [point.latitude, point.longitude] as LatLng);
+        if (route.length >= 2) routes.push(route);
+        start = index;
+      }
+    }
+    const route = points.slice(start).map((point) => [point.latitude, point.longitude] as LatLng);
+    if (route.length >= 2) routes.push(route);
+    if (routes.length) return routes;
   }
-  return previewCoordinates(trip);
+  return previewRoutes(trip);
 }
 
 function localDay(iso: string): string {

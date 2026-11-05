@@ -3,8 +3,8 @@
 import { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
 import type { Map as MapLibreMap } from 'maplibre-gl';
-import type { Feature, FeatureCollection, LineString, Point } from 'geojson';
-import type { GlobeTrip } from './types';
+import type { Feature, FeatureCollection, MultiLineString, Point } from 'geojson';
+import { tripSegments, type GlobeTrip } from './types';
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
 const BRAND_ORANGE = '#FF6B00';
@@ -17,11 +17,11 @@ export function RouteMiniMap({ trip }: { trip: GlobeTrip }) {
   useEffect(() => {
     if (mapRef.current) return; // re-created on trip change via cleanup
     const el = ref.current;
-    const coords = trip.coords;
-    if (!el || coords.length < 2) return;
+    const segments = tripSegments(trip);
+    if (!el || !segments.length) return;
 
     const bounds = new maplibregl.LngLatBounds();
-    for (const [la, ln] of coords) bounds.extend([ln, la]);
+    for (const [la, ln] of segments.flat()) bounds.extend([ln, la]);
 
     let map: MapLibreMap;
     try {
@@ -52,16 +52,16 @@ export function RouteMiniMap({ trip }: { trip: GlobeTrip }) {
         }
       }
 
-      const line: Feature<LineString> = {
+      const line: Feature<MultiLineString> = {
         type: 'Feature',
         properties: {},
-        geometry: { type: 'LineString', coordinates: coords.map(([la, ln]) => [ln, la]) },
+        geometry: { type: 'MultiLineString', coordinates: segments.map((segment) => segment.map(([la, ln]) => [ln, la])) },
       };
       const ends: FeatureCollection<Point> = {
         type: 'FeatureCollection',
         features: [
-          { type: 'Feature', properties: { k: 'start' }, geometry: { type: 'Point', coordinates: [coords[0][1], coords[0][0]] } },
-          { type: 'Feature', properties: { k: 'end' }, geometry: { type: 'Point', coordinates: [coords[coords.length - 1][1], coords[coords.length - 1][0]] } },
+          { type: 'Feature', properties: { k: 'start' }, geometry: { type: 'Point', coordinates: [segments[0][0][1], segments[0][0][0]] } },
+          { type: 'Feature', properties: { k: 'end' }, geometry: { type: 'Point', coordinates: [segments.at(-1)!.at(-1)![1], segments.at(-1)!.at(-1)![0]] } },
         ],
       };
 
